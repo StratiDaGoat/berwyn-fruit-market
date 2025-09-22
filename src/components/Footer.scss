@@ -1,0 +1,201 @@
+@import '../styles/variables.scss';
+
+.footer {
+  background: linear-gradient(135deg, $primary-green, $secondary-green);
+  color: $white;
+  margin-top: auto;
+
+  &__content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: $spacing-3xl;
+    padding: $spacing-4xl 0 $spacing-3xl;
+
+    @media (max-width: $breakpoint-md) {
+      grid-template-columns: 1fr;
+      gap: $spacing-2xl;
+      padding: $spacing-3xl 0 $spacing-2xl;
+    }
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-md;
+  }
+
+  &__logo-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    height: 70px;
+    background: transparent;
+    border-radius: $radius-lg;
+    overflow: hidden;
+  }
+
+  &__logo-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  &__logo-text {
+    font-family: $font-display;
+    font-size: $font-2xl;
+    font-weight: $font-bold;
+    color: $white;
+    margin: 0;
+  }
+
+  &__description {
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+    margin-bottom: $spacing-lg;
+  }
+
+  &__contact {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  &__contact-item {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: $font-sm;
+  }
+
+  &__contact-icon {
+    font-size: $font-lg;
+    width: 20px;
+    text-align: center;
+  }
+
+  &__section-title {
+    font-family: $font-display;
+    font-size: $font-xl;
+    font-weight: $font-semibold;
+    color: $white;
+    margin: 0 0 $spacing-md 0;
+  }
+
+  &__nav {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  &__nav-link {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: $font-sm;
+    transition: all $transition-fast;
+    padding: $spacing-xs 0;
+
+    &:hover {
+      color: $white;
+      transform: translateX(5px);
+    }
+  }
+
+  &__hours {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  &__hours-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $spacing-xs 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__hours-day {
+    font-weight: $font-medium;
+    color: $white;
+  }
+
+  &__hours-time {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: $font-sm;
+  }
+
+  &__social {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  &__social-link {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    padding: $spacing-sm;
+    border-radius: $radius-md;
+    transition: all $transition-fast;
+    background: rgba(255, 255, 255, 0.05);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: $white;
+    }
+  }
+
+  &__social-icon {
+    font-size: $font-lg;
+    width: 24px;
+    text-align: center;
+  }
+
+  &__social-name {
+    font-size: $font-sm;
+    font-weight: $font-medium;
+  }
+
+  &__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $spacing-lg 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+
+    @media (max-width: $breakpoint-sm) {
+      flex-direction: column;
+      gap: $spacing-sm;
+      text-align: center;
+    }
+  }
+
+  &__copyright {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: $font-sm;
+    margin: 0;
+  }
+
+  &__tagline {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: $font-sm;
+    font-weight: $font-medium;
+    font-style: italic;
+    margin: 0;
+  }
+}
