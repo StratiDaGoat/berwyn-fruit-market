@@ -84,6 +84,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+
+    &-media {
+      display: block;
+      width: 100%;
+      max-width: 640px;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-radius: $radius-xl;
+      box-shadow: $shadow-lg;
+      overflow: hidden;
+    }
 
     &-placeholder {
       font-size: 8rem;
@@ -170,3 +182,4 @@
     margin: 0;
   }
 }
+

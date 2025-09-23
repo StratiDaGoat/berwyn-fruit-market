@@ -60,7 +60,7 @@ export const Footer: React.FC = () => {
               </p>
               <p className="footer__contact-item">
                 <span className="footer__contact-icon">✉️</span>
-                {import.meta.env.VITE_MARKET_EMAIL || 'info@berwynfruitmarket.com'}
+                {import.meta.env.VITE_MARKET_EMAIL || 'berwynfruit3811@outlook.com'}
               </p>
             </div>
           </motion.div>

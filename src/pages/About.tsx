@@ -71,9 +71,18 @@ export const About: React.FC = () => {
             </motion.div>
 
             <motion.div className="story__image" variants={itemVariants}>
-              <div className="story__image-placeholder">
-                🏪🌽🥕🍎
-              </div>
+              <img
+                src="/home-slide-1.jpg"
+                alt="Berwyn Fruit Market storefront"
+                className="story__image-media"
+                decoding="async"
+                loading="lazy"
+                draggable={false}
+                onError={(e) => {
+                  const target = e.currentTarget as HTMLImageElement;
+                  if (target.src.endsWith('.jpg')) target.src = target.src.replace('.jpg', '.png');
+                }}
+              />
             </motion.div>
           </motion.div>
         </div>
@@ -134,3 +143,4 @@ export const About: React.FC = () => {
     </div>
   );
 };
+

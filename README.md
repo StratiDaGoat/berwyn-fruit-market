@@ -137,7 +137,7 @@ VITE_SITE_NAME="Berwyn Fruit Market"
 VITE_SITE_DESCRIPTION="Fresh fruits and vegetables from your local community market"
 VITE_MARKET_ADDRESS="123 Main Street, Berwyn, IL 60402"
 VITE_MARKET_PHONE="(708) 555-0123"
-VITE_MARKET_EMAIL="info@berwynfruitmarket.com"
+VITE_MARKET_EMAIL="berwynfruit3811@outlook.com"
 ```
 
 ### Styling
@@ -175,10 +175,11 @@ The built files can be deployed to any static hosting service:
 
 For support or questions about this project, please contact:
 
-- **Email**: info@berwynfruitmarket.com
+- **Email**: berwynfruit3811@outlook.com
 - **Phone**: (708) 795-6670
 - **Address**: 3811 S. Harlem Ave, Berwyn, IL 60402
 
 ---
 
 **Berwyn Fruit Market** - Fresh • Local • Community
+

@@ -89,8 +89,8 @@ export const Contact: React.FC = () => {
                   <div className="contact-info__details">
                     <h3 className="contact-info__item-title">Email</h3>
                     <p className="contact-info__item-text">
-                      <a href={`mailto:${import.meta.env.VITE_MARKET_EMAIL || 'info@berwynfruitmarket.com'}`}>
-                        {import.meta.env.VITE_MARKET_EMAIL || 'info@berwynfruitmarket.com'}
+                      <a href={`mailto:${import.meta.env.VITE_MARKET_EMAIL || 'berwynfruit3811@outlook.com'}`}>
+                        {import.meta.env.VITE_MARKET_EMAIL || 'berwynfruit3811@outlook.com'}
                       </a>
                     </p>
                   </div>

@@ -14,7 +14,7 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
 }) => {
   const imageUrls = useMemo(() => {
     if (images && images.length > 0) return images;
-    // Default: look for exactly 7 images provided by user
+    // Default: include all numbered home slides available in public (1-13)
     return [
       '/home-slide-1.jpg',
       '/home-slide-2.jpg',
@@ -23,6 +23,12 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
       '/home-slide-5.jpg',
       '/home-slide-6.jpg',
       '/home-slide-7.jpg',
+      '/home-slide-8.jpg',
+      '/home-slide-9.jpg',
+      '/home-slide-10.jpg',
+      '/home-slide-11.jpg',
+      '/home-slide-12.jpg',
+      '/home-slide-13.jpg',
     ];
   }, [images]);
 
@@ -47,6 +53,21 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
     }, intervalMs);
     return () => clearInterval(timer);
   }, [imageUrls.length, intervalMs, pausedUntil, isSliding]);
+
+  // Preload next couple of images to avoid decode jank during transition
+  useEffect(() => {
+    if (imageUrls.length <= 1) return;
+    const preloadTargets = [
+      (index + 1) % imageUrls.length,
+      (index + 2) % imageUrls.length,
+    ];
+    preloadTargets.forEach(t => {
+      const img = new Image();
+      img.src = imageUrls[t];
+      // @ts-ignore: not always in older TS lib DOM
+      img.decoding = 'async';
+    });
+  }, [index, imageUrls]);
 
   // Make bubbles scroll one slot smoothly per change (like a wheel)
   useEffect(() => {
@@ -96,8 +117,12 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
         alt="home slide previous"
         initial={{ x: 0, opacity: 1 }}
         animate={{ x: direction === 'forward' ? '-100%' : '100%' }}
-        transition={{ duration: 0.8 }}
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+        transition={{ duration: 0.6, ease: 'easeInOut' }}
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', willChange: 'transform', backfaceVisibility: 'hidden' }}
+        decoding="async"
+        loading="lazy"
+        fetchPriority="low"
+        draggable={false}
         onError={(e) => {
           const target = e.currentTarget as HTMLImageElement;
           if (target.src.endsWith('.jpg')) target.src = target.src.replace('.jpg', '.png');
@@ -110,8 +135,12 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
         alt="home slide"
         initial={{ x: direction === 'forward' ? '100%' : '-100%', opacity: 1 }}
         animate={{ x: 0 }}
-        transition={{ duration: 0.8 }}
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+        transition={{ duration: 0.6, ease: 'easeInOut' }}
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', willChange: 'transform', backfaceVisibility: 'hidden' }}
+        decoding="async"
+        loading="eager"
+        fetchPriority="high"
+        draggable={false}
         onError={(e) => {
           const target = e.currentTarget as HTMLImageElement;
           if (target.src.endsWith('.jpg')) target.src = target.src.replace('.jpg', '.png');
