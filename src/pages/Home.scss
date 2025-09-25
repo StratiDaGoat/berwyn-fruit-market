@@ -208,3 +208,128 @@
     margin: 0;
   }
 }
+
+.home-departments {
+  padding: $spacing-4xl 0;
+  background: $white;
+  overflow-x: hidden; // prevent horizontal scrollbar from outward controls
+
+  .container {
+    overflow-x: hidden; // ensure no horizontal scrollbar from inner transforms/margins
+    padding-left: calc(#{$spacing-xl} + 44px); // extra room so left card isn't visually cut
+    padding-right: calc(#{$spacing-xl} + 44px); // extra room so right card isn't visually cut
+  }
+
+  &__carousel {
+    position: relative;
+  }
+
+  &__controls {
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+    left: $spacing-md; // align to inner content edge
+    right: $spacing-md; // align to inner content edge
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 $spacing-md;
+    z-index: $z-dropdown;
+
+    // no negative offsets needed when using button transforms
+  }
+
+  &__control {
+    pointer-events: all;
+    border: none;
+    background: $primary-green;
+    color: $white;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background $transition-fast;
+
+    &:hover {
+      background: $secondary-green;
+    }
+  }
+
+  &__icon { width: 22px; height: 22px; }
+
+  // Buttons sit outside the card edges (not touching)
+  &__control--prev { transform: translateX(-200%); }
+  &__control--next { transform: translateX(200%); }
+
+  &__track {
+    overflow-x: hidden; // show exactly 3 cards horizontally
+    overflow-y: visible; // allow shadows/bottoms without vertical scrollbar
+    position: relative;
+  }
+
+  &__group {
+    display: flex;
+    align-items: stretch;
+    transition: transform 0.5s ease;
+    column-gap: 0; // use slide padding for gutters
+  }
+
+  &__slide {
+    // Exactly 3 cards visible. Padding is inside width due to border-box.
+    flex: 0 0 33.3333%;
+    padding: 0 $spacing-sm $spacing-lg; // inner gutters + bottom space
+    box-sizing: border-box;
+  }
+
+  &__slide {
+    min-width: 0; /* grid children */
+  }
+}
+
+/* Ensure uniform card sizing in Home carousel only */
+.home-departments {
+  .department-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .department-card__header.department-card__header--media {
+    height: 240px; /* slightly larger height as requested */
+  }
+
+  .department-card__media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .department-card__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: $spacing-md; // ensure inner spacing at bottom
+  }
+
+  .department-card__description {
+    margin-bottom: $spacing-md;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    font-size: $font-sm; // slightly smaller to fit
+    line-height: 1.4;
+  }
+
+  .department-card__features {
+    margin-top: auto; /* push features to bottom */
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+    /* show all chips without clipping; content above is clamped to keep height reasonable */
+  }
+}

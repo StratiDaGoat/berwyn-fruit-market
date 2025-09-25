@@ -95,6 +95,11 @@ a {
   }
 }
 
+// Avoid overriding button link colors on hover
+a.btn:hover {
+  color: inherit;
+}
+
 // Button Styles
 .btn {
   display: inline-flex;
@@ -122,6 +127,7 @@ a {
     
     &:hover:not(:disabled) {
       background-color: $secondary-green;
+      color: $white !important;
       transform: translateY(-2px);
       box-shadow: $shadow-lg;
     }

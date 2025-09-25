@@ -19,7 +19,7 @@ export const Footer: React.FC = () => {
   const quickLinks = [
     { path: '/', label: 'Home' },
     { path: '/about', label: 'About Us' },
-    { path: '/departments', label: 'Our Departments' },
+    { path: '/weekly-ads', label: 'Weekly Ads' },
     { path: '/contact', label: 'Contact' },
   ];
 
@@ -58,10 +58,7 @@ export const Footer: React.FC = () => {
                 <span className="footer__contact-icon">📞</span>
                 {import.meta.env.VITE_MARKET_PHONE || '(708) 795-6670'}
               </p>
-              <p className="footer__contact-item">
-                <span className="footer__contact-icon">✉️</span>
-                {import.meta.env.VITE_MARKET_EMAIL || 'berwynfruit3811@outlook.com'}
-              </p>
+              {/* Email removed per request */}
             </div>
           </motion.div>
 

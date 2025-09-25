@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import { Home } from './pages/Home';
 import { About } from './pages/About';
 import { Products } from './pages/Products';
+import { WeeklyAds } from './pages/WeeklyAds';
 import { Contact } from './pages/Contact';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
@@ -20,6 +21,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/departments" element={<Products />} />
+          <Route path="/weekly-ads" element={<WeeklyAds />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>
       </main>

@@ -72,7 +72,7 @@ export const About: React.FC = () => {
 
             <motion.div className="story__image" variants={itemVariants}>
               <img
-                src="/home-slide-1.jpg"
+                src="/old-store.jpg"
                 alt="Berwyn Fruit Market storefront"
                 className="story__image-media"
                 decoding="async"
@@ -122,10 +122,10 @@ export const About: React.FC = () => {
 
             <motion.div className="values__item" variants={itemVariants}>
               <div className="values__icon">🌍</div>
-              <h3 className="values__item-title">Sustainability</h3>
+              <h3 className="values__item-title">Cater to All Cultures</h3>
               <p className="values__item-description">
-                We promote environmentally friendly practices and offer 
-                organic options to support sustainable agriculture.
+                From imported groceries to specialty items, we stock goods from around the world
+                so every culture can find familiar flavors at our market.
               </p>
             </motion.div>
 

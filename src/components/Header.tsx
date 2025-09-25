@@ -14,7 +14,7 @@ export const Header: React.FC = () => {
   const navigationItems = [
     { path: '/', label: 'Home' },
     { path: '/about', label: 'About' },
-    { path: '/departments', label: 'Departments' },
+    { path: '/weekly-ads', label: 'Weekly Ads' },
     { path: '/contact', label: 'Contact' },
   ];
 

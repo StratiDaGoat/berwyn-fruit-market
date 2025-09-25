@@ -7,7 +7,7 @@
 .departments-hero {
   background: linear-gradient(135deg, $primary-orange, $secondary-orange);
   color: $white;
-  padding: $spacing-4xl 0;
+  padding: $spacing-xl 0;
   text-align: center;
 
   &__content {
@@ -16,27 +16,27 @@
   }
 
   &__title {
-    font-size: $font-6xl;
+    font-size: $font-4xl;
     margin-bottom: $spacing-lg;
     color: $white;
 
     @media (max-width: $breakpoint-md) {
-      font-size: $font-5xl;
+      font-size: $font-3xl;
     }
 
     @media (max-width: $breakpoint-sm) {
-      font-size: $font-4xl;
+      font-size: $font-2xl;
     }
   }
 
   &__subtitle {
-    font-size: $font-xl;
+    font-size: $font-base;
     line-height: 1.6;
     opacity: 0.9;
     margin: 0;
 
     @media (max-width: $breakpoint-md) {
-      font-size: $font-lg;
+      font-size: $font-sm;
     }
   }
 }

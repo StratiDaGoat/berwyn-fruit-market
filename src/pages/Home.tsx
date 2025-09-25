@@ -1,8 +1,9 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import './Home.scss';
 import { HomeSlideshow } from '../components/HomeSlideshow';
+import { departments } from '../data/departments';
 
 /**
  * Home page component featuring hero section and featured products
@@ -28,6 +29,20 @@ export const Home: React.FC = () => {
         duration: 0.6,
       },
     },
+  };
+
+  const total = departments.length;
+  const visible = 3;
+  const CLONES = 50; // large buffer to avoid any perceived snapping
+  const centerBlock = Math.floor(CLONES / 2);
+  const loopItems = useMemo(() => Array.from({ length: CLONES }).flatMap(() => departments), [departments]);
+  const [startIndex, setStartIndex] = useState(total * centerBlock);
+  const [isSnapping, setIsSnapping] = useState(false);
+  const handlePrev = () => {
+    setStartIndex((prev) => prev - 1);
+  };
+  const handleNext = () => {
+    setStartIndex((prev) => prev + 1);
   };
 
   return (
@@ -66,8 +81,8 @@ export const Home: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
             >
-              <Link to="/departments" className="btn btn--primary btn--large">
-                Explore Departments
+              <Link to="/weekly-ads" className="btn btn--primary btn--large">
+                View Weekly Ads
               </Link>
               <Link to="/about" className="btn btn--secondary btn--large">
                 Learn About Us
@@ -88,42 +103,82 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="features">
+      {/* Departments Carousel Section */}
+      <section className="home-departments">
         <div className="container">
           <motion.div
-            className="features__grid"
+            className="home-departments__carousel"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <motion.div className="features__item" variants={itemVariants}>
-              <div className="features__icon">🌱</div>
-              <h3 className="features__title">Locally Sourced</h3>
-              <p className="features__description">
-                We partner with local farms to bring you the freshest produce 
-                while supporting our community.
-              </p>
-            </motion.div>
-
-            <motion.div className="features__item" variants={itemVariants}>
-              <div className="features__icon">🌿</div>
-              <h3 className="features__title">Organic Options</h3>
-              <p className="features__description">
-                Choose from our wide selection of organic fruits and vegetables 
-                grown without harmful pesticides.
-              </p>
-            </motion.div>
-
-            <motion.div className="features__item" variants={itemVariants}>
-              <div className="features__icon">👥</div>
-              <h3 className="features__title">Community Focused</h3>
-              <p className="features__description">
-                We're more than just a market - we're a gathering place for 
-                our community to connect and thrive.
-              </p>
-            </motion.div>
+            <div className="home-departments__controls" aria-hidden="false">
+              <button className="home-departments__control home-departments__control--prev" onClick={handlePrev} aria-label="Previous departments">
+                <svg className="home-departments__icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/>
+                </svg>
+              </button>
+              <button className="home-departments__control home-departments__control--next" onClick={handleNext} aria-label="Next departments">
+                <svg className="home-departments__icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M8.59 16.59 10 18l6-6-6-6-1.41 1.41L13.17 12z" fill="currentColor"/>
+                </svg>
+              </button>
+            </div>
+            <div className="home-departments__track" id="home-dept-track" aria-live="polite">
+              <div
+                className="home-departments__group"
+                style={{
+                  transform: `translateX(-${startIndex * (100 / visible)}%)`,
+                  transition: isSnapping ? 'none' : undefined,
+                }}
+                onTransitionEnd={() => {
+                  // With many clones, only snap when extremely far from center
+                  const leftThreshold = total * 2; // generous buffer
+                  const rightThreshold = total * (CLONES - 2) - visible; // generous buffer on right
+                  if (startIndex > rightThreshold) {
+                    const normalized = ((startIndex - total * centerBlock) % total + total) % total;
+                    setIsSnapping(true);
+                    setStartIndex(total * centerBlock + normalized);
+                    requestAnimationFrame(() => setIsSnapping(false));
+                  } else if (startIndex < leftThreshold) {
+                    const normalized = ((startIndex - total * centerBlock) % total + total) % total;
+                    setIsSnapping(true);
+                    setStartIndex(total * centerBlock + normalized);
+                    requestAnimationFrame(() => setIsSnapping(false));
+                  }
+                }}
+              >
+                {loopItems.map((department, idx) => (
+                  <div key={`${department.id}-${idx}`} className="home-departments__slide">
+                    <div className="department-card">
+                      <div className="department-card__header department-card__header--media">
+                        <img src={department.images[0]} alt={department.name} className="department-card__media" />
+                        <h3 className="department-card__title">{department.name}</h3>
+                      </div>
+                      <div className="department-card__content">
+                        {
+                          (() => {
+                            const full = department.description || '';
+                            const firstSentence = full.split('. ')[0] + (full.includes('. ') ? '.' : '');
+                            const maxLen = 90;
+                            const trimmed = firstSentence.length > maxLen
+                              ? firstSentence.slice(0, maxLen - 1).trimEnd() + '…'
+                              : firstSentence;
+                            return <p className="department-card__description">{trimmed}</p>;
+                          })()
+                        }
+                        <div className="department-card__features">
+                          {department.features.map((feature, index) => (
+                            <span key={index} className="department-card__feature">{feature}</span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>
