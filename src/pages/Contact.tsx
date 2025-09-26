@@ -41,7 +41,7 @@ export const Contact: React.FC = () => {
           >
             <h1 className="contact-hero__title">How Can We Help?</h1>
             <p className="contact-hero__subtitle">
-              Contact us today and let us know how we can help you.
+              <i>Contact us today and let us know how we can help you.</i>
             </p>
           </motion.div>
         </div>
