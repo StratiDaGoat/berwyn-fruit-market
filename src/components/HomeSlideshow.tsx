@@ -14,7 +14,7 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
 }) => {
   const imageUrls = useMemo(() => {
     if (images && images.length > 0) return images;
-    // Default: include all numbered home slides available in public (1-13)
+    // Default: include home slides 1-11
     return [
       '/home-slide-1.jpg',
       '/home-slide-2.jpg',
@@ -27,8 +27,6 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
       '/home-slide-9.jpg',
       '/home-slide-10.jpg',
       '/home-slide-11.jpg',
-      '/home-slide-12.jpg',
-      '/home-slide-13.jpg',
     ];
   }, [images]);
 
@@ -118,7 +116,7 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
         initial={{ x: 0, opacity: 1 }}
         animate={{ x: direction === 'forward' ? '-100%' : '100%' }}
         transition={{ duration: 0.6, ease: 'easeInOut' }}
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', willChange: 'transform', backfaceVisibility: 'hidden' }}
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center', willChange: 'transform', backfaceVisibility: 'hidden' }}
         decoding="async"
         loading="lazy"
         fetchPriority="low"
@@ -136,7 +134,7 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
         initial={{ x: direction === 'forward' ? '100%' : '-100%', opacity: 1 }}
         animate={{ x: 0 }}
         transition={{ duration: 0.6, ease: 'easeInOut' }}
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', willChange: 'transform', backfaceVisibility: 'hidden' }}
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center', willChange: 'transform', backfaceVisibility: 'hidden' }}
         decoding="async"
         loading="eager"
         fetchPriority="high"

@@ -5,8 +5,8 @@
 }
 
 .contact-hero {
-  background: linear-gradient(135deg, $primary-red, $secondary-red);
-  color: $white;
+  background: linear-gradient(135deg, $primary-green, $secondary-green);
+  color: #FFF8E1;
   padding: $spacing-2xl 0;
   text-align: center;
 
@@ -18,7 +18,7 @@
   &__title {
     font-size: $font-4xl;
     margin-bottom: $spacing-lg;
-    color: $white;
+    color: #FFF8E1;
 
     @media (max-width: $breakpoint-md) {
       font-size: $font-3xl;
@@ -34,6 +34,7 @@
     line-height: 1.6;
     opacity: 0.9;
     margin: 0;
+    color: #FFF8E1;
 
     @media (max-width: $breakpoint-md) {
       font-size: $font-sm;

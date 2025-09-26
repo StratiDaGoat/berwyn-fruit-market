@@ -39,9 +39,9 @@ export const Contact: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="contact-hero__title">We welcome all your comments and suggestions</h1>
+            <h1 className="contact-hero__title">How Can We Help?</h1>
             <p className="contact-hero__subtitle">
-              Our customer care team welcomes all of your comments and suggestions. Our customers always come first. Feel free to send us your comments using the form below. We will take the time to listen to you and respond to your needs.
+              Contact us today and let us know how we can help you.
             </p>
           </motion.div>
         </div>
