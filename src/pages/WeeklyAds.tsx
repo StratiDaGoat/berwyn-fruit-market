@@ -1,8 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import './Products.scss';
 
 export const WeeklyAds: React.FC = () => {
+  const [pdfTimestamp, setPdfTimestamp] = useState(Date.now());
+
+  // Refresh PDF when component mounts to ensure latest version loads
+  useEffect(() => {
+    setPdfTimestamp(Date.now());
+  }, []);
+
+  const handlePrint = () => {
+    // Open the PDF file in a new window for printing
+    const printWindow = window.open('/weekly-ad.pdf', '_blank');
+    if (printWindow) {
+      printWindow.onload = () => {
+        printWindow.print();
+      };
+    }
+  };
+
+  const handleDownload = () => {
+    // Create a download link for the PDF file
+    const link = document.createElement('a');
+    link.href = '/weekly-ad.pdf';
+    link.download = 'weekly-ad.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="departments">
       <section className="departments-hero">
@@ -15,19 +42,58 @@ export const WeeklyAds: React.FC = () => {
           >
             <h1 className="departments-hero__title">Weekly Ads</h1>
             <p className="departments-hero__subtitle">
-              Store owners can post weekly specials and promotions here.
+              Check out our latest weekly specials and promotions.
             </p>
           </motion.div>
         </div>
       </section>
 
-      <section className="departments-grid">
+      <section className="weekly-ads-content">
         <div className="container">
-          <div className="departments-grid__content">
-            <div style={{ textAlign: 'center', gridColumn: '1 / -1' }}>
-              <p>Coming soon: upload weekly flyers and featured deals.</p>
+          <motion.div
+            className="weekly-ads__card"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <div className="weekly-ads__actions">
+              <button 
+                className="btn btn--primary weekly-ads__action-btn"
+                onClick={handlePrint}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 9V2H18V9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M6 18H4C2.9 18 2 17.1 2 16V11C2 9.9 2.9 9 4 9H20C21.1 9 22 9.9 22 11V16C22 17.1 21.1 18 20 18H18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M6 14H18V22H6V14Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Print Ad
+              </button>
+              <button 
+                className="btn btn--secondary weekly-ads__action-btn"
+                onClick={handleDownload}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M7 10L12 15L17 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M12 15V3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Download
+              </button>
             </div>
-          </div>
+
+            <div className="weekly-ads__pdf-container">
+              <div className="weekly-ads__pdf-viewer">
+                <iframe
+                  src={`/weekly-ad.pdf?t=${pdfTimestamp}#toolbar=0&navpanes=0&scrollbar=0&view=FitH&page=1&pagemode=none&zoom=100`}
+                  title="Weekly Ad PDF - Pages 1-2"
+                  className="weekly-ads__pdf-iframe"
+                  loading="lazy"
+                  key={pdfTimestamp}
+                />
+              </div>
+            </div>
+
+          </motion.div>
         </div>
       </section>
     </div>

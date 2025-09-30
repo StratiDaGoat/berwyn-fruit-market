@@ -42,7 +42,7 @@ export const About: React.FC = () => {
             <h1 className="about-hero__title">About Us</h1>
             <p className="about-hero__subtitle">
               A family-owned business dedicated to bringing fresh, local produce 
-              to our community for over five decades.
+              to our community for over 50 years.
             </p>
           </motion.div>
         </div>
