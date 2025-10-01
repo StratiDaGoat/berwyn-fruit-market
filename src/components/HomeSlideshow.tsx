@@ -67,6 +67,7 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
     });
   }, [index, imageUrls]);
 
+
   // Make bubbles scroll one slot smoothly per change (like a wheel)
   useEffect(() => {
     if (imageUrls.length <= 1) return;
@@ -115,7 +116,7 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
         alt="home slide previous"
         initial={{ x: 0, opacity: 1 }}
         animate={{ x: direction === 'forward' ? '-100%' : '100%' }}
-        transition={{ duration: 0.6, ease: 'easeInOut' }}
+        transition={{ duration: 0.8, ease: 'easeInOut' }}
         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center', willChange: 'transform', backfaceVisibility: 'hidden' }}
         decoding="async"
         loading="lazy"
@@ -133,7 +134,7 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
         alt="home slide"
         initial={{ x: direction === 'forward' ? '100%' : '-100%', opacity: 1 }}
         animate={{ x: 0 }}
-        transition={{ duration: 0.6, ease: 'easeInOut' }}
+        transition={{ duration: 0.8, ease: 'easeInOut' }}
         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center', willChange: 'transform', backfaceVisibility: 'hidden' }}
         decoding="async"
         loading="eager"
