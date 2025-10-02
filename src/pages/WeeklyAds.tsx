@@ -40,7 +40,7 @@ export const WeeklyAds: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="departments-hero__title">Weekly Ads</h1>
+            <h1 className="departments-hero__title">Weekly Ad</h1>
             <p className="departments-hero__subtitle">
               Check out our latest weekly specials and promotions.
             </p>
@@ -48,17 +48,17 @@ export const WeeklyAds: React.FC = () => {
         </div>
       </section>
 
-      <section className="weekly-ads-content">
+      <section className="weekly-ad-content">
         <div className="container">
           <motion.div
-            className="weekly-ads__card"
+            className="weekly-ad__card"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <div className="weekly-ads__actions">
+            <div className="weekly-ad__actions">
               <button 
-                className="btn btn--primary weekly-ads__action-btn"
+                className="btn btn--primary weekly-ad__action-btn"
                 onClick={handlePrint}
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -69,7 +69,7 @@ export const WeeklyAds: React.FC = () => {
                 Print Ad
               </button>
               <button 
-                className="btn btn--secondary weekly-ads__action-btn"
+                className="btn btn--secondary weekly-ad__action-btn"
                 onClick={handleDownload}
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -81,12 +81,12 @@ export const WeeklyAds: React.FC = () => {
               </button>
             </div>
 
-            <div className="weekly-ads__pdf-container">
-              <div className="weekly-ads__pdf-viewer">
+            <div className="weekly-ad__pdf-container">
+              <div className="weekly-ad__pdf-viewer">
                 <iframe
                   src={`/weekly-ad.pdf?t=${pdfTimestamp}#toolbar=0&navpanes=0&scrollbar=0&view=FitH&page=1&pagemode=none&zoom=100`}
                   title="Weekly Ad PDF - Pages 1-2"
-                  className="weekly-ads__pdf-iframe"
+                  className="weekly-ad__pdf-iframe"
                   loading="lazy"
                   key={pdfTimestamp}
                 />

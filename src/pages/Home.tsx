@@ -81,8 +81,8 @@ export const Home: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
             >
-              <Link to="/weekly-ads" className="btn btn--primary btn--large">
-                View Weekly Ads
+              <Link to="/weekly-ad" className="btn btn--primary btn--large">
+                View Weekly Ad
               </Link>
               <Link to="/about" className="btn btn--secondary btn--large">
                 Learn About Us

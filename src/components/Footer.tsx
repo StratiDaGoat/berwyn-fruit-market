@@ -19,7 +19,7 @@ export const Footer: React.FC = () => {
   const quickLinks = [
     { path: '/', label: 'Home' },
     { path: '/about', label: 'About Us' },
-    { path: '/weekly-ads', label: 'Weekly Ads' },
+    { path: '/weekly-ad', label: 'Weekly Ad' },
     { path: '/contact', label: 'Contact' },
   ];
 

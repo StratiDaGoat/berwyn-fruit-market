@@ -175,12 +175,12 @@
 }
 
 // Weekly Ads specific styles
-.weekly-ads-content {
+.weekly-ad-content {
   padding: $spacing-4xl 0;
   background: $bg-secondary;
 }
 
-.weekly-ads__card {
+.weekly-ad__card {
   background: $white;
   border-radius: $radius-xl;
   padding: $spacing-3xl;
@@ -191,7 +191,7 @@
 }
 
 
-.weekly-ads__pdf-container {
+.weekly-ad__pdf-container {
   background: $white;
   border: 1px solid $light-gray;
   border-radius: $radius-lg;
@@ -200,14 +200,14 @@
   box-shadow: $shadow-md;
 }
 
-.weekly-ads__pdf-viewer {
+.weekly-ad__pdf-viewer {
   height: 1726px; // Perfect height for both pages
   position: relative;
   overflow: hidden; // Prevent scrolling within the PDF viewer
   border-radius: $radius-lg; // Match container border radius
 }
 
-.weekly-ads__pdf-iframe {
+.weekly-ad__pdf-iframe {
   width: 100%;
   height: 100%;
   border: none;
@@ -225,7 +225,7 @@
   scrollbar-width: none;
 }
 
-.weekly-ads__actions {
+.weekly-ad__actions {
   display: flex;
   gap: $spacing-lg;
   justify-content: center;
@@ -238,7 +238,7 @@
   }
 }
 
-.weekly-ads__action-btn {
+.weekly-ad__action-btn {
   display: flex;
   align-items: center;
   gap: $spacing-sm;
