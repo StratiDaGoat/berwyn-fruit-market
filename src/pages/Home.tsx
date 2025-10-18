@@ -20,16 +20,6 @@ export const Home: React.FC = () => {
     },
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-      },
-    },
-  };
 
   const total = departments.length;
   const visible = 3;

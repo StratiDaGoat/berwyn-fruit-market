@@ -10,11 +10,6 @@ import './Footer.scss';
 export const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
-  const socialLinks = [
-    { name: 'Facebook', icon: '📘', url: import.meta.env.VITE_FACEBOOK_URL },
-    { name: 'Instagram', icon: '📷', url: import.meta.env.VITE_INSTAGRAM_URL },
-    { name: 'Twitter', icon: '🐦', url: import.meta.env.VITE_TWITTER_URL },
-  ];
 
   const quickLinks = [
     { path: '/', label: 'Home' },

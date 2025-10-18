@@ -14,10 +14,14 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^7.1.0",
+    "@fortawesome/free-brands-svg-icons": "^7.1.0",
+    "@fortawesome/free-solid-svg-icons": "^7.1.0",
+    "@fortawesome/react-fontawesome": "^3.1.0",
+    "framer-motion": "^10.16.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.20.1",
-    "framer-motion": "^10.16.5"
+    "react-router-dom": "^6.20.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",
@@ -26,10 +30,10 @@
     "@typescript-eslint/parser": "^6.10.0",
     "@vitejs/plugin-react": "^4.1.1",
     "eslint": "^8.53.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.4",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.4",
     "husky": "^8.0.3",
     "lint-staged": "^15.1.0",
     "prettier": "^3.1.0",
@@ -47,4 +51,3 @@
     ]
   }
 }
-

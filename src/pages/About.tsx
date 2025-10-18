@@ -1,5 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLeaf, faGlobe, faHeart } from '@fortawesome/free-solid-svg-icons';
 import './About.scss';
 
 /**
@@ -61,12 +63,10 @@ export const About: React.FC = () => {
             <motion.div className="story__text" variants={itemVariants}>
               <h2 className="story__title">About Berwyn Fruit Market</h2>
               <p className="story__paragraph">
-                We have a commitment to provide our partions with the fresh produce at a great price. Berwyn Fruit Market is a full service grocery store. Our greatest pride is providing you, our valued customer,
-                with fast, friendly service and only the freshest and highest quality meat, produce, deli, and fresh bakery products available.
+              For over 50 years, Berwyn Fruit Market has been serving our neighborhood with quality fresh groceries at a great price. As a full-service grocery store, we take pride in offering only the freshest produce, meats, deli and baked products, all backed by prompt and respectful service. Our staff lives and works in the same communities we serve, and we're committed to their prosperity and development as valued members of the Berwyn Fruit Market team.
               </p>
               <p className="story__paragraph">
-                Our employees are all members of the communities in which the stores are located and we are dedicated to their training and development as Berywn Fruit Market associates. Berwyn Fruit Market also remains 
-                dedicated to the communities we serve - and who support us - by offering our full support to their organizations and events that enhance the quality of life of all members of the community.
+              At Berwyn Fruit Market, we believe in keeping it simple: to offer you the freshest produce, the finest service, and the care that only a neighborhood market, after so many years of tradition, can provide.
               </p>
             </motion.div>
 
@@ -112,7 +112,9 @@ export const About: React.FC = () => {
             viewport={{ once: true }}
           >
             <motion.div className="values__item" variants={itemVariants}>
-              <div className="values__icon">🌱</div>
+              <div className="values__icon values__icon--fresh">
+                <FontAwesomeIcon icon={faLeaf} />
+              </div>
               <h3 className="values__item-title">Freshness First</h3>
               <p className="values__item-description">
                 We never compromise on quality. Every item in our store is 
@@ -121,7 +123,9 @@ export const About: React.FC = () => {
             </motion.div>
 
             <motion.div className="values__item" variants={itemVariants}>
-              <div className="values__icon">🌍</div>
+              <div className="values__icon values__icon--global">
+                <FontAwesomeIcon icon={faGlobe} />
+              </div>
               <h3 className="values__item-title">Cater to All Cultures</h3>
               <p className="values__item-description">
                 From imported groceries to specialty items, we stock goods from around the world
@@ -130,7 +134,9 @@ export const About: React.FC = () => {
             </motion.div>
 
             <motion.div className="values__item" variants={itemVariants}>
-              <div className="values__icon">❤️</div>
+              <div className="values__icon values__icon--care">
+                <FontAwesomeIcon icon={faHeart} />
+              </div>
               <h3 className="values__item-title">Customer Care</h3>
               <p className="values__item-description">
                 Every customer is treated like family. We're here to help 

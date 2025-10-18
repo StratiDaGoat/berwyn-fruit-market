@@ -32,16 +32,15 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
 
   const [index, setIndex] = useState(0);
   const [prevIndex, setPrevIndex] = useState(0);
-  const nextIndex = (index + 1) % imageUrls.length;
   const [pausedUntil, setPausedUntil] = useState<number>(0);
   const [isSliding, setIsSliding] = useState<boolean>(false);
   const [direction, setDirection] = useState<'forward' | 'backward'>('forward');
-  const [dotShift, setDotShift] = useState<number>(0);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     if (imageUrls.length <= 1) return;
     const timer = setInterval(() => {
-      if (!isSliding && Date.now() >= pausedUntil) {
+      if (!isSliding && isReady && Date.now() >= pausedUntil) {
         setDirection('forward');
         setIndex(i => {
           setPrevIndex(i);
@@ -50,7 +49,48 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
       }
     }, intervalMs);
     return () => clearInterval(timer);
-  }, [imageUrls.length, intervalMs, pausedUntil, isSliding]);
+  }, [imageUrls.length, intervalMs, pausedUntil, isSliding, isReady]);
+
+  // Preload all images immediately to prevent white flash
+  useEffect(() => {
+    if (imageUrls.length <= 1) return;
+    
+    let loadedCount = 0;
+    const totalImages = imageUrls.length;
+    
+    // Preload all images with high priority
+    imageUrls.forEach((url) => {
+      const img = new Image();
+      img.src = url;
+      img.loading = 'eager';
+      img.decoding = 'async';
+      
+      img.onload = () => {
+        loadedCount++;
+        // Mark as ready when at least first 2 images are loaded
+        if (loadedCount >= Math.min(2, totalImages)) {
+          setIsReady(true);
+        }
+      };
+      
+      img.onerror = () => {
+        loadedCount++;
+        if (loadedCount >= Math.min(2, totalImages)) {
+          setIsReady(true);
+        }
+      };
+    });
+  }, [imageUrls]);
+
+  // Preload first image immediately to prevent white flash on initial load
+  useEffect(() => {
+    if (imageUrls.length > 0) {
+      const img = new Image();
+      img.src = imageUrls[0];
+      img.loading = 'eager';
+      img.decoding = 'async';
+    }
+  }, [imageUrls]);
 
   // Preload next couple of images to avoid decode jank during transition
   useEffect(() => {
@@ -68,15 +108,6 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
   }, [index, imageUrls]);
 
 
-  // Make bubbles scroll one slot smoothly per change (like a wheel)
-  useEffect(() => {
-    if (imageUrls.length <= 1) return;
-    const forward = ((index - prevIndex + imageUrls.length) % imageUrls.length) === 1;
-    const STEP = 20; // pixel distance per slot (gap + dot size)
-    setDotShift(forward ? -STEP : STEP);
-    const t = setTimeout(() => setDotShift(0), 220);
-    return () => clearTimeout(t);
-  }, [index, prevIndex, imageUrls.length]);
 
   // No pre-active phase; keep bubbles smooth with layout transitions only
 
@@ -108,25 +139,36 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
   };
 
   return (
-    <div className={className} style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden' }}>
-      {/* Leaving (previous) image */}
-      <motion.img
-        key={`leave-${imageUrls[prevIndex]}-${direction}`}
-        src={imageUrls[prevIndex]}
-        alt="home slide previous"
-        initial={{ x: 0, opacity: 1 }}
-        animate={{ x: direction === 'forward' ? '-100%' : '100%' }}
-        transition={{ duration: 0.8, ease: 'easeInOut' }}
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center', willChange: 'transform', backfaceVisibility: 'hidden' }}
-        decoding="async"
-        loading="lazy"
-        fetchPriority="low"
-        draggable={false}
-        onError={(e) => {
-          const target = e.currentTarget as HTMLImageElement;
-          if (target.src.endsWith('.jpg')) target.src = target.src.replace('.jpg', '.png');
-        }}
-      />
+    <div 
+      className={className} 
+      style={{ 
+        position: 'relative', 
+        width: '100%', 
+        height: '100%', 
+        overflow: 'hidden',
+        backgroundColor: '#f0f0f0' // Background fallback while first image loads
+      }}
+    >
+      {/* Only render leaving image when prevIndex !== index (not on first render) */}
+      {prevIndex !== index && (
+        <motion.img
+          key={`leave-${imageUrls[prevIndex]}-${direction}`}
+          src={imageUrls[prevIndex]}
+          alt="home slide previous"
+          initial={{ x: 0, opacity: 1 }}
+          animate={{ x: direction === 'forward' ? '-100%' : '100%' }}
+          transition={{ duration: 0.8, ease: 'easeInOut' }}
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center', willChange: 'transform', backfaceVisibility: 'hidden' }}
+          decoding="async"
+          loading="lazy"
+          fetchPriority="low"
+          draggable={false}
+          onError={(e) => {
+            const target = e.currentTarget as HTMLImageElement;
+            if (target.src.endsWith('.jpg')) target.src = target.src.replace('.jpg', '.png');
+          }}
+        />
+      )}
       {/* Entering (current) image */}
       <motion.img
         key={`enter-${imageUrls[index]}-${direction}`}

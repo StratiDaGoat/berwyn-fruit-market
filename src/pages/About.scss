@@ -169,6 +169,37 @@
     font-size: $font-6xl;
     margin-bottom: $spacing-lg;
     display: block;
+    transition: all $transition-normal;
+
+    // Freshness First - Green leaf
+    &--fresh {
+      color: #4CAF50;
+      
+      &:hover {
+        color: #2E7D32;
+        transform: scale(1.1);
+      }
+    }
+
+    // Cater to All Cultures - Blue globe
+    &--global {
+      color: #2196F3;
+      
+      &:hover {
+        color: #1565C0;
+        transform: scale(1.1);
+      }
+    }
+
+    // Customer Care - Red heart
+    &--care {
+      color: #F44336;
+      
+      &:hover {
+        color: #C62828;
+        transform: scale(1.1);
+      }
+    }
   }
 
   &__item-title {
