@@ -178,6 +178,19 @@
 .weekly-ad-content {
   padding: $spacing-4xl 0;
   background: $bg-secondary;
+  
+  @media (max-width: $breakpoint-md) {
+    padding: $spacing-2xl 0; // Less padding on mobile
+  }
+  
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-xl 0; // Even less padding on phones
+    
+    .container {
+      padding: 0; // Remove container padding on mobile for full width
+      max-width: 100%; // Allow full width
+    }
+  }
 }
 
 .weekly-ad__card {
@@ -188,33 +201,131 @@
   max-width: 800px;
   margin: 0 auto;
   text-align: center;
+  
+  @media (min-width: $breakpoint-lg) {
+    max-width: 1100px; // Wider to show complete PDF content
+  }
+  
+  @media (max-width: $breakpoint-md) {
+    padding: $spacing-lg; // Less padding on mobile to maximize ad space
+    margin: 0 $spacing-sm; // Minimal side margins on mobile
+  }
+  
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-sm; // Minimal padding on phones to eliminate black space
+    margin: 0; // No side margins on phones to use full width
+    width: 100%; // Full width on mobile
+    max-width: 100%; // Prevent overflow
+    box-sizing: border-box; // Include padding in width calculation
+  }
 }
 
 
 .weekly-ad__pdf-container {
-  background: $white;
-  border: 1px solid $light-gray;
-  border-radius: $radius-lg;
+  background: transparent; // No background to eliminate black bars
+  border: none; // Remove border to eliminate black bars
+  border-radius: 0; // Remove border radius to eliminate black bars
   margin-bottom: $spacing-3xl;
-  overflow: hidden;
-  box-shadow: $shadow-md;
+  overflow: hidden; // Clean display
+  box-shadow: none; // Remove shadow to eliminate black bars
+  
+  @media (max-width: $breakpoint-md) {
+    margin-bottom: $spacing-xl; // Less margin on mobile
+  }
+  
+  @media (max-width: $breakpoint-sm) {
+    margin: 0; // Remove ALL margins to eliminate black space
+    width: 100%; // Full width on mobile
+    max-width: 100%; // Prevent overflow
+    padding: 0; // Remove any padding that could create black space
+    height: auto; // Auto height to show whole PDF
+    overflow: visible; // Allow whole PDF to be visible
+    position: relative; // Normal positioning
+    box-sizing: border-box; // Include any borders in width calculation
+  }
 }
 
 .weekly-ad__pdf-viewer {
-  height: 1726px; // Perfect height for both pages
+  height: 1200px; // Much taller to show complete PDF without cutting off bottom
   position: relative;
-  overflow: hidden; // Prevent scrolling within the PDF viewer
-  border-radius: $radius-lg; // Match container border radius
+  overflow: auto; // Allow scrolling to see complete content
+  border-radius: 0; // Remove border radius to eliminate black bars
+  background: transparent; // No background color
+  
+  // Web version specific styling
+  &--web {
+    height: 1200px; // Web height
+    overflow: auto; // Web scrolling
+  }
+  
+  // Mobile version specific styling
+  &--mobile {
+    height: 100vh; // Full viewport height for mobile
+    width: 100%; // Ensure full width on mobile
+    max-width: 100%; // Prevent overflow
+    overflow: auto; // Allow scrolling to see complete ad
+    margin: 0; // Remove ALL margins to eliminate black bar
+    padding: 0; // Remove ALL padding to eliminate black bar
+    position: relative; // Normal positioning
+    box-sizing: border-box; // Include any borders in width calculation
+  }
+  
+  @media (max-width: $breakpoint-md) {
+    height: 100vh; // Full viewport height for mobile
+    min-height: 100vh; // Ensure full screen usage
+    overflow: hidden; // Clean display
+  }
+  
+  @media (max-width: $breakpoint-sm) {
+    height: 100vh; // Full viewport height
+    width: 100%; // Ensure full width on mobile
+    max-width: 100%; // Prevent overflow
+    overflow: auto; // Allow scrolling to see complete ad
+    margin: 0; // Remove ALL margins to eliminate black bar
+    padding: 0; // Remove ALL padding to eliminate black bar
+    position: relative; // Normal positioning
+    box-sizing: border-box; // Include any borders in width calculation
+  }
+}
+
+.weekly-ad__pdf-page {
+  flex: 1; // Equal width for both pages
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: $radius-md;
+  background: $white;
+  box-shadow: $shadow-md;
+  border: 1px solid $light-gray;
+  
+  @media (max-width: $breakpoint-sm) {
+    display: none; // Hide on mobile (only show one at a time)
+  }
+  
+  // Ensure proper aspect ratio for full pages
+  min-width: 0; // Allow flex shrinking
+  max-width: 50%; // Prevent pages from being too wide
 }
 
 .weekly-ad__pdf-iframe {
   width: 100%;
   height: 100%;
   border: none;
-  background: $white;
-  overflow: hidden; // Hide scrollbars
+  background: transparent; // No background to eliminate black bars
+  overflow: visible; // Allow full content to be visible
   pointer-events: none; // Disable all interactions to prevent scrolling
+  margin: 0;
+  padding: 0;
   display: block;
+  object-fit: fill; // Ensure PDF fills entire space
+  
+  @media (max-width: $breakpoint-sm) {
+    overflow: visible; // Allow full PDF to be visible on mobile
+    object-fit: fill; // Fill width to eliminate side black bars
+    width: 100%; // Full width
+    height: auto; // Auto height to show complete ad
+    min-height: 100vh; // Ensure minimum height
+  }
   
   // Additional styling to ensure clean display
   &::-webkit-scrollbar {
@@ -223,6 +334,13 @@
   
   // Hide scrollbars in Firefox
   scrollbar-width: none;
+  
+  @media (max-width: $breakpoint-sm) {
+    width: 100% !important; // Force full width on mobile
+    max-width: 100% !important; // Prevent horizontal overflow
+    object-fit: cover; // Fill the container completely
+    background: $white; // Ensure white background
+  }
 }
 
 .weekly-ad__actions {
@@ -232,9 +350,15 @@
   margin-bottom: $spacing-3xl;
   flex-wrap: wrap;
 
+  @media (max-width: $breakpoint-md) {
+    margin-bottom: $spacing-xl; // Less margin on mobile
+  }
+
   @media (max-width: $breakpoint-sm) {
     flex-direction: column;
     align-items: center;
+    margin-bottom: $spacing-lg; // Even less margin on phones
+    gap: $spacing-md; // Smaller gap between buttons
   }
 }
 
@@ -245,10 +369,85 @@
   padding: $spacing-md $spacing-xl;
   font-weight: $font-medium;
   transition: all $transition-normal;
+  min-height: 48px; // Better touch target for mobile
+
+  @media (max-width: $breakpoint-sm) {
+    width: 100%; // Full width on mobile for easier tapping
+    max-width: 280px; // But not too wide
+    padding: $spacing-lg $spacing-xl; // More padding for better touch
+  }
 
   &:hover {
     transform: translateY(-2px);
     box-shadow: $shadow-lg;
+  }
+}
+
+// Page Navigation Styles
+.weekly-ad__page-nav {
+  display: flex; // Show navigation on both desktop and mobile
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-lg;
+  background: $bg-secondary;
+  border-top: 1px solid $light-gray;
+  gap: $spacing-md;
+  
+  @media (max-width: $breakpoint-sm) {
+    display: flex !important; // Force show navigation on mobile
+    padding: $spacing-sm $spacing-md; // Less padding on mobile
+    gap: $spacing-sm;
+    position: sticky; // Sticky positioning to stick to bottom
+    bottom: 0;
+    z-index: 10;
+    margin: 0; // Remove any margin that creates black space
+    background: $white; // Ensure solid background
+    width: 100%; // Full width to eliminate black bar
+    visibility: visible; // Ensure visibility
+    opacity: 1; // Ensure opacity
+  }
+}
+
+.weekly-ad__nav-btn {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-sm $spacing-lg;
+  font-weight: $font-medium;
+  transition: all $transition-normal;
+  min-height: 44px;
+  min-width: 120px;
+  justify-content: center;
+
+  @media (max-width: $breakpoint-sm) {
+    flex: 1; // Equal width buttons
+    min-width: 80px; // Smaller minimum width
+    padding: $spacing-sm $spacing-md; // Smaller padding
+    font-size: $font-sm; // Smaller text
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  &:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-lg;
+  }
+}
+
+.weekly-ad__page-info {
+  font-weight: $font-medium;
+  color: $text-secondary;
+  font-size: $font-sm;
+  white-space: nowrap;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-xs; // Smaller text on mobile
+    flex-shrink: 0; // Don't shrink the page info
   }
 }
 

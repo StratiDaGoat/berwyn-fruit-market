@@ -37,7 +37,7 @@ export const departments: Department[] = [
     icon: '🍲',
     color: '#F44336',
     images: ['/hotFood-1.jpg', '/hotFood-2.jpg', '/hotFood-3.jpg', '/hotFood-4.jpg'],
-    features: ['Ready-to-Eat', 'Hot Soups', 'Fresh Prepared', 'Family Meals'],
+    features: ['Ready-to-Eat', 'Fresh Prepared', 'Family Meals'],
   },
   {
     id: 'deli',

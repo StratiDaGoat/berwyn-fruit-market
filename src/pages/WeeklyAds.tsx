@@ -4,10 +4,24 @@ import './Products.scss';
 
 export const WeeklyAds: React.FC = () => {
   const [pdfTimestamp, setPdfTimestamp] = useState(Date.now());
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isMobile, setIsMobile] = useState(false);
+  const totalPages = 2; // Assuming the weekly ad has 2 pages
 
   // Refresh PDF when component mounts to ensure latest version loads
   useEffect(() => {
     setPdfTimestamp(Date.now());
+  }, []);
+
+  // Check if mobile on mount and resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768); // $breakpoint-md
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   const handlePrint = () => {
@@ -28,6 +42,18 @@ export const WeeklyAds: React.FC = () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(prev => prev + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(prev => prev - 1);
+    }
   };
 
   return (
@@ -82,14 +108,76 @@ export const WeeklyAds: React.FC = () => {
             </div>
 
             <div className="weekly-ad__pdf-container">
-              <div className="weekly-ad__pdf-viewer">
-                <iframe
-                  src={`/weekly-ad.pdf?t=${pdfTimestamp}#toolbar=0&navpanes=0&scrollbar=0&view=FitH&page=1&pagemode=none&zoom=100`}
-                  title="Weekly Ad PDF - Pages 1-2"
-                  className="weekly-ad__pdf-iframe"
-                  loading="lazy"
-                  key={pdfTimestamp}
-                />
+              {/* Separate PDF viewers for mobile and web */}
+              {isMobile ? (
+                // Mobile PDF viewer
+                <div className="weekly-ad__pdf-viewer weekly-ad__pdf-viewer--mobile">
+                  <iframe
+                    src={`/weekly-ad-${currentPage}.pdf?t=${pdfTimestamp}#toolbar=0&navpanes=0&scrollbar=0&view=FitH&pagemode=none&zoom=100`}
+                    title={`Weekly Ad PDF - Page ${currentPage}`}
+                    className="weekly-ad__pdf-iframe"
+                    loading="lazy"
+                    key={`${pdfTimestamp}-${currentPage}-mobile`}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      border: 'none',
+                      display: 'block',
+                      background: 'transparent',
+                      margin: 0,
+                      padding: 0
+                    }}
+                  />
+                </div>
+              ) : (
+                // Web PDF viewer
+                <div className="weekly-ad__pdf-viewer weekly-ad__pdf-viewer--web">
+                  <iframe
+                    src={`/weekly-ad-${currentPage}.pdf?t=${pdfTimestamp}#toolbar=0&navpanes=0&scrollbar=0&view=FitV&pagemode=none&zoom=100`}
+                    title={`Weekly Ad PDF - Page ${currentPage}`}
+                    className="weekly-ad__pdf-iframe"
+                    loading="lazy"
+                    key={`${pdfTimestamp}-${currentPage}-web`}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      border: 'none',
+                      display: 'block',
+                      background: 'transparent',
+                      margin: 0,
+                      padding: 0
+                    }}
+                  />
+                </div>
+              )}
+              
+              {/* Page Navigation - Show on both desktop and mobile */}
+              <div className="weekly-ad__page-nav">
+                <button 
+                  className="btn btn--secondary weekly-ad__nav-btn"
+                  onClick={handlePrevPage}
+                  disabled={currentPage === 1}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  Previous
+                </button>
+                
+                <span className="weekly-ad__page-info">
+                  Page {currentPage} of {totalPages}
+                </span>
+                
+                <button 
+                  className="btn btn--primary weekly-ad__nav-btn"
+                  onClick={handleNextPage}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
               </div>
             </div>
 
