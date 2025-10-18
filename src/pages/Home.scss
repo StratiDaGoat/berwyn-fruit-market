@@ -220,6 +220,11 @@
     overflow-x: hidden; // ensure no horizontal scrollbar from inner transforms/margins
     padding-left: calc(#{$spacing-xl} + 44px); // extra room so left card isn't visually cut
     padding-right: calc(#{$spacing-xl} + 44px); // extra room so right card isn't visually cut
+
+    @media (max-width: $breakpoint-md) {
+      padding-left: calc(#{$spacing-lg} + 44px); // slightly more padding for better balance
+      padding-right: calc(#{$spacing-lg} + 44px);
+    }
   }
 
   &__carousel {
@@ -238,6 +243,12 @@
     align-items: center;
     padding: 0 $spacing-md;
     z-index: $z-dropdown;
+
+    @media (max-width: $breakpoint-md) {
+      left: $spacing-sm; // closer to edges on mobile
+      right: $spacing-sm;
+      padding: 0 $spacing-sm;
+    }
 
     // no negative offsets needed when using button transforms
   }
@@ -265,11 +276,23 @@
   &__icon { width: 22px; height: 22px; }
 
   // Buttons sit outside the card edges (not touching)
-  &__control--prev { transform: translateX(-200%); }
-  &__control--next { transform: translateX(200%); }
+  &__control--prev { 
+    transform: translateX(-200%); 
+    
+    @media (max-width: $breakpoint-md) {
+      transform: translateX(-150%); // closer to card on mobile
+    }
+  }
+  &__control--next { 
+    transform: translateX(200%); 
+    
+    @media (max-width: $breakpoint-md) {
+      transform: translateX(150%); // closer to card on mobile
+    }
+  }
 
   &__track {
-    overflow-x: hidden; // show exactly 3 cards horizontally
+    overflow-x: hidden; // show exactly 3 cards on desktop, 1 on mobile
     overflow-y: visible; // allow shadows/bottoms without vertical scrollbar
     position: relative;
   }
@@ -282,10 +305,15 @@
   }
 
   &__slide {
-    // Exactly 3 cards visible. Padding is inside width due to border-box.
+    // Exactly 3 cards visible on desktop, 1 on mobile. Padding is inside width due to border-box.
     flex: 0 0 33.3333%;
     padding: 0 $spacing-sm $spacing-lg; // inner gutters + bottom space
     box-sizing: border-box;
+
+    @media (max-width: $breakpoint-md) {
+      flex: 0 0 100%; // Show only 1 card on mobile
+      padding: 0 $spacing-md $spacing-lg; // Slightly more padding for better proportions
+    }
   }
 
   &__slide {
@@ -303,6 +331,10 @@
 
   .department-card__header.department-card__header--media {
     height: 240px; /* slightly larger height as requested */
+    
+    @media (max-width: $breakpoint-md) {
+      height: 180px; /* slightly bigger than before but still compact */
+    }
   }
 
   .department-card__media {
@@ -316,6 +348,10 @@
     display: flex;
     flex-direction: column;
     padding-bottom: $spacing-md; // ensure inner spacing at bottom
+    
+    @media (max-width: $breakpoint-md) {
+      padding: $spacing-md $spacing-md $spacing-md; // slightly more padding for better readability
+    }
   }
 
   .department-card__description {
@@ -325,6 +361,12 @@
     display: block;
     font-size: $font-sm; // slightly smaller to fit
     line-height: 1.4;
+    
+    @media (max-width: $breakpoint-md) {
+      font-size: $font-base; // slightly larger text for better readability
+      line-height: 1.5;
+      margin-bottom: $spacing-md; // normal margin for better spacing
+    }
   }
 
   .department-card__features {
@@ -333,5 +375,9 @@
     flex-wrap: wrap;
     gap: $spacing-sm;
     /* show all chips without clipping; content above is clamped to keep height reasonable */
+    
+    @media (max-width: $breakpoint-md) {
+      gap: $spacing-sm; // normal gap between features for better spacing
+    }
   }
 }

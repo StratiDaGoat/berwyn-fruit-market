@@ -22,12 +22,24 @@ export const Home: React.FC = () => {
 
 
   const total = departments.length;
-  const visible = 3;
+  const [isMobile, setIsMobile] = useState(false);
+  const visible = isMobile ? 1 : 3;
   const CLONES = 50; // large buffer to avoid any perceived snapping
   const centerBlock = Math.floor(CLONES / 2);
   const loopItems = useMemo(() => Array.from({ length: CLONES }).flatMap(() => departments), [departments]);
   const [startIndex, setStartIndex] = useState(total * centerBlock);
   const [isSnapping, setIsSnapping] = useState(false);
+
+  // Check if mobile on mount and resize
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768); // $breakpoint-md
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   const handlePrev = () => {
     setStartIndex((prev) => prev - 1);
   };
