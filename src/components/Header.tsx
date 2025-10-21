@@ -12,9 +12,8 @@ export const Header: React.FC = () => {
   const location = useLocation();
 
   const navigationItems = [
-    { path: '/', label: 'Home' },
+    { path: '/weekly-ad', label: 'Weekly Specials' },
     { path: '/about', label: 'About' },
-    { path: '/weekly-ad', label: 'Weekly Ad' },
     { path: '/contact', label: 'Contact' },
   ];
 
@@ -30,37 +29,6 @@ export const Header: React.FC = () => {
     <header className="header">
       <div className="container">
         <div className="header__content">
-          {/* Logo */}
-          <Link to="/" className="header__logo" onClick={closeMobileMenu}>
-            <motion.div
-              className="header__logo-icon"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <img 
-                src="/logo.png" 
-                alt="Berwyn Fruit Market Logo" 
-                className="header__logo-image"
-              />
-            </motion.div>
-            <span className="header__logo-text">Berwyn Fruit Market</span>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <nav className="header__nav header__nav--desktop">
-            {navigationItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`header__nav-link ${
-                  location.pathname === item.path ? 'header__nav-link--active' : ''
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-
           {/* Mobile Menu Button */}
           <button
             className="header__mobile-toggle"
@@ -81,6 +49,43 @@ export const Header: React.FC = () => {
               animate={{ rotate: isMobileMenuOpen ? -45 : 0 }}
             />
           </button>
+
+          {/* Logo */}
+          <Link 
+            to="/" 
+            className="header__logo" 
+            onClick={() => {
+              closeMobileMenu();
+              window.scrollTo(0, 0);
+            }}
+          >
+            <motion.div
+              className="header__logo-icon"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <img 
+                src="/logo.png" 
+                alt="Berwyn Fruit Market Logo" 
+                className="header__logo-image"
+              />
+            </motion.div>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <nav className="header__nav header__nav--desktop">
+            {navigationItems.map((item) => (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`header__nav-link ${
+                  location.pathname === item.path ? 'header__nav-link--active' : ''
+                }`}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
         </div>
 
         {/* Mobile Navigation */}

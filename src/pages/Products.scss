@@ -174,8 +174,8 @@
   }
 }
 
-// Weekly Ads specific styles
-.weekly-ad-content {
+// Weekly Specials specific styles
+.weekly-specials-content {
   padding: $spacing-4xl 0;
   background: $bg-secondary;
   
@@ -193,17 +193,17 @@
   }
 }
 
-.weekly-ad__card {
+.weekly-specials__card {
   background: $white;
   border-radius: $radius-xl;
   padding: $spacing-3xl;
   box-shadow: $shadow-lg;
-  max-width: 800px;
+  max-width: 100%; // Full width to eliminate horizontal black bars
   margin: 0 auto;
   text-align: center;
   
   @media (min-width: $breakpoint-lg) {
-    max-width: 1100px; // Wider to show complete PDF content
+    max-width: 100%; // Full width to eliminate horizontal black bars
   }
   
   @media (max-width: $breakpoint-md) {
@@ -221,13 +221,14 @@
 }
 
 
-.weekly-ad__pdf-container {
+.weekly-specials__pdf-container {
   background: transparent; // No background to eliminate black bars
   border: none; // Remove border to eliminate black bars
   border-radius: 0; // Remove border radius to eliminate black bars
   margin-bottom: $spacing-3xl;
-  overflow: hidden; // Clean display
+  overflow: visible; // Allow content to be fully visible
   box-shadow: none; // Remove shadow to eliminate black bars
+  padding: 0; // Remove any padding that could create black space
   
   @media (max-width: $breakpoint-md) {
     margin-bottom: $spacing-xl; // Less margin on mobile
@@ -245,105 +246,100 @@
   }
 }
 
-.weekly-ad__pdf-viewer {
-  height: 1200px; // Much taller to show complete PDF without cutting off bottom
+.weekly-specials__pdf-viewer {
+  display: flex;
+  flex-direction: row; // Side by side layout
+  gap: 0; // No gap between pages
   position: relative;
-  overflow: auto; // Allow scrolling to see complete content
   border-radius: 0; // Remove border radius to eliminate black bars
   background: transparent; // No background color
-  
+  border: none; // Remove any borders
+  box-shadow: none; // Remove any shadows
+
   // Web version specific styling
   &--web {
-    height: 1200px; // Web height
-    overflow: auto; // Web scrolling
+    height: 600px; // Smaller height to fit both pages
+    width: 100%; // Full width to show whole ad horizontally
+    overflow: visible; // Allow both pages to be visible
+    padding: 0; // Remove any padding
+    margin: 0; // Remove any margins
+    justify-content: space-between; // Ensure proper side-by-side spacing
   }
-  
+
   // Mobile version specific styling
   &--mobile {
-    height: 100vh; // Full viewport height for mobile
+    height: auto; // Auto height for mobile
     width: 100%; // Ensure full width on mobile
     max-width: 100%; // Prevent overflow
-    overflow: auto; // Allow scrolling to see complete ad
+    overflow: visible; // Allow both pages to be visible
     margin: 0; // Remove ALL margins to eliminate black bar
     padding: 0; // Remove ALL padding to eliminate black bar
     position: relative; // Normal positioning
     box-sizing: border-box; // Include any borders in width calculation
+    flex-direction: column !important; // FORCE vertical stacking on mobile
+    gap: $spacing-md; // Add gap between stacked pages on mobile
   }
-  
+
   @media (max-width: $breakpoint-md) {
-    height: 100vh; // Full viewport height for mobile
-    min-height: 100vh; // Ensure full screen usage
-    overflow: hidden; // Clean display
+    gap: $spacing-sm; // Smaller gap on mobile
   }
-  
+
   @media (max-width: $breakpoint-sm) {
-    height: 100vh; // Full viewport height
-    width: 100%; // Ensure full width on mobile
-    max-width: 100%; // Prevent overflow
-    overflow: auto; // Allow scrolling to see complete ad
-    margin: 0; // Remove ALL margins to eliminate black bar
-    padding: 0; // Remove ALL padding to eliminate black bar
-    position: relative; // Normal positioning
-    box-sizing: border-box; // Include any borders in width calculation
+    gap: $spacing-xs; // Minimal gap on phones
   }
 }
 
-.weekly-ad__pdf-page {
-  flex: 1; // Equal width for both pages
-  height: 100%;
+.weekly-specials__pdf-page {
+  flex: 0 0 50%; // Equal width for side-by-side layout
+  height: 100%; // Full height of container
   position: relative;
   overflow: hidden;
-  border-radius: $radius-md;
-  background: $white;
-  box-shadow: $shadow-md;
-  border: 1px solid $light-gray;
-  
-  @media (max-width: $breakpoint-sm) {
-    display: none; // Hide on mobile (only show one at a time)
-  }
-  
-  // Ensure proper aspect ratio for full pages
-  min-width: 0; // Allow flex shrinking
-  max-width: 50%; // Prevent pages from being too wide
-}
+  border-radius: 0; // Remove border radius to eliminate black bars
+  background: transparent; // Transparent background to eliminate black bars
+  box-shadow: none; // Remove shadow to eliminate black bars
+  border: none; // Remove border to eliminate black bars
+  margin: 0; // Remove any margins
+  padding: 0; // Remove any padding
 
-.weekly-ad__pdf-iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  background: transparent; // No background to eliminate black bars
-  overflow: visible; // Allow full content to be visible
-  pointer-events: none; // Disable all interactions to prevent scrolling
-  margin: 0;
-  padding: 0;
-  display: block;
-  object-fit: fill; // Ensure PDF fills entire space
-  
-  @media (max-width: $breakpoint-sm) {
-    overflow: visible; // Allow full PDF to be visible on mobile
-    object-fit: fill; // Fill width to eliminate side black bars
-    width: 100%; // Full width
-    height: auto; // Auto height to show complete ad
-    min-height: 100vh; // Ensure minimum height
+  // Mobile: stack vertically
+  @media (max-width: $breakpoint-md) {
+    flex: none !important; // Remove flex for mobile
+    width: 100% !important; // Full width on mobile
+    height: 60vh; // Fixed height on mobile
   }
-  
-  // Additional styling to ensure clean display
-  &::-webkit-scrollbar {
-    display: none; // Hide scrollbars in webkit browsers
-  }
-  
-  // Hide scrollbars in Firefox
-  scrollbar-width: none;
-  
+
   @media (max-width: $breakpoint-sm) {
-    width: 100% !important; // Force full width on mobile
-    max-width: 100% !important; // Prevent horizontal overflow
-    object-fit: cover; // Fill the container completely
-    background: $white; // Ensure white background
+    height: 50vh; // Even smaller height on phones
+    border-radius: 0; // No border radius on mobile either
   }
 }
 
-.weekly-ad__actions {
+.weekly-specials__pdf-iframe {
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+  background: transparent !important; // No background to eliminate black bars
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block !important;
+  overflow: hidden !important; // Prevent internal scrolling
+  pointer-events: none !important; // Disable all interactions to prevent scrolling
+  object-fit: fill !important; // Fill the entire container
+  min-width: 100% !important; // Ensure full width
+  max-width: 100% !important; // Prevent overflow
+  position: absolute !important; // Force absolute positioning
+  top: 0 !important; // Position at top
+  left: 0 !important; // Position at left
+  right: 0 !important; // Stretch to right edge
+  bottom: 0 !important; // Stretch to bottom
+  
+  @media (max-width: $breakpoint-sm) {
+    width: 100% !important; // Full width on mobile
+    height: 100% !important; // Full height of container
+  }
+}
+
+.weekly-specials__actions {
   display: flex;
   gap: $spacing-lg;
   justify-content: center;
@@ -351,18 +347,11 @@
   flex-wrap: wrap;
 
   @media (max-width: $breakpoint-md) {
-    margin-bottom: $spacing-xl; // Less margin on mobile
-  }
-
-  @media (max-width: $breakpoint-sm) {
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: $spacing-lg; // Even less margin on phones
-    gap: $spacing-md; // Smaller gap between buttons
+    display: none; // Hide buttons on mobile
   }
 }
 
-.weekly-ad__action-btn {
+.weekly-specials__action-btn {
   display: flex;
   align-items: center;
   gap: $spacing-sm;

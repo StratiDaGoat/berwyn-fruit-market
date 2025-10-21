@@ -51,6 +51,9 @@ export const Home: React.FC = () => {
     <div className="home">
       {/* Hero Section */}
       <section className="hero">
+        <div className="hero__background">
+          <HomeSlideshow />
+        </div>
         <div className="container">
           <motion.div
             className="hero__content"
@@ -58,23 +61,31 @@ export const Home: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <motion.h1
-              className="hero__title"
+            <motion.h2
+              className="hero__welcome"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              Welcome to{' '}
-              <span className="hero__title-accent">Berwyn Fruit Market</span>
+              Welcome to
+            </motion.h2>
+            
+            <motion.h1
+              className="hero__title"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              Berwyn Fruit Market
             </motion.h1>
             
             <motion.p
               className="hero__subtitle"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
             >
-              YOUR NEIGHBORHOOD FRESH MARKET & QUALITY BUTCHER SHOP
+              Your neighborhood fresh market & quality butcher shop
             </motion.p>
 
             <motion.div
@@ -84,23 +95,12 @@ export const Home: React.FC = () => {
               transition={{ duration: 0.8, delay: 0.6 }}
             >
               <Link to="/weekly-ad" className="btn btn--primary btn--large">
-                View Weekly Ad
+                View Weekly Specials
               </Link>
               <Link to="/about" className="btn btn--secondary btn--large">
                 Learn About Us
               </Link>
             </motion.div>
-          </motion.div>
-
-          <motion.div
-            className="hero__image"
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-          >
-            <div className="hero__image-slideshow">
-              <HomeSlideshow />
-            </div>
           </motion.div>
         </div>
       </section>

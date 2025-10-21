@@ -14,8 +14,21 @@ export const Footer: React.FC = () => {
   const quickLinks = [
     { path: '/', label: 'Home' },
     { path: '/about', label: 'About Us' },
-    { path: '/weekly-ad', label: 'Weekly Ad' },
+    { path: '/weekly-ad', label: 'Weekly Specials' },
     { path: '/contact', label: 'Contact' },
+  ];
+
+  const socialLinks = [
+    {
+      name: 'Facebook',
+      url: 'https://www.facebook.com/berwynfruitmarket',
+      icon: 'fab fa-facebook-f'
+    },
+    {
+      name: 'Instagram', 
+      url: 'https://www.instagram.com/berwynfruit/',
+      icon: 'fab fa-instagram'
+    }
   ];
 
   return (
@@ -73,6 +86,24 @@ export const Footer: React.FC = () => {
                 </Link>
               ))}
             </nav>
+            
+            {/* Social Links - Inline with Quick Links */}
+            <div className="footer__social-inline">
+              {socialLinks.map((social) => (
+                <motion.a
+                  key={social.name}
+                  href={social.url}
+                  className="footer__social-link-inline"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Follow us on ${social.name}`}
+                >
+                  <i className={social.icon}></i>
+                </motion.a>
+              ))}
+            </div>
           </motion.div>
 
           {/* Hours */}
@@ -95,34 +126,6 @@ export const Footer: React.FC = () => {
               </div>
             </div>
           </motion.div>
-
-          {/* Social Links - Hidden for now */}
-          {/* <motion.div
-            className="footer__section"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            viewport={{ once: true }}
-          >
-            <h4 className="footer__section-title">Follow Us</h4>
-            <div className="footer__social">
-              {socialLinks.map((social) => (
-                <motion.a
-                  key={social.name}
-                  href={social.url}
-                  className="footer__social-link"
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  whileTap={{ scale: 0.95 }}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Follow us on ${social.name}`}
-                >
-                  <span className="footer__social-icon">{social.icon}</span>
-                  <span className="footer__social-name">{social.name}</span>
-                </motion.a>
-              ))}
-            </div>
-          </motion.div> */}
         </div>
 
         {/* Bottom Bar */}

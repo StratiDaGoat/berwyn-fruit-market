@@ -171,6 +171,34 @@
     font-weight: $font-medium;
   }
 
+  &__social-inline {
+    display: flex;
+    gap: $spacing-md;
+    margin-top: $spacing-lg;
+    padding-top: $spacing-lg;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  &__social-link-inline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    color: $white;
+    text-decoration: none;
+    border-radius: 50%;
+    transition: all $transition-fast;
+    font-size: $font-lg;
+
+    &:hover {
+      background: #f5f5dc; // Cream color
+      color: $primary-green; // Dark green text for contrast
+      transform: translateY(-2px);
+    }
+  }
+
   &__bottom {
     display: flex;
     justify-content: space-between;

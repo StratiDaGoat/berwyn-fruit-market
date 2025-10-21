@@ -4,9 +4,7 @@ import './Products.scss';
 
 export const WeeklyAds: React.FC = () => {
   const [pdfTimestamp, setPdfTimestamp] = useState(Date.now());
-  const [currentPage, setCurrentPage] = useState(1);
   const [isMobile, setIsMobile] = useState(false);
-  const totalPages = 2; // Assuming the weekly ad has 2 pages
 
   // Refresh PDF when component mounts to ensure latest version loads
   useEffect(() => {
@@ -16,43 +14,61 @@ export const WeeklyAds: React.FC = () => {
   // Check if mobile on mount and resize
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768); // $breakpoint-md
+      const isMobileDevice = window.innerWidth < 768; // $breakpoint-md
+      setIsMobile(isMobileDevice);
     };
     
+    // Check immediately
     checkMobile();
+    
+    // Add resize listener
     window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    
+    // Also check on focus (when user comes back to tab)
+    window.addEventListener('focus', checkMobile);
+    
+    // Check on visibility change (when user switches tabs)
+    document.addEventListener('visibilitychange', checkMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      window.removeEventListener('focus', checkMobile);
+      document.removeEventListener('visibilitychange', checkMobile);
+    };
   }, []);
 
+  // Force mobile check on every render
+  const currentIsMobile = window.innerWidth < 768;
+  if (currentIsMobile !== isMobile) {
+    setIsMobile(currentIsMobile);
+  }
+
   const handlePrint = () => {
-    // Open the PDF file in a new window for printing
+    // Open the single PDF file for printing
     const printWindow = window.open('/weekly-ad.pdf', '_blank');
     if (printWindow) {
       printWindow.onload = () => {
-        printWindow.print();
+        setTimeout(() => {
+          printWindow.print();
+        }, 1000);
       };
     }
   };
 
   const handleDownload = () => {
-    // Create a download link for the PDF file
-    const link = document.createElement('a');
-    link.href = '/weekly-ad.pdf';
-    link.download = 'weekly-ad.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(prev => prev + 1);
-    }
-  };
-
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(prev => prev - 1);
+    // Download the single PDF file
+    try {
+      const link = document.createElement('a');
+      link.href = '/weekly-ad.pdf';
+      link.download = 'weekly-specials.pdf';
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      // Fallback: open PDF in new tab
+      window.open('/weekly-ad.pdf', '_blank');
     }
   };
 
@@ -66,7 +82,7 @@ export const WeeklyAds: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="departments-hero__title">Weekly Ad</h1>
+            <h1 className="departments-hero__title">Weekly Specials</h1>
             <p className="departments-hero__subtitle">
               Check out our latest weekly specials and promotions.
             </p>
@@ -74,17 +90,18 @@ export const WeeklyAds: React.FC = () => {
         </div>
       </section>
 
-      <section className="weekly-ad-content">
+      <section className="weekly-specials-content">
         <div className="container">
           <motion.div
-            className="weekly-ad__card"
+            className="weekly-specials__card"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <div className="weekly-ad__actions">
-              <button 
-                className="btn btn--primary weekly-ad__action-btn"
+            {/* Hide buttons on mobile */}
+            <div className="weekly-specials__actions">
+              <button
+                className="btn btn--primary weekly-specials__action-btn"
                 onClick={handlePrint}
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -92,10 +109,10 @@ export const WeeklyAds: React.FC = () => {
                   <path d="M6 18H4C2.9 18 2 17.1 2 16V11C2 9.9 2.9 9 4 9H20C21.1 9 22 9.9 22 11V16C22 17.1 21.1 18 20 18H18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   <path d="M6 14H18V22H6V14Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                Print Ad
+                Print Specials
               </button>
-              <button 
-                className="btn btn--secondary weekly-ad__action-btn"
+              <button
+                className="btn btn--secondary weekly-specials__action-btn"
                 onClick={handleDownload}
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -107,79 +124,98 @@ export const WeeklyAds: React.FC = () => {
               </button>
             </div>
 
-            <div className="weekly-ad__pdf-container">
-              {/* Separate PDF viewers for mobile and web */}
-              {isMobile ? (
-                // Mobile PDF viewer
-                <div className="weekly-ad__pdf-viewer weekly-ad__pdf-viewer--mobile">
-                  <iframe
-                    src={`/weekly-ad-${currentPage}.pdf?t=${pdfTimestamp}#toolbar=0&navpanes=0&scrollbar=0&view=FitH&pagemode=none&zoom=100`}
-                    title={`Weekly Ad PDF - Page ${currentPage}`}
-                    className="weekly-ad__pdf-iframe"
-                    loading="lazy"
-                    key={`${pdfTimestamp}-${currentPage}-mobile`}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      border: 'none',
-                      display: 'block',
-                      background: 'transparent',
-                      margin: 0,
-                      padding: 0
-                    }}
-                  />
-                </div>
-              ) : (
-                // Web PDF viewer
-                <div className="weekly-ad__pdf-viewer weekly-ad__pdf-viewer--web">
-                  <iframe
-                    src={`/weekly-ad-${currentPage}.pdf?t=${pdfTimestamp}#toolbar=0&navpanes=0&scrollbar=0&view=FitV&pagemode=none&zoom=100`}
-                    title={`Weekly Ad PDF - Page ${currentPage}`}
-                    className="weekly-ad__pdf-iframe"
-                    loading="lazy"
-                    key={`${pdfTimestamp}-${currentPage}-web`}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      border: 'none',
-                      display: 'block',
-                      background: 'transparent',
-                      margin: 0,
-                      padding: 0
-                    }}
-                  />
-                </div>
-              )}
-              
-              {/* Page Navigation - Show on both desktop and mobile */}
-              <div className="weekly-ad__page-nav">
-                <button 
-                  className="btn btn--secondary weekly-ad__nav-btn"
-                  onClick={handlePrevPage}
-                  disabled={currentPage === 1}
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  Previous
-                </button>
-                
-                <span className="weekly-ad__page-info">
-                  Page {currentPage} of {totalPages}
-                </span>
-                
-                <button 
-                  className="btn btn--primary weekly-ad__nav-btn"
-                  onClick={handleNextPage}
-                  disabled={currentPage === totalPages}
-                >
-                  Next
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
+             <div className="weekly-specials__pdf-container">
+               {/* Side-by-side PDF viewers for both mobile and web */}
+               {isMobile ? (
+                 // Mobile PDF viewer - side by side
+                 <div className="weekly-specials__pdf-viewer weekly-specials__pdf-viewer--mobile">
+                   <div className="weekly-specials__pdf-page">
+                     <iframe
+                       src={`/weekly-ad-1.pdf?t=${pdfTimestamp}#toolbar=0&navpanes=0&scrollbar=0&view=FitV&pagemode=none&zoom=60&disableScroll=1`}
+                       title="Weekly Specials PDF - Page 1"
+                       className="weekly-specials__pdf-iframe"
+                       loading="lazy"
+                       key={`${pdfTimestamp}-1-mobile`}
+                       style={{
+                         width: '100%',
+                         height: '100%',
+                         border: 'none',
+                         display: 'block',
+                         background: 'transparent',
+                         margin: 0,
+                         padding: 0,
+                         overflow: 'hidden'
+                       }}
+                       scrolling="no"
+                     />
+                   </div>
+                   <div className="weekly-specials__pdf-page">
+                     <iframe
+                       src={`/weekly-ad-2.pdf?t=${pdfTimestamp}#toolbar=0&navpanes=0&scrollbar=0&view=FitV&pagemode=none&zoom=60&disableScroll=1`}
+                       title="Weekly Specials PDF - Page 2"
+                       className="weekly-specials__pdf-iframe"
+                       loading="lazy"
+                       key={`${pdfTimestamp}-2-mobile`}
+                       style={{
+                         width: '100%',
+                         height: '100%',
+                         border: 'none',
+                         display: 'block',
+                         background: 'transparent',
+                         margin: 0,
+                         padding: 0,
+                         overflow: 'hidden'
+                       }}
+                       scrolling="no"
+                     />
+                   </div>
+                 </div>
+               ) : (
+                 // Web PDF viewer - side by side
+                 <div className="weekly-specials__pdf-viewer weekly-specials__pdf-viewer--web">
+                   <div className="weekly-specials__pdf-page">
+                     <iframe
+                       src={`/weekly-ad-1.pdf?t=${pdfTimestamp}#toolbar=0&navpanes=0&scrollbar=0&view=FitV&pagemode=none&zoom=60&disableScroll=1`}
+                       title="Weekly Specials PDF - Page 1"
+                       className="weekly-specials__pdf-iframe"
+                       loading="lazy"
+                       key={`${pdfTimestamp}-1-web`}
+                       style={{
+                         width: '100%',
+                         height: '100%',
+                         border: 'none',
+                         display: 'block',
+                         background: 'transparent',
+                         margin: 0,
+                         padding: 0,
+                         overflow: 'hidden'
+                       }}
+                       scrolling="no"
+                     />
+                   </div>
+                   <div className="weekly-specials__pdf-page">
+                     <iframe
+                       src={`/weekly-ad-2.pdf?t=${pdfTimestamp}#toolbar=0&navpanes=0&scrollbar=0&view=FitV&pagemode=none&zoom=60&disableScroll=1`}
+                       title="Weekly Specials PDF - Page 2"
+                       className="weekly-specials__pdf-iframe"
+                       loading="lazy"
+                       key={`${pdfTimestamp}-2-web`}
+                       style={{
+                         width: '100%',
+                         height: '100%',
+                         border: 'none',
+                         display: 'block',
+                         background: 'transparent',
+                         margin: 0,
+                         padding: 0,
+                         overflow: 'hidden'
+                       }}
+                       scrolling="no"
+                     />
+                   </div>
+                 </div>
+               )}
+             </div>
 
           </motion.div>
         </div>

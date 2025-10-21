@@ -21,41 +21,36 @@
   &__logo {
     display: flex;
     align-items: center;
-    gap: $spacing-sm;
     text-decoration: none;
     color: $text-primary;
-    font-weight: $font-bold;
-    font-size: $font-xl;
 
     &:hover {
       color: $primary-green;
+    }
+    
+    @media (max-width: $breakpoint-md) {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-65%);
     }
   }
 
   &__logo-icon {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     width: 70px;
     height: 70px;
     background: transparent;
     border-radius: $radius-lg;
-    overflow: hidden;
+    overflow: visible;
   }
 
   &__logo-image {
-    width: 100%;
-    height: 100%;
+    width: 350%;
+    height: 350%;
     object-fit: contain;
-  }
-
-  &__logo-text {
-    font-family: $font-display;
-    font-weight: $font-bold;
-
-    @media (max-width: $breakpoint-sm) {
-      display: none;
-    }
+    transform: translateX(-20%);
   }
 
   &__nav {

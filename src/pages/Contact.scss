@@ -60,10 +60,20 @@
   border-radius: $radius-xl;
   box-shadow: $shadow-lg;
 
+  @media (max-width: $breakpoint-md) {
+    padding: $spacing-lg;
+    margin: 0 $spacing-sm;
+  }
+
   &__title {
     font-size: $font-3xl;
     margin-bottom: $spacing-2xl;
     color: $text-primary;
+
+    @media (max-width: $breakpoint-md) {
+      font-size: $font-2xl;
+      margin-bottom: $spacing-lg;
+    }
   }
 
   &__content {
@@ -71,6 +81,11 @@
     flex-direction: column;
     gap: $spacing-2xl;
     margin-bottom: $spacing-3xl;
+
+    @media (max-width: $breakpoint-md) {
+      gap: $spacing-lg;
+      margin-bottom: $spacing-lg;
+    }
   }
 
   &__item {
@@ -81,9 +96,20 @@
     border-radius: $radius-lg;
     transition: all $transition-normal;
 
+    @media (max-width: $breakpoint-md) {
+      gap: $spacing-md;
+      padding: $spacing-md;
+      flex-direction: column;
+      text-align: center;
+    }
+
     &:hover {
       transform: translateX(5px);
       box-shadow: $shadow-md;
+
+      @media (max-width: $breakpoint-md) {
+        transform: none;
+      }
     }
   }
 
@@ -98,10 +124,21 @@
     border-radius: 50%;
     box-shadow: $shadow-sm;
     flex-shrink: 0;
+
+    @media (max-width: $breakpoint-md) {
+      font-size: $font-2xl;
+      width: 40px;
+      height: 40px;
+      margin: 0 auto;
+    }
   }
 
   &__details {
     flex: 1;
+
+    @media (max-width: $breakpoint-md) {
+      text-align: center;
+    }
   }
 
   &__item-title {
@@ -109,12 +146,22 @@
     font-weight: $font-semibold;
     margin-bottom: $spacing-xs;
     color: $text-primary;
+
+    @media (max-width: $breakpoint-md) {
+      font-size: $font-base;
+      margin-bottom: $spacing-sm;
+    }
   }
 
   &__item-text {
     color: $text-secondary;
     margin: 0;
     line-height: 1.5;
+
+    @media (max-width: $breakpoint-md) {
+      font-size: $font-sm;
+      line-height: 1.4;
+    }
 
     a {
       color: $primary-green;
@@ -131,6 +178,10 @@
     display: flex;
     flex-direction: column;
     gap: $spacing-xs;
+
+    @media (max-width: $breakpoint-md) {
+      gap: $spacing-sm;
+    }
   }
 
   &__hours-item {
@@ -138,6 +189,13 @@
     justify-content: space-between;
     align-items: center;
     font-size: $font-sm;
+
+    @media (max-width: $breakpoint-md) {
+      flex-direction: column;
+      gap: $spacing-xs;
+      text-align: center;
+      font-size: $font-xs;
+    }
 
     span:first-child {
       font-weight: $font-medium;
@@ -151,6 +209,10 @@
 
   &__map {
     margin-top: $spacing-2xl;
+
+    @media (max-width: $breakpoint-md) {
+      margin-top: $spacing-lg;
+    }
   }
 
   &__map-iframe {
@@ -159,9 +221,19 @@
     border: 0;
     border-radius: $radius-lg;
     box-shadow: $shadow-md;
+
+    @media (max-width: $breakpoint-md) {
+      height: 250px;
+      border-radius: $radius-md;
+    }
   }
 
   &__map-actions {
     margin-top: $spacing-md;
+
+    @media (max-width: $breakpoint-md) {
+      margin-top: $spacing-sm;
+      text-align: center;
+    }
   }
 }
