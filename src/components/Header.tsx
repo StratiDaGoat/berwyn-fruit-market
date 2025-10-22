@@ -29,6 +29,28 @@ export const Header: React.FC = () => {
     <header className="header">
       <div className="container">
         <div className="header__content">
+          {/* Logo */}
+          <Link 
+            to="/" 
+            className="header__logo" 
+            onClick={() => {
+              closeMobileMenu();
+              window.scrollTo(0, 0);
+            }}
+          >
+            <motion.div
+              className="header__logo-icon"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <img
+                src="/logo.png"
+                alt="Berwyn Fruit Market Logo"
+                className="header__logo-image"
+              />
+            </motion.div>
+          </Link>
+
           {/* Mobile Menu Button */}
           <button
             className="header__mobile-toggle"
@@ -49,28 +71,6 @@ export const Header: React.FC = () => {
               animate={{ rotate: isMobileMenuOpen ? -45 : 0 }}
             />
           </button>
-
-          {/* Logo */}
-          <Link 
-            to="/" 
-            className="header__logo" 
-            onClick={() => {
-              closeMobileMenu();
-              window.scrollTo(0, 0);
-            }}
-          >
-            <motion.div
-              className="header__logo-icon"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <img 
-                src="/logo.png" 
-                alt="Berwyn Fruit Market Logo" 
-                className="header__logo-image"
-              />
-            </motion.div>
-          </Link>
 
           {/* Desktop Navigation */}
           <nav className="header__nav header__nav--desktop">

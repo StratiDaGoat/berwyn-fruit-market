@@ -16,6 +16,15 @@
     align-items: center;
     justify-content: space-between;
     padding: $spacing-md 0;
+    position: relative;
+
+    // Mobile layout: center logo, hamburger on right
+    @media (max-width: 768px) {
+      display: grid !important;
+      grid-template-columns: 1fr auto 1fr !important;
+      align-items: center !important;
+      justify-items: center !important;
+    }
   }
 
   &__logo {
@@ -28,17 +37,10 @@
       color: $primary-green;
     }
     
-    // iPad Air and similar tablets
-    @media (max-width: $breakpoint-lg) and (min-width: $breakpoint-md) {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-45%); // Move more to the right for iPad Air
-    }
-    
-    @media (max-width: $breakpoint-md) {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-65%);
+    // Mobile: use grid positioning
+    @media (max-width: 768px) {
+      grid-column: 2 !important;
+      justify-self: center !important;
     }
   }
 
@@ -51,6 +53,11 @@
     background: transparent;
     border-radius: $radius-lg;
     overflow: visible;
+
+    // Mobile: center the logo icon
+    @media (max-width: 768px) {
+      justify-content: center !important;
+    }
   }
 
   &__logo-image {
@@ -58,6 +65,11 @@
     height: 350%;
     object-fit: contain;
     transform: translateX(-20%);
+
+    // Mobile: center the logo image
+    @media (max-width: 768px) {
+      transform: translateX(0) !important;
+    }
   }
 
   &__nav {
@@ -131,9 +143,11 @@
     padding: 0;
     gap: 4px;
 
-    // Show on mobile and tablet (iPad Air, iPad Mini)
-    @media (max-width: $breakpoint-lg) {
-      display: flex;
+    // Show on mobile only
+    @media (max-width: 768px) {
+      display: flex !important;
+      grid-column: 3 !important;
+      justify-self: end !important;
     }
 
     &:focus {
