@@ -8,14 +8,14 @@ interface WeeklyAdImagesProps {
 export const WeeklyAdImages: React.FC<WeeklyAdImagesProps> = ({ className = '' }) => {
   const adImages = [
     {
-      src: '/weekly-ad-1.jpg',
-      alt: 'Weekly Ad - Page 1',
-      title: 'Weekly Specials Page 1'
+      src: '/weekly-ad-week 43-1.jpg',
+      alt: 'Weekly Ad - Week 43 Page 1',
+      title: 'Weekly Specials Week 43 Page 1'
     },
     {
-      src: '/weekly-ad-2.jpg',
-      alt: 'Weekly Ad - Page 2',
-      title: 'Weekly Specials Page 2'
+      src: '/weekly-ad-week 43-2.jpg',
+      alt: 'Weekly Ad - Week 43 Page 2',
+      title: 'Weekly Specials Week 43 Page 2'
     }
   ];
 
