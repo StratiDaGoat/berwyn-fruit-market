@@ -218,6 +218,14 @@
     max-width: 100%; // Prevent overflow
     box-sizing: border-box; // Include padding in width calculation
   }
+
+  // Optimize for small phones (393px width)
+  @media (max-width: 400px) {
+    padding: $spacing-xs; // Even smaller padding for small phones
+    margin: 0; // No margins
+    width: 100%; // Full width
+    max-width: 100%; // No overflow
+  }
 }
 
 
@@ -255,6 +263,23 @@
   background: transparent; // No background color
   border: none; // Remove any borders
   box-shadow: none; // Remove any shadows
+  
+  // Force mobile/tablet layout with media queries as fallback
+  @media (max-width: $breakpoint-lg) {
+    flex-direction: column !important;
+    gap: $spacing-md !important;
+    
+    .weekly-specials__pdf-page {
+      width: 100% !important;
+      flex: none !important;
+      height: 80vh !important;
+      margin-bottom: $spacing-md !important;
+      
+      &:last-child {
+        margin-bottom: 0 !important;
+      }
+    }
+  }
 
   // Web version specific styling
   &--web {
@@ -266,18 +291,45 @@
     justify-content: space-between; // Ensure proper side-by-side spacing
   }
 
-  // Mobile version specific styling
+  // Mobile and tablet version specific styling
   &--mobile {
-    height: auto; // Auto height for mobile
-    width: 100%; // Ensure full width on mobile
-    max-width: 100%; // Prevent overflow
-    overflow: visible; // Allow both pages to be visible
-    margin: 0; // Remove ALL margins to eliminate black bar
-    padding: 0; // Remove ALL padding to eliminate black bar
-    position: relative; // Normal positioning
-    box-sizing: border-box; // Include any borders in width calculation
-    flex-direction: column !important; // FORCE vertical stacking on mobile
-    gap: $spacing-md; // Add gap between stacked pages on mobile
+    height: auto !important; // Auto height for mobile/tablet
+    width: 100% !important; // Ensure full width on mobile/tablet
+    max-width: 100% !important; // Prevent overflow
+    overflow: visible !important; // Allow both pages to be visible
+    margin: 0 !important; // Remove ALL margins to eliminate black bar
+    padding: 0 !important; // Remove ALL padding to eliminate black bar
+    position: relative !important; // Normal positioning
+    box-sizing: border-box !important; // Include any borders in width calculation
+    flex-direction: column !important; // FORCE vertical stacking on mobile/tablet
+    gap: $spacing-md !important; // Add gap between stacked pages on mobile/tablet
+    display: flex !important; // Force flex display
+    
+    // Force each page to be full width and stack vertically
+    .weekly-specials__pdf-page {
+      width: 100% !important;
+      flex: none !important;
+      height: 80vh !important;
+      margin-bottom: $spacing-md !important;
+      
+      &:last-child {
+        margin-bottom: 0 !important;
+      }
+    }
+
+    // Optimize for small phones (393px width)
+    @media (max-width: 400px) {
+      gap: $spacing-sm !important; // Smaller gap for small phones
+      
+      .weekly-specials__pdf-page {
+        height: 60vh !important; // Optimized height for small phones
+        margin-bottom: $spacing-sm !important; // Smaller margin
+        
+        &:last-child {
+          margin-bottom: 0 !important;
+        }
+      }
+    }
   }
 
   @media (max-width: $breakpoint-md) {
@@ -305,12 +357,22 @@
   @media (max-width: $breakpoint-md) {
     flex: none !important; // Remove flex for mobile
     width: 100% !important; // Full width on mobile
-    height: 60vh; // Fixed height on mobile
+    height: 80vh !important; // Larger height on mobile to show more content
+    max-width: 100% !important; // Ensure no overflow
   }
 
   @media (max-width: $breakpoint-sm) {
-    height: 50vh; // Even smaller height on phones
+    height: 70vh !important; // Larger height on phones to show more content
     border-radius: 0; // No border radius on mobile either
+    max-width: 100% !important; // Ensure no overflow
+  }
+
+  // Specific styling for small phones (393px width)
+  @media (max-width: 400px) {
+    height: 60vh !important; // Optimized height for small phones
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 }
 

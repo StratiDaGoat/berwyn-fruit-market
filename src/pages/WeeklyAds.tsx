@@ -4,43 +4,72 @@ import './Products.scss';
 
 export const WeeklyAds: React.FC = () => {
   const [pdfTimestamp, setPdfTimestamp] = useState(Date.now());
-  const [isMobile, setIsMobile] = useState(false);
+  const [deviceType, setDeviceType] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
 
   // Refresh PDF when component mounts to ensure latest version loads
   useEffect(() => {
     setPdfTimestamp(Date.now());
   }, []);
 
-  // Check if mobile on mount and resize
+  // Check device type on mount and resize
   useEffect(() => {
-    const checkMobile = () => {
-      const isMobileDevice = window.innerWidth < 768; // $breakpoint-md
-      setIsMobile(isMobileDevice);
+    const checkDeviceType = () => {
+      const width = window.innerWidth;
+      const isTablet = /iPad|Android/i.test(navigator.userAgent) && width >= 768 && width < 1024;
+      const isMobile = width < 768 || /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      
+      let deviceType: 'mobile' | 'tablet' | 'desktop';
+      if (isMobile) {
+        deviceType = 'mobile';
+      } else if (isTablet || (width >= 768 && width < 1024)) {
+        deviceType = 'tablet'; // iPad Air, iPad Mini, etc.
+      } else {
+        deviceType = 'desktop';
+      }
+      
+      console.log('Device detection:', { 
+        width, 
+        deviceType,
+        userAgent: navigator.userAgent,
+        isTablet,
+        isMobile
+      });
+      
+      setDeviceType(deviceType);
     };
     
     // Check immediately
-    checkMobile();
+    checkDeviceType();
     
     // Add resize listener
-    window.addEventListener('resize', checkMobile);
+    window.addEventListener('resize', checkDeviceType);
     
     // Also check on focus (when user comes back to tab)
-    window.addEventListener('focus', checkMobile);
+    window.addEventListener('focus', checkDeviceType);
     
     // Check on visibility change (when user switches tabs)
-    document.addEventListener('visibilitychange', checkMobile);
+    document.addEventListener('visibilitychange', checkDeviceType);
     
     return () => {
-      window.removeEventListener('resize', checkMobile);
-      window.removeEventListener('focus', checkMobile);
-      document.removeEventListener('visibilitychange', checkMobile);
+      window.removeEventListener('resize', checkDeviceType);
+      window.removeEventListener('focus', checkDeviceType);
+      document.removeEventListener('visibilitychange', checkDeviceType);
     };
   }, []);
 
-  // Force mobile check on every render
-  const currentIsMobile = window.innerWidth < 768;
-  if (currentIsMobile !== isMobile) {
-    setIsMobile(currentIsMobile);
+  // Force device type check on every render
+  const currentDeviceType = (() => {
+    const width = window.innerWidth;
+    const isTablet = /iPad|Android/i.test(navigator.userAgent) && width >= 768 && width < 1024;
+    const isMobile = width < 768 || /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (isMobile) return 'mobile';
+    if (isTablet || (width >= 768 && width < 1024)) return 'tablet';
+    return 'desktop';
+  })();
+  
+  if (currentDeviceType !== deviceType) {
+    setDeviceType(currentDeviceType);
   }
 
   const handlePrint = () => {
@@ -98,7 +127,8 @@ export const WeeklyAds: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            {/* Hide buttons on mobile */}
+            {/* Hide buttons on mobile and tablet */}
+            {deviceType === 'desktop' && (
             <div className="weekly-specials__actions">
               <button
                 className="btn btn--primary weekly-specials__action-btn"
@@ -123,15 +153,16 @@ export const WeeklyAds: React.FC = () => {
                 Download
               </button>
             </div>
+            )}
 
              <div className="weekly-specials__pdf-container">
-               {/* Side-by-side PDF viewers for both mobile and web */}
-               {isMobile ? (
-                 // Mobile PDF viewer - side by side
+               {/* PDF viewers based on device type */}
+               {deviceType === 'mobile' || deviceType === 'tablet' ? (
+                 // Mobile PDF viewer - vertical stacking
                  <div className="weekly-specials__pdf-viewer weekly-specials__pdf-viewer--mobile">
                    <div className="weekly-specials__pdf-page">
                      <iframe
-                       src={`/weekly-ad-1.pdf?t=${pdfTimestamp}#toolbar=0&navpanes=0&scrollbar=0&view=FitV&pagemode=none&zoom=60&disableScroll=1`}
+                       src={`/weekly-ad-1.pdf?t=${pdfTimestamp}#toolbar=0&navpanes=0&scrollbar=0&view=FitH&pagemode=none&zoom=75&disableScroll=1`}
                        title="Weekly Specials PDF - Page 1"
                        className="weekly-specials__pdf-iframe"
                        loading="lazy"
@@ -151,7 +182,7 @@ export const WeeklyAds: React.FC = () => {
                    </div>
                    <div className="weekly-specials__pdf-page">
                      <iframe
-                       src={`/weekly-ad-2.pdf?t=${pdfTimestamp}#toolbar=0&navpanes=0&scrollbar=0&view=FitV&pagemode=none&zoom=60&disableScroll=1`}
+                       src={`/weekly-ad-2.pdf?t=${pdfTimestamp}#toolbar=0&navpanes=0&scrollbar=0&view=FitH&pagemode=none&zoom=75&disableScroll=1`}
                        title="Weekly Specials PDF - Page 2"
                        className="weekly-specials__pdf-iframe"
                        loading="lazy"

@@ -123,6 +123,14 @@ export const Contact: React.FC = () => {
                   >
                     Open in Google Maps
                   </a>
+                  <a
+                    className="btn btn--primary"
+                    href={`https://maps.apple.com/?q=${encodeURIComponent(import.meta.env.VITE_MARKET_ADDRESS || '3811 S. Harlem Ave, Berwyn, IL 60402')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Open in Apple Maps
+                  </a>
                 </div>
               </div>
             </motion.div>

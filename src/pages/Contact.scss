@@ -229,11 +229,16 @@
   }
 
   &__map-actions {
+    display: flex;
+    gap: $spacing-md;
     margin-top: $spacing-md;
+    justify-content: center;
 
     @media (max-width: $breakpoint-md) {
       margin-top: $spacing-sm;
-      text-align: center;
+      flex-direction: column;
+      align-items: center;
+      gap: $spacing-sm;
     }
   }
 }

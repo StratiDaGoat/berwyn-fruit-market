@@ -22,29 +22,41 @@ export const Home: React.FC = () => {
 
 
   const total = departments.length;
-  const [isMobile, setIsMobile] = useState(false);
-  const visible = isMobile ? 1 : 3;
+  const [deviceType, setDeviceType] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+  
+  // Determine visible departments based on device type
+  const visible = deviceType === 'mobile' ? 1 : deviceType === 'tablet' ? 2 : 3;
+  
   const CLONES = 50; // large buffer to avoid any perceived snapping
   const centerBlock = Math.floor(CLONES / 2);
   const loopItems = useMemo(() => Array.from({ length: CLONES }).flatMap(() => departments), [departments]);
   const [startIndex, setStartIndex] = useState(total * centerBlock);
   const [isSnapping, setIsSnapping] = useState(false);
 
-  // Check if mobile on mount and resize
+  // Check device type on mount and resize
   React.useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768); // $breakpoint-md
+    const checkDeviceType = () => {
+      const width = window.innerWidth;
+      if (width < 768) {
+        setDeviceType('mobile');
+      } else if (width < 1024) {
+        setDeviceType('tablet'); // iPad Mini and similar tablets
+      } else {
+        setDeviceType('desktop');
+      }
     };
     
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    checkDeviceType();
+    window.addEventListener('resize', checkDeviceType);
+    return () => window.removeEventListener('resize', checkDeviceType);
   }, []);
   const handlePrev = () => {
-    setStartIndex((prev) => prev - 1);
+    // Move by the number of visible cards
+    setStartIndex((prev) => prev - visible);
   };
   const handleNext = () => {
-    setStartIndex((prev) => prev + 1);
+    // Move by the number of visible cards
+    setStartIndex((prev) => prev + visible);
   };
 
   return (

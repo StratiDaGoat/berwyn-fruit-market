@@ -296,10 +296,15 @@
   }
 
   &__slide {
-    // Exactly 3 cards visible on desktop, 1 on mobile. Padding is inside width due to border-box.
-    flex: 0 0 33.3333%;
+    // Responsive card layout: 3 on desktop, 2 on tablet, 1 on mobile
+    flex: 0 0 33.3333%; // Default: 3 cards on desktop
     padding: 0 $spacing-sm $spacing-lg; // inner gutters + bottom space
     box-sizing: border-box;
+
+    @media (max-width: $breakpoint-lg) and (min-width: $breakpoint-md) {
+      flex: 0 0 50%; // Show 2 cards on tablet (iPad Mini)
+      padding: 0 $spacing-md $spacing-lg; // More padding for tablet
+    }
 
     @media (max-width: $breakpoint-md) {
       flex: 0 0 100%; // Show only 1 card on mobile
@@ -307,9 +312,6 @@
     }
   }
 
-  &__slide {
-    min-width: 0; /* grid children */
-  }
 }
 
 /* Ensure uniform card sizing in Home carousel only */
