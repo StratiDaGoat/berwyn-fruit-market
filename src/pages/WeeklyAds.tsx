@@ -4,13 +4,7 @@ import WeeklyAdImages from '../components/WeeklyAdImages';
 import './Products.scss';
 
 export const WeeklyAds: React.FC = () => {
-  const [pdfTimestamp, setPdfTimestamp] = useState(Date.now());
   const [deviceType, setDeviceType] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
-
-  // Refresh PDF when component mounts to ensure latest version loads
-  useEffect(() => {
-    setPdfTimestamp(Date.now());
-  }, []);
 
   // Check device type on mount and resize
   useEffect(() => {

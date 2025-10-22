@@ -39,7 +39,7 @@ export const WeeklyAdDisplay: React.FC<WeeklyAdDisplayProps> = ({ className = ''
     }
   ];
 
-  const renderAd = (file: typeof adFiles[0], index: number) => {
+  const renderAd = (file: typeof adFiles[0]) => {
     if (useImageFallback) {
       return (
         <img
@@ -91,7 +91,7 @@ export const WeeklyAdDisplay: React.FC<WeeklyAdDisplayProps> = ({ className = ''
       <div className="weekly-ad__container">
         {adFiles.map((file, index) => (
           <div key={index} className="weekly-ad__page">
-            {renderAd(file, index)}
+            {renderAd(file)}
           </div>
         ))}
       </div>

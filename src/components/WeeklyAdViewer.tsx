@@ -26,11 +26,6 @@ export const WeeklyAdViewer: React.FC<WeeklyAdViewerProps> = ({ className = '' }
   // Check if PDF embedding is supported and working
   useEffect(() => {
     const checkPDFSupport = () => {
-      // Test if PDF embedding works by checking if object/embed is supported
-      const testObject = document.createElement('object');
-      const supportsPDF = testObject.type === 'application/pdf' || 
-                         (typeof window !== 'undefined' && 'PDFViewerApplication' in window);
-      
       // For Safari and mobile browsers, prefer image fallback
       const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
       const isMobileBrowser = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
