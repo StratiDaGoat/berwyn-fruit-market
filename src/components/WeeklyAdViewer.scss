@@ -1,0 +1,194 @@
+@import '../styles/variables.scss';
+
+.weekly-ad {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  background: transparent;
+  overflow: hidden;
+
+  &__container {
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    gap: 0;
+  }
+
+  &__page {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    overflow: hidden;
+    position: relative;
+  }
+
+  &__pdf {
+    width: 100% !important;
+    height: auto !important;
+    border: none !important;
+    background: transparent !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+    overflow: hidden !important;
+    object-fit: contain !important;
+    max-width: 100% !important;
+  }
+
+  &__image {
+    width: 100% !important;
+    height: auto !important;
+    border: none !important;
+    background: transparent !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+    object-fit: contain !important;
+    max-width: 100% !important;
+  }
+
+  &__fallback {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-2xl;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: $radius-md;
+    min-height: 200px;
+  }
+
+  &__fallback-link {
+    color: $primary-green;
+    text-decoration: none;
+    font-weight: $font-medium;
+    padding: $spacing-sm $spacing-md;
+    border: 1px solid $primary-green;
+    border-radius: $radius-md;
+    transition: all $transition-fast;
+    margin-top: $spacing-md;
+
+    &:hover {
+      background: $primary-green;
+      color: $white;
+    }
+  }
+
+  // Mobile Layout (stacked vertically)
+  &--mobile {
+    .weekly-ad__container {
+      flex-direction: column;
+      gap: $spacing-lg;
+    }
+
+    .weekly-ad__page {
+      width: 100%;
+      flex: none;
+    }
+
+    .weekly-ad__pdf,
+    .weekly-ad__image {
+      height: auto;
+      min-height: 300px;
+      max-height: 80vh;
+    }
+  }
+
+  // Tablet Layout (stacked or side-by-side based on content)
+  &--tablet {
+    .weekly-ad__container {
+      flex-direction: column;
+      gap: $spacing-lg;
+    }
+
+    .weekly-ad__page {
+      width: 100%;
+      flex: none;
+    }
+
+    .weekly-ad__pdf,
+    .weekly-ad__image {
+      height: auto;
+      min-height: 400px;
+      max-height: 70vh;
+    }
+
+    // If screen is wide enough, show side-by-side
+    @media (min-width: 900px) {
+      .weekly-ad__container {
+        flex-direction: row;
+        gap: $spacing-md;
+      }
+
+      .weekly-ad__page {
+        flex: 1;
+        width: 50%;
+      }
+    }
+  }
+
+  // Desktop Layout (side-by-side)
+  &--desktop {
+    .weekly-ad__container {
+      flex-direction: row;
+      gap: $spacing-md;
+    }
+
+    .weekly-ad__page {
+      flex: 1;
+      width: 50%;
+    }
+
+    .weekly-ad__pdf,
+    .weekly-ad__image {
+      height: auto;
+      min-height: 500px;
+      max-height: 80vh;
+    }
+  }
+
+  // Responsive breakpoints
+  @media (max-width: $breakpoint-sm) {
+    &__container {
+      gap: $spacing-sm;
+    }
+
+    &__pdf,
+    &__image {
+      min-height: 250px;
+      max-height: 70vh;
+    }
+  }
+
+  @media (max-width: 400px) {
+    &__pdf,
+    &__image {
+      min-height: 200px;
+      max-height: 60vh;
+    }
+  }
+}
+
+// Ensure no horizontal scrolling
+.weekly-ad * {
+  box-sizing: border-box;
+}
+
+// Remove any default margins/padding that might cause issues
+.weekly-ad,
+.weekly-ad * {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}

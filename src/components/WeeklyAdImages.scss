@@ -1,0 +1,168 @@
+@import '../styles/variables.scss';
+
+.weekly-ad-images {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  overflow: hidden;
+  box-sizing: border-box;
+
+  &__container {
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    gap: 0;
+    box-sizing: border-box;
+  }
+
+  &__item {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__image {
+    width: 100%;
+    height: auto;
+    border: none;
+    background: transparent;
+    margin: 0;
+    padding: 0;
+    display: block;
+    object-fit: contain;
+    max-width: 100%;
+    box-sizing: border-box;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: optimize-contrast;
+  }
+
+  // Mobile Layout (stacked vertically, full width)
+  @media (max-width: 767px) {
+    &__container {
+      flex-direction: column;
+      gap: $spacing-md;
+    }
+
+    &__item {
+      width: 100%;
+      flex: none;
+    }
+
+    &__image {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  // Tablet Layout (adaptive)
+  @media (min-width: 768px) and (max-width: 1023px) {
+    &__container {
+      flex-direction: column;
+      gap: $spacing-lg;
+    }
+
+    &__item {
+      width: 100%;
+      flex: none;
+    }
+
+    &__image {
+      width: 100%;
+      height: auto;
+    }
+
+    // If tablet is wide enough, show side-by-side
+    @media (min-width: 900px) {
+      &__container {
+        flex-direction: row;
+        gap: $spacing-md;
+      }
+
+      &__item {
+        flex: 1;
+        width: 50%;
+      }
+    }
+  }
+
+  // Desktop Layout (side-by-side, 50% width each)
+  @media (min-width: 1024px) {
+    &__container {
+      flex-direction: row;
+      gap: $spacing-lg;
+    }
+
+    &__item {
+      flex: 1;
+      width: 50%;
+    }
+
+    &__image {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  // Ensure no horizontal scrolling on any device
+  * {
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+
+  // Remove any default margins/padding
+  * {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+  }
+}
+
+// Additional responsive adjustments for very small screens
+@media (max-width: 480px) {
+  .weekly-ad-images {
+    &__container {
+      gap: $spacing-sm;
+    }
+  }
+}
+
+// High DPI display optimizations
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .weekly-ad-images__image {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: optimize-contrast;
+  }
+}
+
+// Print styles
+@media print {
+  .weekly-ad-images {
+    &__container {
+      flex-direction: column;
+      gap: $spacing-lg;
+    }
+
+    &__item {
+      width: 100%;
+      page-break-inside: avoid;
+    }
+  }
+}

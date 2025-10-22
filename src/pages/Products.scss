@@ -309,7 +309,8 @@
     .weekly-specials__pdf-page {
       width: 100% !important;
       flex: none !important;
-      height: 80vh !important;
+      height: auto !important; // Auto height for responsive design
+      min-height: 400px !important; // Minimum height to ensure visibility
       margin-bottom: $spacing-md !important;
       
       &:last-child {
@@ -322,7 +323,8 @@
       gap: $spacing-sm !important; // Smaller gap for small phones
       
       .weekly-specials__pdf-page {
-        height: 60vh !important; // Optimized height for small phones
+        height: auto !important; // Auto height for small phones
+        min-height: 300px !important; // Minimum height for small phones
         margin-bottom: $spacing-sm !important; // Smaller margin
         
         &:last-child {
@@ -353,23 +355,26 @@
   margin: 0; // Remove any margins
   padding: 0; // Remove any padding
 
-  // Mobile: stack vertically
+  // Mobile: stack vertically with responsive height
   @media (max-width: $breakpoint-md) {
     flex: none !important; // Remove flex for mobile
     width: 100% !important; // Full width on mobile
-    height: 80vh !important; // Larger height on mobile to show more content
+    height: auto !important; // Auto height for responsive design
+    min-height: 400px !important; // Minimum height to ensure visibility
     max-width: 100% !important; // Ensure no overflow
   }
 
   @media (max-width: $breakpoint-sm) {
-    height: 70vh !important; // Larger height on phones to show more content
+    height: auto !important; // Auto height for phones
+    min-height: 350px !important; // Minimum height for phones
     border-radius: 0; // No border radius on mobile either
     max-width: 100% !important; // Ensure no overflow
   }
 
   // Specific styling for small phones (393px width)
   @media (max-width: 400px) {
-    height: 60vh !important; // Optimized height for small phones
+    height: auto !important; // Auto height for small phones
+    min-height: 300px !important; // Minimum height for small phones
     max-width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
@@ -378,26 +383,32 @@
 
 .weekly-specials__pdf-iframe {
   width: 100% !important;
-  height: 100% !important;
+  height: auto !important; // Auto height for responsive design
+  min-height: 400px !important; // Minimum height to ensure visibility
   border: none !important;
   background: transparent !important; // No background to eliminate black bars
   margin: 0 !important;
   padding: 0 !important;
   display: block !important;
   overflow: hidden !important; // Prevent internal scrolling
-  pointer-events: none !important; // Disable all interactions to prevent scrolling
-  object-fit: fill !important; // Fill the entire container
-  min-width: 100% !important; // Ensure full width
+  object-fit: contain !important; // Contain the entire PDF within the container
   max-width: 100% !important; // Prevent overflow
-  position: absolute !important; // Force absolute positioning
-  top: 0 !important; // Position at top
-  left: 0 !important; // Position at left
-  right: 0 !important; // Stretch to right edge
-  bottom: 0 !important; // Stretch to bottom
+  
+  // Mobile responsive adjustments
+  @media (max-width: $breakpoint-md) {
+    height: auto !important; // Auto height on mobile
+    min-height: 350px !important; // Minimum height for mobile
+  }
   
   @media (max-width: $breakpoint-sm) {
-    width: 100% !important; // Full width on mobile
-    height: 100% !important; // Full height of container
+    height: auto !important; // Auto height on phones
+    min-height: 300px !important; // Minimum height for phones
+  }
+  
+  // Small phones (393px width)
+  @media (max-width: 400px) {
+    height: auto !important; // Auto height for small phones
+    min-height: 250px !important; // Minimum height for small phones
   }
 }
 

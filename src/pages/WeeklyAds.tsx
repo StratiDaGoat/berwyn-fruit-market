@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import WeeklyAdImages from '../components/WeeklyAdImages';
 import './Products.scss';
 
 export const WeeklyAds: React.FC = () => {
@@ -156,96 +157,8 @@ export const WeeklyAds: React.FC = () => {
             )}
 
              <div className="weekly-specials__pdf-container">
-               {/* PDF viewers based on device type */}
-               {deviceType === 'mobile' || deviceType === 'tablet' ? (
-                 // Mobile PDF viewer - vertical stacking
-                 <div className="weekly-specials__pdf-viewer weekly-specials__pdf-viewer--mobile">
-                   <div className="weekly-specials__pdf-page">
-                     <iframe
-                       src={`/weekly-ad-1.pdf?t=${pdfTimestamp}#toolbar=0&navpanes=0&scrollbar=0&view=FitH&pagemode=none&zoom=75&disableScroll=1`}
-                       title="Weekly Specials PDF - Page 1"
-                       className="weekly-specials__pdf-iframe"
-                       loading="lazy"
-                       key={`${pdfTimestamp}-1-mobile`}
-                       style={{
-                         width: '100%',
-                         height: '100%',
-                         border: 'none',
-                         display: 'block',
-                         background: 'transparent',
-                         margin: 0,
-                         padding: 0,
-                         overflow: 'hidden'
-                       }}
-                       scrolling="no"
-                     />
-                   </div>
-                   <div className="weekly-specials__pdf-page">
-                     <iframe
-                       src={`/weekly-ad-2.pdf?t=${pdfTimestamp}#toolbar=0&navpanes=0&scrollbar=0&view=FitH&pagemode=none&zoom=75&disableScroll=1`}
-                       title="Weekly Specials PDF - Page 2"
-                       className="weekly-specials__pdf-iframe"
-                       loading="lazy"
-                       key={`${pdfTimestamp}-2-mobile`}
-                       style={{
-                         width: '100%',
-                         height: '100%',
-                         border: 'none',
-                         display: 'block',
-                         background: 'transparent',
-                         margin: 0,
-                         padding: 0,
-                         overflow: 'hidden'
-                       }}
-                       scrolling="no"
-                     />
-                   </div>
-                 </div>
-               ) : (
-                 // Web PDF viewer - side by side
-                 <div className="weekly-specials__pdf-viewer weekly-specials__pdf-viewer--web">
-                   <div className="weekly-specials__pdf-page">
-                     <iframe
-                       src={`/weekly-ad-1.pdf?t=${pdfTimestamp}#toolbar=0&navpanes=0&scrollbar=0&view=FitV&pagemode=none&zoom=60&disableScroll=1`}
-                       title="Weekly Specials PDF - Page 1"
-                       className="weekly-specials__pdf-iframe"
-                       loading="lazy"
-                       key={`${pdfTimestamp}-1-web`}
-                       style={{
-                         width: '100%',
-                         height: '100%',
-                         border: 'none',
-                         display: 'block',
-                         background: 'transparent',
-                         margin: 0,
-                         padding: 0,
-                         overflow: 'hidden'
-                       }}
-                       scrolling="no"
-                     />
-                   </div>
-                   <div className="weekly-specials__pdf-page">
-                     <iframe
-                       src={`/weekly-ad-2.pdf?t=${pdfTimestamp}#toolbar=0&navpanes=0&scrollbar=0&view=FitV&pagemode=none&zoom=60&disableScroll=1`}
-                       title="Weekly Specials PDF - Page 2"
-                       className="weekly-specials__pdf-iframe"
-                       loading="lazy"
-                       key={`${pdfTimestamp}-2-web`}
-                       style={{
-                         width: '100%',
-                         height: '100%',
-                         border: 'none',
-                         display: 'block',
-                         background: 'transparent',
-                         margin: 0,
-                         padding: 0,
-                         overflow: 'hidden'
-                       }}
-                       scrolling="no"
-                     />
-                   </div>
-                 </div>
-               )}
+               {/* Use the new WeeklyAdImages component */}
+               <WeeklyAdImages />
              </div>
 
           </motion.div>
