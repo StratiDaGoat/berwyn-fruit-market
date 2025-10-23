@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLeaf, faGlobe, faHeart } from '@fortawesome/free-solid-svg-icons';
@@ -9,6 +9,34 @@ import './About.scss';
  * Features animated sections with company information
  */
 export const About: React.FC = () => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  
+  const images = [
+    {
+      src: '/old-store.jpg',
+      alt: 'Berwyn Fruit Market storefront - original location'
+    },
+    {
+      src: '/76-store.jpeg',
+      alt: 'Berwyn Fruit Market storefront - current location'
+    }
+  ];
+
+  console.log('Current image index:', currentImageIndex);
+
+  // Auto-rotate images every 7.5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => {
+        const newIndex = (prevIndex + 1) % images.length;
+        console.log('Switching to image index:', newIndex);
+        return newIndex;
+      });
+    }, 7500);
+
+    return () => clearInterval(interval);
+  }, [images.length]);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -71,18 +99,23 @@ export const About: React.FC = () => {
             </motion.div>
 
             <motion.div className="story__image" variants={itemVariants}>
-              <img
-                src="/old-store.jpg"
-                alt="Berwyn Fruit Market storefront"
-                className="story__image-media"
-                decoding="async"
-                loading="lazy"
-                draggable={false}
-                onError={(e) => {
-                  const target = e.currentTarget as HTMLImageElement;
-                  if (target.src.endsWith('.jpg')) target.src = target.src.replace('.jpg', '.png');
-                }}
-              />
+              <div className="story__image-container">
+                {images.map((image, index) => (
+                  <img
+                    key={index}
+                    src={image.src}
+                    alt={image.alt}
+                    className={`story__image-media ${index === currentImageIndex ? 'story__image-media--active' : ''}`}
+                    decoding="async"
+                    loading="lazy"
+                    draggable={false}
+                    onError={(e) => {
+                      const target = e.currentTarget as HTMLImageElement;
+                      if (target.src.endsWith('.jpg')) target.src = target.src.replace('.jpg', '.png');
+                    }}
+                  />
+                ))}
+              </div>
             </motion.div>
           </motion.div>
         </div>

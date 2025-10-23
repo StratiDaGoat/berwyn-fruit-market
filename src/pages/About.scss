@@ -87,15 +87,31 @@
     align-items: center;
     position: relative;
 
-    &-media {
-      display: block;
+    &-container {
+      position: relative;
       width: 100%;
       max-width: 640px;
       aspect-ratio: 4 / 3;
-      object-fit: cover;
       border-radius: $radius-xl;
       box-shadow: $shadow-lg;
       overflow: hidden;
+    }
+
+    &-media {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 90%; // Show more of the bottom/store part
+      border-radius: $radius-xl;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+
+      &--active {
+        opacity: 1;
+      }
     }
 
     &-placeholder {
