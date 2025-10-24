@@ -6,6 +6,7 @@ import { WeeklyAds } from './pages/WeeklyAds';
 import { Contact } from './pages/Contact';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
+import FlashSalePopup from './components/FlashSalePopup';
 
 /**
  * Main App component with routing configuration
@@ -14,6 +15,7 @@ import { Footer } from './components/Footer';
 function App() {
   return (
     <div className="app">
+      <FlashSalePopup />
       <Header />
       <main className="main-content">
         <Routes>

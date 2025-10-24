@@ -17,6 +17,7 @@
     justify-content: space-between;
     padding: $spacing-md 0;
     position: relative;
+    margin: 0; // Ensure no margin
 
     // Mobile layout: center logo, hamburger on right
     @media (max-width: 768px) {

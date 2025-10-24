@@ -1,0 +1,292 @@
+// Flash Sale Popup Styles
+.flash-sale-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  max-width: 300px;
+  width: 80%;
+  animation: popupSlideIn 0.3s ease-out;
+}
+
+.popup-content {
+  position: relative;
+}
+
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #ff4444;
+  color: white;
+  border-radius: 8px 8px 0 0;
+}
+
+.flash-sale-text {
+  font-weight: bold;
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+.close-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid white;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: white;
+    color: #ff4444;
+    transform: scale(1.1);
+  }
+}
+
+.popup-image {
+  padding: 16px;
+  text-align: center;
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+  }
+}
+
+// Flash Sale Banner Styles
+.flash-sale-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background: #ff0000;
+  color: white;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  border-bottom: none; // Remove border to prevent visual gap
+  overflow: hidden;
+  margin: 0;
+  padding: 10px;
+  animation: bannerSlideDown 0.5s ease-out;
+  transform: translateY(0);
+  opacity: 1;
+  z-index: 1001; // Higher than header z-index
+}
+
+// Header adjustment when banner is visible
+.header.with-banner {
+  top: 60px; // Push header down by banner height
+  transition: top 0.4s ease-in-out;
+  margin-top: 0; // Ensure no margin
+  border-top: none; // Remove any top border
+  border-bottom: none; // Remove bottom border to prevent gap
+}
+
+// Main content adjustment when banner is visible
+.main-content.with-banner {
+  padding-top: 140px; // Account for banner (60px) + header (80px)
+  transition: padding-top 0.4s ease-in-out;
+}
+
+// Ensure no gaps between banner and header
+.flash-sale-banner {
+  margin-bottom: 0 !important;
+  border-bottom: none !important; // Remove border that might cause visual gap
+  padding-bottom: 10px; // Keep internal padding
+}
+
+.header.with-banner {
+  margin-top: 0 !important;
+  border-top: none !important; // Remove any top border that might cause gap
+  margin-bottom: 0 !important; // Ensure no bottom margin
+}
+
+
+.banner-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 20px;
+  padding-right: 50px;
+  flex-wrap: wrap;
+  min-height: 40px;
+}
+
+.banner-text {
+  font-weight: bold;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  flex: 1;
+  text-align: center;
+}
+
+.view-btn {
+  background: white;
+  color: #ff4444;
+  border: 2px solid white;
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &:hover {
+    background-color: #ff4444;
+    color: white;
+    transform: scale(1.05);
+  }
+}
+
+.banner-close-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #cc0000;
+  border: 2px solid white;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 50%;
+  transition: all 0.2s;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: white;
+    color: #cc0000;
+    transform: translateY(-50%) scale(1.1);
+  }
+}
+
+// Animations
+@keyframes popupSlideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes bannerSlideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .flash-sale-popup {
+    max-width: 280px;
+    width: 90%;
+  }
+  
+  .banner-text {
+    font-size: 12px;
+    flex: 1;
+    min-width: 200px;
+  }
+  
+  .view-btn {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+  
+  .banner-close-btn {
+    font-size: 16px;
+    width: 28px;
+    height: 28px;
+  }
+  
+  .banner-content {
+    gap: 8px;
+    padding-right: 40px;
+    flex-direction: row; // Keep horizontal layout like desktop
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .banner-close-btn {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+  }
+  
+  .flash-sale-banner {
+    padding: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .banner-text {
+    font-size: 11px;
+    text-align: center;
+  }
+  
+  .banner-content {
+    flex-direction: row; // Keep horizontal layout like desktop
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-right: 35px;
+  }
+  
+  .banner-close-btn {
+    position: absolute;
+    right: 3px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 22px;
+    height: 22px;
+    font-size: 12px;
+  }
+  
+  .view-btn {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+  
+  .flash-sale-banner {
+    padding: 6px;
+  }
+}
