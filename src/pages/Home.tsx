@@ -51,12 +51,12 @@ export const Home: React.FC = () => {
     return () => window.removeEventListener('resize', checkDeviceType);
   }, []);
   const handlePrev = () => {
-    // Move by the number of visible cards
-    setStartIndex((prev) => prev - visible);
+    // Move by 1 department at a time
+    setStartIndex((prev) => prev - 1);
   };
   const handleNext = () => {
-    // Move by the number of visible cards
-    setStartIndex((prev) => prev + visible);
+    // Move by 1 department at a time
+    setStartIndex((prev) => prev + 1);
   };
 
   return (
