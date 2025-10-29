@@ -68,8 +68,8 @@ export const WeeklyAds: React.FC = () => {
   }
 
   const handlePrint = () => {
-    // Open the Week 43 PDF file for printing
-    const printWindow = window.open('/weekly-ad-week 43.pdf', '_blank');
+    // Open the Week 44 PDF file for printing
+    const printWindow = window.open('/weekly-ad-44.pdf', '_blank');
     if (printWindow) {
       printWindow.onload = () => {
         setTimeout(() => {
@@ -80,11 +80,11 @@ export const WeeklyAds: React.FC = () => {
   };
 
   const handleDownload = () => {
-    // Download the Week 43 PDF file
+    // Download the Week 44 PDF file
     try {
       const link = document.createElement('a');
-      link.href = '/weekly-ad-week 43.pdf';
-      link.download = 'weekly-specials-week43.pdf';
+      link.href = '/weekly-ad-44.pdf';
+      link.download = 'weekly-specials-week44.pdf';
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       document.body.appendChild(link);
@@ -92,7 +92,7 @@ export const WeeklyAds: React.FC = () => {
       document.body.removeChild(link);
     } catch (error) {
       // Fallback: open PDF in new tab
-      window.open('/weekly-ad-week 43.pdf', '_blank');
+      window.open('/weekly-ad-44.pdf', '_blank');
     }
   };
 
