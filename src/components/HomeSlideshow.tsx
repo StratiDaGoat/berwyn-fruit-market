@@ -49,7 +49,7 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
   const preloadAndDecode = (url: string): Promise<void> => {
     const renderUrl = getRenderUrl(url);
     if (decodedSetRef.current.has(renderUrl)) return Promise.resolve();
-    if (inflightRef.current[renderUrl]) return inflightRef.current[renderUrl];
+    if (renderUrl in inflightRef.current) return inflightRef.current[renderUrl];
     const promise = new Promise<void>((resolve) => {
       const img = new Image();
       img.src = renderUrl;
