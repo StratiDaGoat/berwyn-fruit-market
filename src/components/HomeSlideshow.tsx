@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
 interface HomeSlideshowProps {
@@ -36,6 +36,57 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
   const [isSliding, setIsSliding] = useState<boolean>(false);
   const [direction, setDirection] = useState<'forward' | 'backward'>('forward');
   const [isReady, setIsReady] = useState(false);
+  const [isFirstImageReady, setIsFirstImageReady] = useState(false);
+  const decodedSetRef = useRef<Set<string>>(new Set());
+  const inflightRef = useRef<Record<string, Promise<void>>>({});
+  const blobUrlMapRef = useRef<Record<string, string>>({});
+  const abortControllersRef = useRef<Record<string, AbortController>>({});
+
+  const getRenderUrl = (originalUrl: string): string => {
+    return blobUrlMapRef.current[originalUrl] || originalUrl;
+  };
+
+  const preloadAndDecode = (url: string): Promise<void> => {
+    const renderUrl = getRenderUrl(url);
+    if (decodedSetRef.current.has(renderUrl)) return Promise.resolve();
+    if (inflightRef.current[renderUrl]) return inflightRef.current[renderUrl];
+    const promise = new Promise<void>((resolve) => {
+      const img = new Image();
+      img.src = renderUrl;
+      img.loading = 'eager';
+      // @ts-ignore decode may not exist in older iOS but is widely available
+      const decodePromise: Promise<void> | undefined = typeof img.decode === 'function' ? img.decode() : undefined;
+      const finalize = () => {
+        decodedSetRef.current.add(renderUrl);
+        delete inflightRef.current[renderUrl];
+        resolve();
+      };
+      if (decodePromise) {
+        decodePromise.then(finalize).catch(finalize);
+      } else {
+        img.onload = finalize;
+        img.onerror = finalize;
+      }
+    });
+    inflightRef.current[renderUrl] = promise;
+    return promise;
+  };
+
+  const prefetchToBlobUrl = async (url: string): Promise<string> => {
+    if (blobUrlMapRef.current[url]) return blobUrlMapRef.current[url];
+    const controller = new AbortController();
+    abortControllersRef.current[url] = controller;
+    try {
+      const response = await fetch(url, { cache: 'force-cache', signal: controller.signal });
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      blobUrlMapRef.current[url] = blobUrl;
+      return blobUrl;
+    } catch {
+      // Fallback to original URL on any error
+      return url;
+    }
+  };
 
   useEffect(() => {
     if (imageUrls.length <= 1) return;
@@ -51,35 +102,36 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
     return () => clearInterval(timer);
   }, [imageUrls.length, intervalMs, pausedUntil, isSliding, isReady]);
 
-  // Preload all images immediately to prevent white flash
+  // Preload all images on mount; fetch to Blob first to avoid progressive scanlines on mobile
   useEffect(() => {
     if (imageUrls.length <= 1) return;
     
     let loadedCount = 0;
     const totalImages = imageUrls.length;
     
-    // Preload all images with high priority
-    imageUrls.forEach((url) => {
-      const img = new Image();
-      img.src = url;
-      img.loading = 'eager';
-      img.decoding = 'async';
-      
-      img.onload = () => {
-        loadedCount++;
-        // Mark as ready when at least first 2 images are loaded
-        if (loadedCount >= Math.min(2, totalImages)) {
-          setIsReady(true);
-        }
-      };
-      
-      img.onerror = () => {
-        loadedCount++;
-        if (loadedCount >= Math.min(2, totalImages)) {
-          setIsReady(true);
-        }
-      };
-    });
+    (async () => {
+      for (const url of imageUrls) {
+        // Start fetches in background without awaiting serially
+        // eslint-disable-next-line no-void
+        void prefetchToBlobUrl(url).then(() => {
+          // After blob is ready, ensure decode
+          preloadAndDecode(url).then(() => {
+            loadedCount++;
+            if (loadedCount >= Math.min(2, totalImages)) {
+              setIsReady(true);
+            }
+          });
+        });
+      }
+    })();
+
+    return () => {
+      // Cleanup inflight fetches and blob URLs
+      Object.values(abortControllersRef.current).forEach(c => c.abort());
+      abortControllersRef.current = {};
+      Object.values(blobUrlMapRef.current).forEach(u => URL.revokeObjectURL(u));
+      blobUrlMapRef.current = {} as Record<string, string>;
+    };
   }, [imageUrls]);
 
   // Preload first image immediately to prevent white flash on initial load
@@ -89,10 +141,12 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
       img.src = imageUrls[0];
       img.loading = 'eager';
       img.decoding = 'async';
+      img.onload = () => setIsFirstImageReady(true);
+      img.onerror = () => setIsFirstImageReady(true);
     }
   }, [imageUrls]);
 
-  // Preload next couple of images to avoid decode jank during transition
+  // Opportunistically ensure next couple of images are decoded
   useEffect(() => {
     if (imageUrls.length <= 1) return;
     const preloadTargets = [
@@ -100,10 +154,9 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
       (index + 2) % imageUrls.length,
     ];
     preloadTargets.forEach(t => {
-      const img = new Image();
-      img.src = imageUrls[t];
-      // @ts-ignore: not always in older TS lib DOM
-      img.decoding = 'async';
+      const url = imageUrls[t];
+      // eslint-disable-next-line no-void
+      void prefetchToBlobUrl(url).then(() => preloadAndDecode(url));
     });
   }, [index, imageUrls]);
 
@@ -113,16 +166,19 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
 
   const pauseAuto = () => setPausedUntil(Date.now() + 3000);
 
-  const slideToIndex = (target: number) => {
+  const slideToIndex = async (target: number) => {
     if (isSliding) return;
+    const normalizedTarget = ((target % imageUrls.length) + imageUrls.length) % imageUrls.length;
+    const targetUrl = imageUrls[normalizedTarget];
+    await prefetchToBlobUrl(targetUrl);
+    // Ensure target frame is decoded before transition
+    await preloadAndDecode(targetUrl);
     setIsSliding(true);
     pauseAuto();
     setIndex(i => {
       setPrevIndex(i);
-      const normalizedTarget = ((target % imageUrls.length) + imageUrls.length) % imageUrls.length;
       return normalizedTarget;
     });
-    // release lock slightly after image transition (0.8s)
     const unlockMs = 820;
     setTimeout(() => setIsSliding(false), unlockMs);
   };
@@ -130,12 +186,12 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
   const goPrev = () => {
     if (isSliding) return;
     setDirection('backward');
-    slideToIndex(index - 1);
+    void slideToIndex(index - 1);
   };
   const goNext = () => {
     if (isSliding) return;
     setDirection('forward');
-    slideToIndex(index + 1);
+    void slideToIndex(index + 1);
   };
 
   return (
@@ -149,8 +205,21 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
         backgroundColor: '#f0f0f0' // Background fallback while first image loads
       }}
     >
-      {/* Only render leaving image when prevIndex !== index (not on first render) */}
-      {prevIndex !== index && (
+      {/* Instant static first frame while preloading on slow devices */}
+      {!isReady && isFirstImageReady && (
+        <img
+          key={`static-${imageUrls[0]}`}
+          src={imageUrls[0]}
+          alt="home slide"
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center' }}
+          decoding="async"
+          loading="eager"
+          fetchPriority="high"
+          draggable={false}
+        />
+      )}
+      {/* Only render slideshow when ready */}
+      {isReady && prevIndex !== index && (
         <motion.img
           key={`leave-${imageUrls[prevIndex]}-${direction}`}
           src={imageUrls[prevIndex]}
@@ -160,8 +229,6 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
           transition={{ duration: 0.8, ease: 'easeInOut' }}
           style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center', willChange: 'transform', backfaceVisibility: 'hidden' }}
           decoding="async"
-          loading="lazy"
-          fetchPriority="low"
           draggable={false}
           onError={(e) => {
             const target = e.currentTarget as HTMLImageElement;
@@ -170,26 +237,26 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
         />
       )}
       {/* Entering (current) image */}
-      <motion.img
-        key={`enter-${imageUrls[index]}-${direction}`}
-        src={imageUrls[index]}
-        alt="home slide"
-        initial={{ x: direction === 'forward' ? '100%' : '-100%', opacity: 1 }}
-        animate={{ x: 0 }}
-        transition={{ duration: 0.8, ease: 'easeInOut' }}
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center', willChange: 'transform', backfaceVisibility: 'hidden' }}
-        decoding="async"
-        loading="eager"
-        fetchPriority="high"
-        draggable={false}
-        onError={(e) => {
-          const target = e.currentTarget as HTMLImageElement;
-          if (target.src.endsWith('.jpg')) target.src = target.src.replace('.jpg', '.png');
-        }}
-      />
+      {isReady && (
+        <motion.img
+          key={`enter-${imageUrls[index]}-${direction}`}
+          src={imageUrls[index]}
+          alt="home slide"
+          initial={{ x: direction === 'forward' ? '100%' : '-100%', opacity: 1 }}
+          animate={{ x: 0 }}
+          transition={{ duration: 0.8, ease: 'easeInOut' }}
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center', willChange: 'transform', backfaceVisibility: 'hidden' }}
+          decoding="async"
+          draggable={false}
+          onError={(e) => {
+            const target = e.currentTarget as HTMLImageElement;
+            if (target.src.endsWith('.jpg')) target.src = target.src.replace('.jpg', '.png');
+          }}
+        />
+      )}
 
       {/* Controls (arrows) */}
-      {imageUrls.length > 1 && (
+      {isReady && imageUrls.length > 1 && (
         <>
           <button
             type="button"
