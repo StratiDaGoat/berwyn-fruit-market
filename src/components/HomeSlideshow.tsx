@@ -102,48 +102,57 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
     return () => clearInterval(timer);
   }, [imageUrls.length, intervalMs, pausedUntil, isSliding, isReady]);
 
-  // Preload all images on mount; fetch to Blob first to avoid progressive scanlines on mobile
+  // Preload ALL images to Blobs and decode them before showing slideshow
   useEffect(() => {
-    if (imageUrls.length <= 1) return;
+    if (imageUrls.length <= 1) {
+      setIsReady(true);
+      setIsFirstImageReady(true);
+      return;
+    }
     
-    let loadedCount = 0;
-    const totalImages = imageUrls.length;
+    let isCancelled = false;
     
     (async () => {
-      for (const url of imageUrls) {
-        // Start fetches in background without awaiting serially
-        // eslint-disable-next-line no-void
-        void prefetchToBlobUrl(url).then(() => {
-          // After blob is ready, ensure decode
-          preloadAndDecode(url).then(() => {
-            loadedCount++;
-            if (loadedCount >= Math.min(2, totalImages)) {
-              setIsReady(true);
-            }
-          });
-        });
+      try {
+        // Step 1: Fetch first image ASAP to show it immediately
+        const firstUrl = imageUrls[0];
+        await prefetchToBlobUrl(firstUrl);
+        await preloadAndDecode(firstUrl);
+        if (!isCancelled) {
+          setIsFirstImageReady(true);
+        }
+        
+        // Step 2: Fetch ALL remaining images to Blob URLs in parallel
+        const remainingPromises = imageUrls.slice(1).map(url => prefetchToBlobUrl(url));
+        await Promise.all(remainingPromises);
+        
+        if (isCancelled) return;
+        
+        // Step 3: Decode ALL remaining images in parallel
+        const remainingDecodePromises = imageUrls.slice(1).map(url => preloadAndDecode(url));
+        await Promise.all(remainingDecodePromises);
+        
+        if (isCancelled) return;
+        
+        // Step 4: Mark slideshow ready - all images are now fully loaded and decoded
+        setIsReady(true);
+      } catch (error) {
+        // Even on error, show first frame to avoid blank screen
+        if (!isCancelled) {
+          setIsFirstImageReady(true);
+          setIsReady(true);
+        }
       }
     })();
 
     return () => {
+      isCancelled = true;
       // Cleanup inflight fetches and blob URLs
       Object.values(abortControllersRef.current).forEach(c => c.abort());
       abortControllersRef.current = {};
       Object.values(blobUrlMapRef.current).forEach(u => URL.revokeObjectURL(u));
       blobUrlMapRef.current = {} as Record<string, string>;
     };
-  }, [imageUrls]);
-
-  // Preload first image immediately to prevent white flash on initial load
-  useEffect(() => {
-    if (imageUrls.length > 0) {
-      const img = new Image();
-      img.src = imageUrls[0];
-      img.loading = 'eager';
-      img.decoding = 'async';
-      img.onload = () => setIsFirstImageReady(true);
-      img.onerror = () => setIsFirstImageReady(true);
-    }
   }, [imageUrls]);
 
   // Opportunistically ensure next couple of images are decoded
@@ -202,33 +211,57 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
         width: '100%', 
         height: '100%', 
         overflow: 'hidden',
-        backgroundColor: '#f0f0f0' // Background fallback while first image loads
+        backgroundColor: '#f0f0f0', // Background fallback while first image loads
+        transform: 'translateZ(0)',
+        WebkitTransform: 'translateZ(0)',
+        willChange: 'contents'
       }}
     >
-      {/* Instant static first frame while preloading on slow devices */}
+      {/* Show nothing until all images are fully preloaded */}
       {!isReady && isFirstImageReady && (
         <img
           key={`static-${imageUrls[0]}`}
-          src={imageUrls[0]}
+          src={getRenderUrl(imageUrls[0])}
           alt="home slide"
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center' }}
-          decoding="async"
-          loading="eager"
-          fetchPriority="high"
+          style={{ 
+            position: 'absolute', 
+            inset: 0, 
+            width: '100%', 
+            height: '100%', 
+            objectFit: 'cover', 
+            objectPosition: 'center center',
+            transform: 'translateZ(0)',
+            WebkitTransform: 'translateZ(0)',
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden'
+          }}
           draggable={false}
         />
       )}
-      {/* Only render slideshow when ready */}
+      {/* Only render slideshow when ALL images are ready */}
       {isReady && prevIndex !== index && (
         <motion.img
           key={`leave-${imageUrls[prevIndex]}-${direction}`}
-          src={imageUrls[prevIndex]}
+          src={getRenderUrl(imageUrls[prevIndex])}
           alt="home slide previous"
           initial={{ x: 0, opacity: 1 }}
           animate={{ x: direction === 'forward' ? '-100%' : '100%' }}
           transition={{ duration: 0.8, ease: 'easeInOut' }}
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center', willChange: 'transform', backfaceVisibility: 'hidden' }}
-          decoding="async"
+          style={{ 
+            position: 'absolute', 
+            inset: 0, 
+            width: '100%', 
+            height: '100%', 
+            objectFit: 'cover', 
+            objectPosition: 'center center', 
+            willChange: 'transform',
+            transform: 'translateZ(0)',
+            WebkitTransform: 'translateZ(0)',
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
+            perspective: 1000,
+            WebkitPerspective: 1000
+          }}
           draggable={false}
           onError={(e) => {
             const target = e.currentTarget as HTMLImageElement;
@@ -240,13 +273,26 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
       {isReady && (
         <motion.img
           key={`enter-${imageUrls[index]}-${direction}`}
-          src={imageUrls[index]}
+          src={getRenderUrl(imageUrls[index])}
           alt="home slide"
           initial={{ x: direction === 'forward' ? '100%' : '-100%', opacity: 1 }}
           animate={{ x: 0 }}
           transition={{ duration: 0.8, ease: 'easeInOut' }}
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center', willChange: 'transform', backfaceVisibility: 'hidden' }}
-          decoding="async"
+          style={{ 
+            position: 'absolute', 
+            inset: 0, 
+            width: '100%', 
+            height: '100%', 
+            objectFit: 'cover', 
+            objectPosition: 'center center', 
+            willChange: 'transform',
+            transform: 'translateZ(0)',
+            WebkitTransform: 'translateZ(0)',
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
+            perspective: 1000,
+            WebkitPerspective: 1000
+          }}
           draggable={false}
           onError={(e) => {
             const target = e.currentTarget as HTMLImageElement;
