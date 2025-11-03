@@ -8,6 +8,9 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import FlashSalePopup from './components/FlashSalePopup';
 
+// Feature flag: Set to true to show flash sale banner, false to hide it
+const IS_FLASH_SALE_ACTIVE = false;
+
 /**
  * Main App component with routing configuration
  * Sets up the main layout with header, footer, and page routes
@@ -15,7 +18,7 @@ import FlashSalePopup from './components/FlashSalePopup';
 function App() {
   return (
     <div className="app">
-      <FlashSalePopup />
+      {IS_FLASH_SALE_ACTIVE && <FlashSalePopup />}
       <Header />
       <main className="main-content">
         <Routes>
