@@ -11,7 +11,7 @@ import { Footer } from './components/Footer';
 import FlashSalePopup from './components/FlashSalePopup';
 
 // Feature flag: Set to true to show flash sale banner, false to hide it
-const IS_FLASH_SALE_ACTIVE = false;
+const IS_FLASH_SALE_ACTIVE = true;
 
 /**
  * Main App component with routing configuration

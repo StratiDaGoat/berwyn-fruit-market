@@ -45,7 +45,7 @@ const FlashSalePopup: React.FC = () => {
       {isBannerVisible && (
         <div className="flash-sale-banner visible">
           <div className="banner-content">
-            <span className="banner-text">FLASH SALE FRESH CROP MICHIGAN APPLES STARTING TODAY</span>
+            <span className="banner-text">BANANA BONANZA</span>
             <button className="view-btn" onClick={handleViewClick}>
               VIEW
             </button>
@@ -61,13 +61,13 @@ const FlashSalePopup: React.FC = () => {
         <div className="flash-sale-popup">
           <div className="popup-content">
             <div className="popup-header">
-              <span className="flash-sale-text">FLASH SALE</span>
+              <span className="flash-sale-text">BANANA BONANZA</span>
               <button className="close-btn" onClick={handleClosePopup}>
                 ×
               </button>
             </div>
                 <div className="popup-image">
-                  <img src="/ad-with-logo.png" alt="Michigan Apple Flash Sale" />
+                  <img src="/11:11 free banana.png" alt="Banana Bonanza - 11:11 Free Banana" />
                 </div>
           </div>
         </div>
