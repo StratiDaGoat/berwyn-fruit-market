@@ -28,13 +28,13 @@ export const WeeklyAdDisplay: React.FC<WeeklyAdDisplayProps> = ({ className = ''
 
   const adFiles = [
     { 
-      pdf: '/weekly-ad-45.pdf', 
-      image: '/weekly-ad-45-1.jpg',
+      pdf: '/weekly-ad-46.pdf', 
+      image: '/weekly-ad-46-1.png',
       alt: 'Weekly Ad Page 1'
     },
     { 
-      pdf: '/weekly-ad-45.pdf', 
-      image: '/weekly-ad-45-2.jpg',
+      pdf: '/weekly-ad-46.pdf', 
+      image: '/weekly-ad-46-2.png',
       alt: 'Weekly Ad Page 2'
     }
   ];
