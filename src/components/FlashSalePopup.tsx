@@ -67,7 +67,7 @@ const FlashSalePopup: React.FC = () => {
               </button>
             </div>
                 <div className="popup-image">
-                  <img src="/11:11 free banana.png" alt="Banana Bonanza - 11:11 Free Banana" />
+                  <img src="/more bananas.png" alt="Banana Bonanza - More Bananas" />
                 </div>
           </div>
         </div>
