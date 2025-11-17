@@ -3,7 +3,7 @@ import './FlashSalePopup.scss';
 
 const FlashSalePopup: React.FC = () => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const [isBannerVisible, setIsBannerVisible] = useState(true);
+  const [isBannerVisible, setIsBannerVisible] = useState(false);
 
   useEffect(() => {
     const header = document.querySelector('.header');
@@ -28,7 +28,7 @@ const FlashSalePopup: React.FC = () => {
 
 
   const handleViewClick = () => {
-    setIsPopupVisible(true);
+    setIsPopupVisible(false);
   };
 
   const handleClosePopup = () => {
