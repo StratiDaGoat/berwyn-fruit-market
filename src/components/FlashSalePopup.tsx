@@ -3,7 +3,7 @@ import './FlashSalePopup.scss';
 
 const FlashSalePopup: React.FC = () => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const [isBannerVisible, setIsBannerVisible] = useState(false);
+  const [isBannerVisible, setIsBannerVisible] = useState(true);
 
   useEffect(() => {
     const header = document.querySelector('.header');
@@ -28,7 +28,7 @@ const FlashSalePopup: React.FC = () => {
 
 
   const handleViewClick = () => {
-    setIsPopupVisible(false);
+    setIsPopupVisible(true);
   };
 
   const handleClosePopup = () => {
@@ -45,7 +45,7 @@ const FlashSalePopup: React.FC = () => {
       {isBannerVisible && (
         <div className="flash-sale-banner visible">
           <div className="banner-content">
-            <span className="banner-text">BANANA BONANZA</span>
+            <span className="banner-text">EGG-SCELLENT DEALS! CHEAPEST EGGS IN THE CHICAGOLAND AREA</span>
             <button className="view-btn" onClick={handleViewClick}>
               VIEW
             </button>
@@ -61,13 +61,13 @@ const FlashSalePopup: React.FC = () => {
         <div className="flash-sale-popup">
           <div className="popup-content">
             <div className="popup-header">
-              <span className="flash-sale-text">BANANA BONANZA</span>
+              <span className="flash-sale-text">JUMBO EGGS $1.99</span>
               <button className="close-btn" onClick={handleClosePopup}>
                 ×
               </button>
             </div>
                 <div className="popup-image">
-                  <img src="/more bananas.png" alt="Banana Bonanza - More Bananas" />
+                  <img src="/egg promo.png" alt="Egg Promo - Jumbo Eggs $1.99" />
                 </div>
           </div>
         </div>
