@@ -37,6 +37,7 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
   const [direction, setDirection] = useState<'forward' | 'backward'>('forward');
   const [isReady, setIsReady] = useState(false);
   const [isFirstImageReady, setIsFirstImageReady] = useState(false);
+  const [isInitialRender, setIsInitialRender] = useState(true);
   const decodedSetRef = useRef<Set<string>>(new Set());
   const inflightRef = useRef<Record<string, Promise<void>>>({});
   const blobUrlMapRef = useRef<Record<string, string>>({});
@@ -92,6 +93,7 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
     if (imageUrls.length <= 1) return;
     const timer = setInterval(() => {
       if (!isSliding && isReady && Date.now() >= pausedUntil) {
+        setIsInitialRender(false); // Disable initial render flag on first auto-advance
         setDirection('forward');
         setIndex(i => {
           setPrevIndex(i);
@@ -136,6 +138,8 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
         
         // Step 4: Mark slideshow ready - all images are now fully loaded and decoded
         setIsReady(true);
+        // After a brief moment, allow animations for subsequent transitions
+        setTimeout(() => setIsInitialRender(false), 100);
       } catch (error) {
         // Even on error, show first frame to avoid blank screen
         if (!isCancelled) {
@@ -177,6 +181,7 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
 
   const slideToIndex = async (target: number) => {
     if (isSliding) return;
+    setIsInitialRender(false); // Disable initial render flag on manual navigation
     const normalizedTarget = ((target % imageUrls.length) + imageUrls.length) % imageUrls.length;
     const targetUrl = imageUrls[normalizedTarget];
     await prefetchToBlobUrl(targetUrl);
@@ -217,8 +222,8 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
         willChange: 'contents'
       }}
     >
-      {/* Show nothing until all images are fully preloaded */}
-      {!isReady && isFirstImageReady && (
+      {/* Show static first image until slideshow is ready, or during initial render */}
+      {(!isReady || (isInitialRender && index === 0)) && isFirstImageReady && (
         <img
           key={`static-${imageUrls[0]}`}
           src={getRenderUrl(imageUrls[0])}
@@ -233,7 +238,8 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
             transform: 'translateZ(0)',
             WebkitTransform: 'translateZ(0)',
             backfaceVisibility: 'hidden',
-            WebkitBackfaceVisibility: 'hidden'
+            WebkitBackfaceVisibility: 'hidden',
+            zIndex: isInitialRender && index === 0 ? 2 : 1
           }}
           draggable={false}
         />
@@ -275,9 +281,9 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
           key={`enter-${imageUrls[index]}-${direction}`}
           src={getRenderUrl(imageUrls[index])}
           alt="home slide"
-          initial={{ x: direction === 'forward' ? '100%' : '-100%', opacity: 1 }}
+          initial={isInitialRender && index === 0 ? { x: 0, opacity: 1 } : { x: direction === 'forward' ? '100%' : '-100%', opacity: 1 }}
           animate={{ x: 0 }}
-          transition={{ duration: 0.8, ease: 'easeInOut' }}
+          transition={isInitialRender && index === 0 ? { duration: 0 } : { duration: 0.8, ease: 'easeInOut' }}
           style={{ 
             position: 'absolute', 
             inset: 0, 

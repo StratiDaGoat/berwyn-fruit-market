@@ -106,8 +106,9 @@ export const About: React.FC = () => {
                     src={image.src}
                     alt={image.alt}
                     className={`story__image-media ${index === currentImageIndex ? 'story__image-media--active' : ''}`}
-                    decoding="async"
-                    loading="lazy"
+                    decoding={index === 0 ? "sync" : "async"}
+                    loading={index === 0 ? "eager" : "lazy"}
+                    fetchPriority={index === 0 ? "high" : undefined}
                     draggable={false}
                     onError={(e) => {
                       const target = e.currentTarget as HTMLImageElement;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './WeeklyAdImages.scss';
 
 interface WeeklyAdImagesProps {
@@ -19,6 +19,19 @@ export const WeeklyAdImages: React.FC<WeeklyAdImagesProps> = ({ className = '' }
     }
   ];
 
+  // Preload all images immediately on mount for instant mobile loading
+  useEffect(() => {
+    const imageUrls = ['/weekly-ad-47-1.jpg', '/weekly-ad-47-2.jpg'];
+    
+    imageUrls.forEach((url) => {
+      const img = new Image();
+      img.src = url;
+      img.loading = 'eager';
+      // @ts-ignore - fetchPriority may not be in all TypeScript versions
+      img.fetchPriority = 'high';
+    });
+  }, []);
+
   return (
     <div className={`weekly-ad-images ${className}`}>
       <div className="weekly-ad-images__container">
@@ -29,8 +42,9 @@ export const WeeklyAdImages: React.FC<WeeklyAdImagesProps> = ({ className = '' }
               alt={ad.alt}
               title={ad.title}
               className="weekly-ad-images__image"
-              loading="lazy"
-              decoding="async"
+              loading="eager"
+              decoding="sync"
+              fetchPriority="high"
             />
           </div>
         ))}

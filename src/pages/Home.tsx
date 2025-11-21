@@ -167,7 +167,14 @@ export const Home: React.FC = () => {
                   <div key={`${department.id}-${idx}`} className="home-departments__slide">
                     <div className="department-card">
                       <div className="department-card__header department-card__header--media">
-                        <img src={department.images[0]} alt={department.name} className="department-card__media" />
+                        <img 
+                          src={department.images[0]} 
+                          alt={department.name} 
+                          className="department-card__media"
+                          loading="eager"
+                          decoding="sync"
+                          fetchPriority="high"
+                        />
                         <h3 className="department-card__title">{department.name}</h3>
                       </div>
                       <div className="department-card__content">

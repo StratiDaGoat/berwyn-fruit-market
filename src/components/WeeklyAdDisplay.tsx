@@ -46,7 +46,9 @@ export const WeeklyAdDisplay: React.FC<WeeklyAdDisplayProps> = ({ className = ''
           src={file.image}
           alt={file.alt}
           className="weekly-ad__image"
-          loading="lazy"
+          loading="eager"
+          decoding="sync"
+          fetchPriority="high"
           onError={() => {
             // If image fails, try PDF as last resort
             setUseImageFallback(false);
