@@ -17,7 +17,12 @@ export const departments: Department[] = [
     icon: '🥬',
     color: '#4CAF50',
     images: ['/produce-1.jpg', '/produce-2.jpg'],
-    features: ['Local Sourcing', 'Organic Options', 'Daily Fresh', 'Seasonal Variety'],
+    features: [
+      'Local Sourcing',
+      'Organic Options',
+      'Daily Fresh',
+      'Seasonal Variety',
+    ],
   },
   {
     id: 'meat',
@@ -27,7 +32,12 @@ export const departments: Department[] = [
     icon: '🥩',
     color: '#E91E63',
     images: ['/meat-1.jpg', '/meat-2.jpg'],
-    features: ['Fresh Daily Cuts', 'Custom Orders', 'Expert Butchers', 'Quality Guaranteed'],
+    features: [
+      'Fresh Daily Cuts',
+      'Custom Orders',
+      'Expert Butchers',
+      'Quality Guaranteed',
+    ],
   },
   {
     id: 'hotFood',
@@ -36,7 +46,12 @@ export const departments: Department[] = [
       'Ready-to-eat meals, hot soups, and fresh prepared foods. Perfect for busy families.',
     icon: '🍲',
     color: '#F44336',
-    images: ['/hotFood-1.jpg', '/hotFood-2.jpg', '/hotFood-3.jpg', '/hotFood-4.jpg'],
+    images: [
+      '/hotFood-1.jpg',
+      '/hotFood-2.jpg',
+      '/hotFood-3.jpg',
+      '/hotFood-4.jpg',
+    ],
     features: ['Ready-to-Eat', 'Fresh Prepared', 'Family Meals'],
   },
   {
@@ -47,7 +62,12 @@ export const departments: Department[] = [
     icon: '🧀',
     color: '#FF9800',
     images: ['/deli-1.jpg', '/deli-2.jpg'],
-    features: ['Premium Meats', 'Artisan Cheeses', 'Prepared Foods', 'Custom Slicing'],
+    features: [
+      'Premium Meats',
+      'Artisan Cheeses',
+      'Prepared Foods',
+      'Custom Slicing',
+    ],
   },
   {
     id: 'imports',
@@ -57,7 +77,12 @@ export const departments: Department[] = [
     icon: '🌍',
     color: '#2196F3',
     images: ['/imports-1.jpg', '/imports-2.jpg'],
-    features: ['International Foods', 'Specialty Items', 'Unique Flavors', 'Global Selection'],
+    features: [
+      'International Foods',
+      'Specialty Items',
+      'Unique Flavors',
+      'Global Selection',
+    ],
   },
   {
     id: 'beer',
@@ -67,8 +92,11 @@ export const departments: Department[] = [
     icon: '🍷',
     color: '#9C27B0',
     images: ['/beer-1.jpg'],
-    features: ['Craft Beers', 'Fine Wines', 'Premium Spirits', 'Expert Recommendations'],
+    features: [
+      'Craft Beers',
+      'Fine Wines',
+      'Premium Spirits',
+      'Expert Recommendations',
+    ],
   },
 ];
-
-

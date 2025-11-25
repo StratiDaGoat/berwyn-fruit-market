@@ -10,16 +10,16 @@ import './About.scss';
  */
 export const About: React.FC = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  
+
   const images = [
     {
       src: '/old-store.jpg',
-      alt: 'Berwyn Fruit Market storefront - original location'
+      alt: 'Berwyn Fruit Market storefront - original location',
     },
     {
       src: '/76-store.jpeg',
-      alt: 'Berwyn Fruit Market storefront - current location'
-    }
+      alt: 'Berwyn Fruit Market storefront - current location',
+    },
   ];
 
   console.log('Current image index:', currentImageIndex);
@@ -27,7 +27,7 @@ export const About: React.FC = () => {
   // Auto-rotate images every 7.5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => {
+      setCurrentImageIndex(prevIndex => {
         const newIndex = (prevIndex + 1) % images.length;
         console.log('Switching to image index:', newIndex);
         return newIndex;
@@ -71,7 +71,7 @@ export const About: React.FC = () => {
           >
             <h1 className="about-hero__title">About Us</h1>
             <p className="about-hero__subtitle">
-              A family-owned business dedicated to bringing fresh, local produce 
+              A family-owned business dedicated to bringing fresh, local produce
               to our community for over 50 years.
             </p>
           </motion.div>
@@ -91,10 +91,25 @@ export const About: React.FC = () => {
             <motion.div className="story__text" variants={itemVariants}>
               <h2 className="story__title">About Berwyn Fruit Market</h2>
               <p className="story__paragraph">
-              For over 50 years, Berwyn Fruit Market has been serving our neighborhood with quality fresh groceries at a great price. As a full-service grocery store, we take pride in offering only the freshest produce, meats, deli and baked products, all backed by prompt and respectful service. Our staff lives and works in the same communities we serve, and we're committed to their prosperity and development as valued members of the Berwyn Fruit Market team.
+                Since 1980, Berwyn Fruit Market has been more than just a
+                grocery store—we&apos;re a part of the community. We&apos;ve
+                been serving our neighborhood with quality fresh groceries at a
+                great price. As a full-service grocery store, we take pride in
+                offering only the freshest produce, meats, deli and baked
+                products, all backed by prompt and respectful service. Our staff
+                lives and works in the same communities we serve, and we&apos;re
+                committed to their prosperity and development as valued members
+                of the Berwyn Fruit Market team.
               </p>
               <p className="story__paragraph">
-              At Berwyn Fruit Market, we believe in keeping it simple: to offer you the freshest produce, the finest service, and the care that only a neighborhood market, after so many years of tradition, can provide.
+                At Berwyn Fruit Market, we believe in keeping it simple: to
+                offer you the freshest produce, the finest service, and the care
+                that only a neighborhood market, after so many years of
+                tradition, can provide.
+              </p>
+              <p className="story__paragraph">
+                Have questions? We&apos;d love to hear from you. Visit us in
+                store or give us a call.
               </p>
             </motion.div>
 
@@ -106,13 +121,14 @@ export const About: React.FC = () => {
                     src={image.src}
                     alt={image.alt}
                     className={`story__image-media ${index === currentImageIndex ? 'story__image-media--active' : ''}`}
-                    decoding={index === 0 ? "sync" : "async"}
-                    loading={index === 0 ? "eager" : "lazy"}
-                    fetchPriority={index === 0 ? "high" : undefined}
+                    decoding={index === 0 ? 'sync' : 'async'}
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                    fetchPriority={index === 0 ? 'high' : undefined}
                     draggable={false}
-                    onError={(e) => {
+                    onError={e => {
                       const target = e.currentTarget as HTMLImageElement;
-                      if (target.src.endsWith('.jpg')) target.src = target.src.replace('.jpg', '.png');
+                      if (target.src.endsWith('.jpg'))
+                        target.src = target.src.replace('.jpg', '.png');
                     }}
                   />
                 ))}
@@ -151,7 +167,7 @@ export const About: React.FC = () => {
               </div>
               <h3 className="values__item-title">Freshness First</h3>
               <p className="values__item-description">
-                We never compromise on quality. Every item in our store is 
+                We never compromise on quality. Every item in our store is
                 carefully selected for peak freshness and flavor.
               </p>
             </motion.div>
@@ -162,8 +178,9 @@ export const About: React.FC = () => {
               </div>
               <h3 className="values__item-title">Cater to All Cultures</h3>
               <p className="values__item-description">
-                From imported groceries to specialty items, we stock goods from around the world
-                so every culture can find familiar flavors at our market.
+                From imported groceries to specialty items, we stock goods from
+                around the world so every culture can find familiar flavors at
+                our market.
               </p>
             </motion.div>
 
@@ -173,7 +190,7 @@ export const About: React.FC = () => {
               </div>
               <h3 className="values__item-title">Customer Care</h3>
               <p className="values__item-description">
-                Every customer is treated like family. We're here to help 
+                Every customer is treated like family. We&apos;re here to help
                 you find exactly what you need with a smile.
               </p>
             </motion.div>
@@ -183,4 +200,3 @@ export const About: React.FC = () => {
     </div>
   );
 };
-

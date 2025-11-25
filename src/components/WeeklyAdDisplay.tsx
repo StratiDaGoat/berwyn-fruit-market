@@ -5,7 +5,9 @@ interface WeeklyAdDisplayProps {
   className?: string;
 }
 
-export const WeeklyAdDisplay: React.FC<WeeklyAdDisplayProps> = ({ className = '' }) => {
+export const WeeklyAdDisplay: React.FC<WeeklyAdDisplayProps> = ({
+  className = '',
+}) => {
   const [useImageFallback, setUseImageFallback] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -13,9 +15,11 @@ export const WeeklyAdDisplay: React.FC<WeeklyAdDisplayProps> = ({ className = ''
   useEffect(() => {
     const checkFallback = () => {
       const isMobile = window.innerWidth < 768;
-      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+      const isSafari = /^((?!chrome|android).)*safari/i.test(
+        navigator.userAgent
+      );
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-      
+
       // Use image fallback for mobile Safari and iOS devices for best performance
       if (isMobile && (isSafari || isIOS)) {
         setUseImageFallback(true);
@@ -27,19 +31,19 @@ export const WeeklyAdDisplay: React.FC<WeeklyAdDisplayProps> = ({ className = ''
   }, []);
 
   const adFiles = [
-    { 
-      pdf: '/weekly-ad-47.pdf', 
+    {
+      pdf: '/weekly-ad-47.pdf',
       image: '/weekly-ad-47-1.jpg',
-      alt: 'Weekly Ad Page 1'
+      alt: 'Weekly Ad Page 1',
     },
-    { 
-      pdf: '/weekly-ad-47.pdf', 
+    {
+      pdf: '/weekly-ad-47.pdf',
       image: '/weekly-ad-47-2.jpg',
-      alt: 'Weekly Ad Page 2'
-    }
+      alt: 'Weekly Ad Page 2',
+    },
   ];
 
-  const renderAd = (file: typeof adFiles[0]) => {
+  const renderAd = (file: (typeof adFiles)[0]) => {
     if (useImageFallback) {
       return (
         <img

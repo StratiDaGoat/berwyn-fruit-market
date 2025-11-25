@@ -28,10 +28,16 @@ export const DepartmentSlideshow: React.FC<DepartmentSlideshowProps> = ({
   const imageUrls = useMemo(() => {
     if (images && images.length > 0) return images;
     // default pattern (backward compatible): /departments/{id}-{index}.jpg
-    return Array.from({ length: imageCount }, (_, i) => `/departments/${departmentId}-${i + 1}.jpg`);
+    return Array.from(
+      { length: imageCount },
+      (_, i) => `/departments/${departmentId}-${i + 1}.jpg`
+    );
   }, [departmentId, imageCount, images]);
 
-  const indexes = useMemo(() => Array.from({ length: imageUrls.length }, (_, i) => i), [imageUrls.length]);
+  const indexes = useMemo(
+    () => Array.from({ length: imageUrls.length }, (_, i) => i),
+    [imageUrls.length]
+  );
   const [order, setOrder] = useState<number[]>(() => shuffleArray(indexes));
   const [currentIdx, setCurrentIdx] = useState<number>(0);
   const [prevIdx, setPrevIdx] = useState<number | null>(null);
@@ -47,7 +53,6 @@ export const DepartmentSlideshow: React.FC<DepartmentSlideshowProps> = ({
       }
     }, intervalMs);
     return () => clearInterval(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageUrls.length, intervalMs, order.length, currentIdx]);
 
   const activeIndex = order[currentIdx] ?? 0;
@@ -59,7 +64,12 @@ export const DepartmentSlideshow: React.FC<DepartmentSlideshowProps> = ({
     <div
       className={className}
       aria-label={`${departmentId} slideshow`}
-      style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden' }}
+      style={{
+        position: 'relative',
+        width: '100%',
+        height: '100%',
+        overflow: 'hidden',
+      }}
     >
       {prevSrc && (
         <motion.img
@@ -69,8 +79,14 @@ export const DepartmentSlideshow: React.FC<DepartmentSlideshowProps> = ({
           initial={{ opacity: 1 }}
           animate={{ opacity: 0 }}
           transition={{ duration: 0.6 }}
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-          onError={(e) => {
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+          }}
+          onError={e => {
             const target = e.currentTarget as HTMLImageElement;
             if (target.src.endsWith('.jpg')) {
               target.src = target.src.replace('.jpg', '.png');
@@ -87,8 +103,14 @@ export const DepartmentSlideshow: React.FC<DepartmentSlideshowProps> = ({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-        onError={(e) => {
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+        }}
+        onError={e => {
           const target = e.currentTarget as HTMLImageElement;
           if (target.src.endsWith('.jpg')) {
             target.src = target.src.replace('.jpg', '.png');
@@ -102,5 +124,3 @@ export const DepartmentSlideshow: React.FC<DepartmentSlideshowProps> = ({
 };
 
 export default DepartmentSlideshow;
-
-

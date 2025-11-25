@@ -60,14 +60,15 @@ export const Contact: React.FC = () => {
             {/* Contact Information */}
             <motion.div className="contact-info" variants={itemVariants}>
               <h2 className="contact-info__title">Visit Our Store</h2>
-              
+
               <div className="contact-info__content">
                 <div className="contact-info__item">
                   <div className="contact-info__icon">📍</div>
                   <div className="contact-info__details">
                     <h3 className="contact-info__item-title">Address</h3>
                     <p className="contact-info__item-text">
-                      {import.meta.env.VITE_MARKET_ADDRESS || '3811 S. Harlem Ave, Berwyn, IL 60402'}
+                      {import.meta.env.VITE_MARKET_ADDRESS ||
+                        '3811 S. Harlem Ave, Berwyn, IL 60402'}
                     </p>
                   </div>
                 </div>
@@ -77,7 +78,9 @@ export const Contact: React.FC = () => {
                   <div className="contact-info__details">
                     <h3 className="contact-info__item-title">Phone</h3>
                     <p className="contact-info__item-text">
-                      <a href={`tel:${import.meta.env.VITE_MARKET_PHONE || '(708) 795-6670'}`}>
+                      <a
+                        href={`tel:${import.meta.env.VITE_MARKET_PHONE || '(708) 795-6670'}`}
+                      >
                         {import.meta.env.VITE_MARKET_PHONE || '(708) 795-6670'}
                       </a>
                     </p>

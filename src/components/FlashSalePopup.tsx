@@ -8,7 +8,7 @@ const FlashSalePopup: React.FC = () => {
   useEffect(() => {
     const header = document.querySelector('.header');
     const mainContent = document.querySelector('.main-content');
-    
+
     if (header) {
       if (isBannerVisible) {
         header.classList.add('with-banner');
@@ -16,7 +16,7 @@ const FlashSalePopup: React.FC = () => {
         header.classList.remove('with-banner');
       }
     }
-    
+
     if (mainContent) {
       if (isBannerVisible) {
         mainContent.classList.add('with-banner');
@@ -25,7 +25,6 @@ const FlashSalePopup: React.FC = () => {
       }
     }
   }, [isBannerVisible]);
-
 
   const handleViewClick = () => {
     setIsPopupVisible(true);
@@ -45,7 +44,9 @@ const FlashSalePopup: React.FC = () => {
       {isBannerVisible && (
         <div className="flash-sale-banner visible">
           <div className="banner-content">
-            <span className="banner-text">EGG-SCELLENT DEALS! CHEAPEST EGGS IN THE CHICAGOLAND AREA</span>
+            <span className="banner-text">
+              EGG-SCELLENT DEALS! CHEAPEST EGGS IN THE CHICAGOLAND AREA
+            </span>
             <button className="view-btn" onClick={handleViewClick}>
               VIEW
             </button>
@@ -66,13 +67,12 @@ const FlashSalePopup: React.FC = () => {
                 ×
               </button>
             </div>
-                <div className="popup-image">
-                  <img src="/egg promo.png" alt="Egg Promo - Jumbo Eggs $1.99" />
-                </div>
+            <div className="popup-image">
+              <img src="/egg promo.png" alt="Egg Promo - Jumbo Eggs $1.99" />
+            </div>
           </div>
         </div>
       )}
-      
     </>
   );
 };

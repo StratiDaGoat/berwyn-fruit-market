@@ -2,21 +2,21 @@
 // Vibrant, fresh color palette inspired by fruits and vegetables
 
 // Primary Colors - Inspired by fresh produce
-$primary-green: #4CAF50;        // Fresh lettuce green
-$primary-orange: #FF9800;       // Vibrant orange
-$primary-red: #F44336;          // Ripe tomato red
-$primary-yellow: #FFEB3B;       // Sunny lemon yellow
+$primary-green: #4caf50; // Fresh lettuce green
+$primary-orange: #ff9800; // Vibrant orange
+$primary-red: #f44336; // Ripe tomato red
+$primary-yellow: #ffeb3b; // Sunny lemon yellow
 
 // Secondary Colors - Supporting the fresh theme
-$secondary-green: #8BC34A;      // Light green (herbs)
-$secondary-orange: #FFC107;     // Golden yellow
-$secondary-red: #E91E63;        // Berry red
-$secondary-blue: #2196F3;       // Sky blue
+$secondary-green: #8bc34a; // Light green (herbs)
+$secondary-orange: #ffc107; // Golden yellow
+$secondary-red: #e91e63; // Berry red
+$secondary-blue: #2196f3; // Sky blue
 
 // Neutral Colors
-$white: #FFFFFF;
-$light-gray: #F5F5F5;
-$medium-gray: #9E9E9E;
+$white: #ffffff;
+$light-gray: #f5f5f5;
+$medium-gray: #9e9e9e;
 $dark-gray: #424242;
 $black: #212121;
 
@@ -43,40 +43,46 @@ $font-semibold: 600;
 $font-bold: 700;
 
 // Font Sizes
-$font-xs: 0.75rem;      // 12px
-$font-sm: 0.875rem;     // 14px
-$font-base: 1rem;       // 16px
-$font-lg: 1.125rem;     // 18px
-$font-xl: 1.25rem;      // 20px
-$font-2xl: 1.5rem;      // 24px
-$font-3xl: 1.875rem;    // 30px
-$font-4xl: 2.25rem;     // 36px
-$font-5xl: 3rem;        // 48px
-$font-6xl: 3.75rem;     // 60px
+$font-xs: 0.75rem; // 12px
+$font-sm: 0.875rem; // 14px
+$font-base: 1rem; // 16px
+$font-lg: 1.125rem; // 18px
+$font-xl: 1.25rem; // 20px
+$font-2xl: 1.5rem; // 24px
+$font-3xl: 1.875rem; // 30px
+$font-4xl: 2.25rem; // 36px
+$font-5xl: 3rem; // 48px
+$font-6xl: 3.75rem; // 60px
 
 // Spacing Scale
-$spacing-xs: 0.25rem;   // 4px
-$spacing-sm: 0.5rem;    // 8px
-$spacing-md: 1rem;      // 16px
-$spacing-lg: 1.5rem;    // 24px
-$spacing-xl: 2rem;      // 32px
-$spacing-2xl: 3rem;     // 48px
-$spacing-3xl: 4rem;     // 64px
-$spacing-4xl: 6rem;     // 96px
-$spacing-5xl: 8rem;     // 128px
+$spacing-xs: 0.25rem; // 4px
+$spacing-sm: 0.5rem; // 8px
+$spacing-md: 1rem; // 16px
+$spacing-lg: 1.5rem; // 24px
+$spacing-xl: 2rem; // 32px
+$spacing-2xl: 3rem; // 48px
+$spacing-3xl: 4rem; // 64px
+$spacing-4xl: 6rem; // 96px
+$spacing-5xl: 8rem; // 128px
 
 // Border Radius
-$radius-sm: 0.25rem;    // 4px
-$radius-md: 0.5rem;     // 8px
-$radius-lg: 1rem;       // 16px
-$radius-xl: 1.5rem;     // 24px
+$radius-sm: 0.25rem; // 4px
+$radius-md: 0.5rem; // 8px
+$radius-lg: 1rem; // 16px
+$radius-xl: 1.5rem; // 24px
 $radius-full: 9999px;
 
 // Shadows
 $shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+$shadow-md:
+  0 4px 6px -1px rgba(0, 0, 0, 0.1),
+  0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$shadow-lg:
+  0 10px 15px -3px rgba(0, 0, 0, 0.1),
+  0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$shadow-xl:
+  0 20px 25px -5px rgba(0, 0, 0, 0.1),
+  0 10px 10px -5px rgba(0, 0, 0, 0.04);
 
 // Transitions
 $transition-fast: 0.15s ease-in-out;
@@ -98,4 +104,3 @@ $z-modal-backdrop: 1040;
 $z-modal: 1050;
 $z-popover: 1060;
 $z-tooltip: 1070;
-

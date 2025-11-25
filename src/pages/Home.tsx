@@ -20,16 +20,20 @@ export const Home: React.FC = () => {
     },
   };
 
-
   const total = departments.length;
-  const [deviceType, setDeviceType] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
-  
+  const [deviceType, setDeviceType] = useState<'mobile' | 'tablet' | 'desktop'>(
+    'desktop'
+  );
+
   // Determine visible departments based on device type
   const visible = deviceType === 'mobile' ? 1 : deviceType === 'tablet' ? 2 : 3;
-  
+
   const CLONES = 50; // large buffer to avoid any perceived snapping
   const centerBlock = Math.floor(CLONES / 2);
-  const loopItems = useMemo(() => Array.from({ length: CLONES }).flatMap(() => departments), [departments]);
+  const loopItems = useMemo(
+    () => Array.from({ length: CLONES }).flatMap(() => departments),
+    []
+  );
   const [startIndex, setStartIndex] = useState(total * centerBlock);
   const [isSnapping, setIsSnapping] = useState(false);
 
@@ -45,18 +49,18 @@ export const Home: React.FC = () => {
         setDeviceType('desktop');
       }
     };
-    
+
     checkDeviceType();
     window.addEventListener('resize', checkDeviceType);
     return () => window.removeEventListener('resize', checkDeviceType);
   }, []);
   const handlePrev = () => {
     // Move by 1 department at a time
-    setStartIndex((prev) => prev - 1);
+    setStartIndex(prev => prev - 1);
   };
   const handleNext = () => {
     // Move by 1 department at a time
-    setStartIndex((prev) => prev + 1);
+    setStartIndex(prev => prev + 1);
   };
 
   return (
@@ -81,7 +85,7 @@ export const Home: React.FC = () => {
             >
               Welcome to
             </motion.h2>
-            
+
             <motion.h1
               className="hero__title"
               initial={{ opacity: 0, y: 20 }}
@@ -90,7 +94,7 @@ export const Home: React.FC = () => {
             >
               Berwyn Fruit Market
             </motion.h1>
-            
+
             <motion.p
               className="hero__subtitle"
               initial={{ opacity: 0, y: 20 }}
@@ -128,18 +132,44 @@ export const Home: React.FC = () => {
             viewport={{ once: true }}
           >
             <div className="home-departments__controls" aria-hidden="false">
-              <button className="home-departments__control home-departments__control--prev" onClick={handlePrev} aria-label="Previous departments">
-                <svg className="home-departments__icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/>
+              <button
+                className="home-departments__control home-departments__control--prev"
+                onClick={handlePrev}
+                aria-label="Previous departments"
+              >
+                <svg
+                  className="home-departments__icon"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"
+                    fill="currentColor"
+                  />
                 </svg>
               </button>
-              <button className="home-departments__control home-departments__control--next" onClick={handleNext} aria-label="Next departments">
-                <svg className="home-departments__icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M8.59 16.59 10 18l6-6-6-6-1.41 1.41L13.17 12z" fill="currentColor"/>
+              <button
+                className="home-departments__control home-departments__control--next"
+                onClick={handleNext}
+                aria-label="Next departments"
+              >
+                <svg
+                  className="home-departments__icon"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M8.59 16.59 10 18l6-6-6-6-1.41 1.41L13.17 12z"
+                    fill="currentColor"
+                  />
                 </svg>
               </button>
             </div>
-            <div className="home-departments__track" id="home-dept-track" aria-live="polite">
+            <div
+              className="home-departments__track"
+              id="home-dept-track"
+              aria-live="polite"
+            >
               <div
                 className="home-departments__group"
                 style={{
@@ -151,12 +181,16 @@ export const Home: React.FC = () => {
                   const leftThreshold = total * 2; // generous buffer
                   const rightThreshold = total * (CLONES - 2) - visible; // generous buffer on right
                   if (startIndex > rightThreshold) {
-                    const normalized = ((startIndex - total * centerBlock) % total + total) % total;
+                    const normalized =
+                      (((startIndex - total * centerBlock) % total) + total) %
+                      total;
                     setIsSnapping(true);
                     setStartIndex(total * centerBlock + normalized);
                     requestAnimationFrame(() => setIsSnapping(false));
                   } else if (startIndex < leftThreshold) {
-                    const normalized = ((startIndex - total * centerBlock) % total + total) % total;
+                    const normalized =
+                      (((startIndex - total * centerBlock) % total) + total) %
+                      total;
                     setIsSnapping(true);
                     setStartIndex(total * centerBlock + normalized);
                     requestAnimationFrame(() => setIsSnapping(false));
@@ -164,34 +198,50 @@ export const Home: React.FC = () => {
                 }}
               >
                 {loopItems.map((department, idx) => (
-                  <div key={`${department.id}-${idx}`} className="home-departments__slide">
+                  <div
+                    key={`${department.id}-${idx}`}
+                    className="home-departments__slide"
+                  >
                     <div className="department-card">
                       <div className="department-card__header department-card__header--media">
-                        <img 
-                          src={department.images[0]} 
-                          alt={department.name} 
+                        <img
+                          src={department.images[0]}
+                          alt={department.name}
                           className="department-card__media"
                           loading="eager"
                           decoding="sync"
                           fetchPriority="high"
                         />
-                        <h3 className="department-card__title">{department.name}</h3>
+                        <h3 className="department-card__title">
+                          {department.name}
+                        </h3>
                       </div>
                       <div className="department-card__content">
-                        {
-                          (() => {
-                            const full = department.description || '';
-                            const firstSentence = full.split('. ')[0] + (full.includes('. ') ? '.' : '');
-                            const maxLen = 90;
-                            const trimmed = firstSentence.length > maxLen
-                              ? firstSentence.slice(0, maxLen - 1).trimEnd() + '…'
+                        {(() => {
+                          const full = department.description || '';
+                          const firstSentence =
+                            full.split('. ')[0] +
+                            (full.includes('. ') ? '.' : '');
+                          const maxLen = 90;
+                          const trimmed =
+                            firstSentence.length > maxLen
+                              ? firstSentence.slice(0, maxLen - 1).trimEnd() +
+                                '…'
                               : firstSentence;
-                            return <p className="department-card__description">{trimmed}</p>;
-                          })()
-                        }
+                          return (
+                            <p className="department-card__description">
+                              {trimmed}
+                            </p>
+                          );
+                        })()}
                         <div className="department-card__features">
                           {department.features.map((feature, index) => (
-                            <span key={index} className="department-card__feature">{feature}</span>
+                            <span
+                              key={index}
+                              className="department-card__feature"
+                            >
+                              {feature}
+                            </span>
                           ))}
                         </div>
                       </div>

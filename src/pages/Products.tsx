@@ -9,8 +9,6 @@ import { departments } from '../data/departments';
  * Features department cards with descriptions and navigation
  */
 export const Products: React.FC = () => {
-
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -45,7 +43,7 @@ export const Products: React.FC = () => {
           >
             <h1 className="departments-hero__title">Our Departments</h1>
             <p className="departments-hero__subtitle">
-              Explore our full-service grocery store with dedicated departments 
+              Explore our full-service grocery store with dedicated departments
               offering the finest quality products and expert service.
             </p>
           </motion.div>
@@ -62,7 +60,7 @@ export const Products: React.FC = () => {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            {departments.map((department) => (
+            {departments.map(department => (
               <motion.div
                 key={department.id}
                 className="department-card"
@@ -73,18 +71,17 @@ export const Products: React.FC = () => {
                 <div className="department-card__header department-card__header--media">
                   <DepartmentSlideshow
                     departmentId={department.id}
-                    images={('images' in department ? (department as any).images : undefined)}
-                    imageCount={('images' in department ? undefined : 1)}
+                    images={department.images}
                     className="department-card__media"
                   />
                   <h3 className="department-card__title">{department.name}</h3>
                 </div>
-                
+
                 <div className="department-card__content">
                   <p className="department-card__description">
                     {department.description}
                   </p>
-                  
+
                   <div className="department-card__features">
                     {department.features.map((feature, index) => (
                       <span key={index} className="department-card__feature">

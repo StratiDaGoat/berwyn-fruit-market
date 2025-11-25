@@ -30,9 +30,9 @@ export const Header: React.FC = () => {
       <div className="container">
         <div className="header__content">
           {/* Logo */}
-          <Link 
-            to="/" 
-            className="header__logo" 
+          <Link
+            to="/"
+            className="header__logo"
             onClick={() => {
               closeMobileMenu();
               window.scrollTo(0, 0);
@@ -47,6 +47,8 @@ export const Header: React.FC = () => {
                 src="/logo.png"
                 alt="Berwyn Fruit Market Logo"
                 className="header__logo-image"
+                width="150"
+                height="50"
               />
             </motion.div>
           </Link>
@@ -74,12 +76,14 @@ export const Header: React.FC = () => {
 
           {/* Desktop Navigation */}
           <nav className="header__nav header__nav--desktop">
-            {navigationItems.map((item) => (
+            {navigationItems.map(item => (
               <Link
                 key={item.path}
                 to={item.path}
                 className={`header__nav-link ${
-                  location.pathname === item.path ? 'header__nav-link--active' : ''
+                  location.pathname === item.path
+                    ? 'header__nav-link--active'
+                    : ''
                 }`}
               >
                 {item.label}
@@ -108,7 +112,9 @@ export const Header: React.FC = () => {
                   <Link
                     to={item.path}
                     className={`header__nav-link ${
-                      location.pathname === item.path ? 'header__nav-link--active' : ''
+                      location.pathname === item.path
+                        ? 'header__nav-link--active'
+                        : ''
                     }`}
                     onClick={closeMobileMenu}
                   >

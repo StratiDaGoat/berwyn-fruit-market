@@ -6,7 +6,7 @@
 
 .about-hero {
   background: linear-gradient(135deg, $primary-green, $secondary-green);
-  color: #FFF8E1;
+  color: #fff8e1;
   padding: $spacing-2xl 0;
   text-align: center;
 
@@ -18,7 +18,7 @@
   &__title {
     font-size: $font-4xl;
     margin-bottom: $spacing-lg;
-    color: #FFF8E1;
+    color: #fff8e1;
 
     @media (max-width: $breakpoint-md) {
       font-size: $font-3xl;
@@ -34,7 +34,7 @@
     line-height: 1.6;
     opacity: 0.9;
     margin: 0;
-    color: #FFF8E1;
+    color: #fff8e1;
 
     @media (max-width: $breakpoint-md) {
       font-size: $font-sm;
@@ -189,30 +189,30 @@
 
     // Freshness First - Green leaf
     &--fresh {
-      color: #4CAF50;
-      
+      color: #4caf50;
+
       &:hover {
-        color: #2E7D32;
+        color: #2e7d32;
         transform: scale(1.1);
       }
     }
 
     // Cater to All Cultures - Blue globe
     &--global {
-      color: #2196F3;
-      
+      color: #2196f3;
+
       &:hover {
-        color: #1565C0;
+        color: #1565c0;
         transform: scale(1.1);
       }
     }
 
     // Customer Care - Red heart
     &--care {
-      color: #F44336;
-      
+      color: #f44336;
+
       &:hover {
-        color: #C62828;
+        color: #c62828;
         transform: scale(1.1);
       }
     }
@@ -230,4 +230,3 @@
     margin: 0;
   }
 }
-

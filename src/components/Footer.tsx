@@ -10,7 +10,6 @@ import './Footer.scss';
 export const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
-
   const quickLinks = [
     { path: '/', label: 'Home' },
     { path: '/about', label: 'About Us' },
@@ -22,13 +21,13 @@ export const Footer: React.FC = () => {
     {
       name: 'Facebook',
       url: 'https://www.facebook.com/berwynfruitmarket',
-      icon: 'fab fa-facebook-f'
+      icon: 'fab fa-facebook-f',
     },
     {
-      name: 'Instagram', 
+      name: 'Instagram',
       url: 'https://www.instagram.com/berwynfruit/',
-      icon: 'fab fa-instagram'
-    }
+      icon: 'fab fa-instagram',
+    },
   ];
 
   return (
@@ -45,22 +44,24 @@ export const Footer: React.FC = () => {
           >
             <div className="footer__logo">
               <div className="footer__logo-icon">
-                <img 
-                  src="/logo.png" 
-                  alt="Berwyn Fruit Market Logo" 
+                <img
+                  src="/logo.png"
+                  alt="Berwyn Fruit Market Logo"
                   className="footer__logo-image"
                 />
               </div>
               <h3 className="footer__logo-text">Berwyn Fruit Market</h3>
             </div>
-            <p className="footer__description">
-              Your local community market for the freshest fruits and vegetables. 
-              We're committed to bringing you premium quality produce and friendly service.
+            <p className="footer__text">
+              Berwyn Fruit Market is a family-owned grocery store serving the
+              community since 1980. We&apos;re committed to providing fresh,
+              high-quality produce at affordable prices.
             </p>
             <div className="footer__contact">
               <p className="footer__contact-item">
                 <span className="footer__contact-icon">📍</span>
-                {import.meta.env.VITE_MARKET_ADDRESS || '3811 S. Harlem Ave, Berwyn, IL 60402'}
+                {import.meta.env.VITE_MARKET_ADDRESS ||
+                  '3811 S. Harlem Ave, Berwyn, IL 60402'}
               </p>
               <p className="footer__contact-item">
                 <span className="footer__contact-icon">📞</span>
@@ -80,16 +81,20 @@ export const Footer: React.FC = () => {
           >
             <h4 className="footer__section-title">Quick Links</h4>
             <nav className="footer__nav">
-              {quickLinks.map((link) => (
-                <Link key={link.path} to={link.path} className="footer__nav-link">
+              {quickLinks.map(link => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className="footer__nav-link"
+                >
                   {link.label}
                 </Link>
               ))}
             </nav>
-            
+
             {/* Social Links - Inline with Quick Links */}
             <div className="footer__social-inline">
-              {socialLinks.map((social) => (
+              {socialLinks.map(social => (
                 <motion.a
                   key={social.name}
                   href={social.url}
@@ -139,9 +144,7 @@ export const Footer: React.FC = () => {
           <p className="footer__copyright">
             © {currentYear} Berwyn Fruit Market. All rights reserved.
           </p>
-          <p className="footer__tagline">
-            Fresh • Local • Community
-          </p>
+          <p className="footer__tagline">Fresh • Local • Community</p>
         </motion.div>
       </div>
     </footer>

@@ -1,0 +1,90 @@
+@use '../variables.scss' as *;
+
+.department-card {
+  background: $white;
+  border-radius: $radius-xl;
+  overflow: hidden;
+  box-shadow: $shadow-md;
+  transition: all $transition-normal;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    box-shadow: $shadow-xl;
+  }
+
+  &__header {
+    padding: $spacing-2xl;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+
+    &--media {
+      padding: 0;
+      height: 200px;
+      background: $bg-secondary;
+    }
+  }
+
+  &__media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__title {
+    font-size: $font-2xl;
+    font-weight: $font-bold;
+    margin: 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: $spacing-md $spacing-lg;
+    color: $white;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    background: linear-gradient(180deg,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.55) 80%);
+    z-index: 1;
+
+    @media (max-width: $breakpoint-sm) {
+      font-size: $font-xl;
+    }
+  }
+
+  &__content {
+    padding: $spacing-2xl;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__description {
+    color: $text-secondary;
+    line-height: 1.6;
+    margin-bottom: $spacing-lg;
+    font-size: $font-base;
+  }
+
+  &__features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-md;
+    margin-top: auto;
+    justify-content: center;
+    padding-top: $spacing-sm;
+  }
+
+  &__feature {
+    background: $bg-accent;
+    color: $text-primary;
+    padding: $spacing-xs $spacing-sm;
+    border-radius: $radius-full;
+    font-size: $font-xs;
+    font-weight: $font-medium;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}

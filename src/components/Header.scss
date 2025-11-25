@@ -37,7 +37,7 @@
     &:hover {
       color: $primary-green;
     }
-    
+
     // Mobile: use grid positioning
     @media (max-width: 768px) {
       grid-column: 2 !important;

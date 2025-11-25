@@ -5,7 +5,9 @@ interface WeeklyAdViewerProps {
   className?: string;
 }
 
-export const WeeklyAdViewer: React.FC<WeeklyAdViewerProps> = ({ className = '' }) => {
+export const WeeklyAdViewer: React.FC<WeeklyAdViewerProps> = ({
+  className = '',
+}) => {
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
   const [useImageFallback, setUseImageFallback] = useState(false);
@@ -27,9 +29,14 @@ export const WeeklyAdViewer: React.FC<WeeklyAdViewerProps> = ({ className = '' }
   useEffect(() => {
     const checkPDFSupport = () => {
       // For Safari and mobile browsers, prefer image fallback
-      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-      const isMobileBrowser = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      
+      const isSafari = /^((?!chrome|android).)*safari/i.test(
+        navigator.userAgent
+      );
+      const isMobileBrowser =
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        );
+
       if (isSafari || isMobileBrowser) {
         setUseImageFallback(true);
       }
@@ -40,7 +47,7 @@ export const WeeklyAdViewer: React.FC<WeeklyAdViewerProps> = ({ className = '' }
 
   const pdfFiles = [
     { pdf: '/weekly-ad-47.pdf', image: '/weekly-ad-47-1.jpg' },
-    { pdf: '/weekly-ad-47.pdf', image: '/weekly-ad-47-2.jpg' }
+    { pdf: '/weekly-ad-47.pdf', image: '/weekly-ad-47-2.jpg' },
   ];
 
   const renderPDF = (pdfPath: string, imagePath: string, index: number) => {
@@ -54,7 +61,7 @@ export const WeeklyAdViewer: React.FC<WeeklyAdViewerProps> = ({ className = '' }
             width: '100%',
             height: 'auto',
             objectFit: 'contain',
-            display: 'block'
+            display: 'block',
           }}
           onError={() => {
             // If image fails, try PDF as last resort
@@ -74,20 +81,13 @@ export const WeeklyAdViewer: React.FC<WeeklyAdViewerProps> = ({ className = '' }
           height: isMobile ? '100dvh' : 'auto',
           minHeight: isMobile ? '400px' : '600px',
           border: 'none',
-          display: 'block'
+          display: 'block',
         }}
       >
         {/* Fallback content */}
-        <div className="weekly-ad__fallback">
-          <p>Your browser doesn't support embedded PDFs.</p>
-          <a 
-            href={pdfPath} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="weekly-ad__fallback-link"
-          >
-            View PDF in new tab
-          </a>
+        <div className="weekly-ad-viewer__error">
+          <p>We couldn&apos;t load the weekly ad. Please try again later.</p>
+          <button onClick={() => window.location.reload()}>Retry</button>
         </div>
       </object>
     );
