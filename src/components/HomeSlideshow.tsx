@@ -216,152 +216,209 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
   };
 
   return (
-    <div
-      className={className}
-      style={{
-        position: 'relative',
-        width: '100%',
-        height: '100%',
-        overflow: 'hidden',
-        backgroundColor: '#f0f0f0', // Background fallback while first image loads
-        transform: 'translateZ(0)',
-        WebkitTransform: 'translateZ(0)',
-        willChange: 'contents',
-      }}
-    >
-      {/* Show static first image until slideshow is ready, or during initial render */}
-      {(!isReady || (isInitialRender && index === 0)) && isFirstImageReady && (
-        <img
-          key={`static-${imageUrls[0]}`}
-          src={getRenderUrl(imageUrls[0])}
-          alt="home slide"
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            objectPosition: 'center center',
-            transform: 'translateZ(0)',
-            WebkitTransform: 'translateZ(0)',
-            backfaceVisibility: 'hidden',
-            WebkitBackfaceVisibility: 'hidden',
-            zIndex: isInitialRender && index === 0 ? 2 : 1,
-          }}
-          draggable={false}
-        />
-      )}
-      {/* Only render slideshow when ALL images are ready */}
-      {isReady && prevIndex !== index && (
-        <motion.img
-          key={`leave-${imageUrls[prevIndex]}-${direction}`}
-          src={getRenderUrl(imageUrls[prevIndex])}
-          alt="home slide previous"
-          initial={{ x: 0, opacity: 1 }}
-          animate={{ x: direction === 'forward' ? '-100%' : '100%' }}
-          transition={{ duration: 0.8, ease: 'easeInOut' }}
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            objectPosition: 'center center',
-            willChange: 'transform',
-            transform: 'translateZ(0)',
-            WebkitTransform: 'translateZ(0)',
-            backfaceVisibility: 'hidden',
-            WebkitBackfaceVisibility: 'hidden',
-            perspective: 1000,
-            WebkitPerspective: 1000,
-          }}
-          draggable={false}
-          onError={e => {
-            const target = e.currentTarget as HTMLImageElement;
-            if (target.src.endsWith('.jpg'))
-              target.src = target.src.replace('.jpg', '.png');
-          }}
-        />
-      )}
-      {/* Entering (current) image */}
-      {isReady && (
-        <motion.img
-          key={`enter-${imageUrls[index]}-${direction}`}
-          src={getRenderUrl(imageUrls[index])}
-          alt="home slide"
-          initial={
-            isInitialRender && index === 0
-              ? { x: 0, opacity: 1 }
-              : { x: direction === 'forward' ? '100%' : '-100%', opacity: 1 }
+    <>
+      <style>
+        {`
+          @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
           }
-          animate={{ x: 0 }}
-          transition={
-            isInitialRender && index === 0
-              ? { duration: 0 }
-              : { duration: 0.8, ease: 'easeInOut' }
+          @keyframes spin {
+            to { transform: rotate(360deg); }
           }
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            objectPosition: 'center center',
-            willChange: 'transform',
-            transform: 'translateZ(0)',
-            WebkitTransform: 'translateZ(0)',
-            backfaceVisibility: 'hidden',
-            WebkitBackfaceVisibility: 'hidden',
-            perspective: 1000,
-            WebkitPerspective: 1000,
-          }}
-          draggable={false}
-          onError={e => {
-            const target = e.currentTarget as HTMLImageElement;
-            if (target.src.endsWith('.jpg'))
-              target.src = target.src.replace('.jpg', '.png');
-          }}
-        />
-      )}
-
-      {/* Controls (arrows) */}
-      {isReady && imageUrls.length > 1 && (
-        <>
-          <button
-            type="button"
-            aria-label="Previous image"
-            onClick={goPrev}
-            className="home-slide__control home-slide__control--prev"
-            disabled={isSliding}
+          @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+        `}
+      </style>
+      <div
+        className={className}
+        style={{
+          position: 'relative',
+          width: '100%',
+          height: '100%',
+          overflow: 'hidden',
+          backgroundColor: '#f0f0f0', // Background fallback while first image loads
+          transform: 'translateZ(0)',
+          WebkitTransform: 'translateZ(0)',
+          willChange: 'contents',
+        }}
+      >
+        {/* Loading skeleton - shown before first image loads */}
+        {!isFirstImageReady && (
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%)',
+              animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              zIndex: 10,
+            }}
           >
-            <svg
-              className="home-slide__icon"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
+            <div
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                textAlign: 'center',
+                color: '#9e9e9e',
+                fontFamily: 'Poppins, sans-serif',
+              }}
             >
-              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
-            </svg>
-          </button>
-          <button
-            type="button"
-            aria-label="Next image"
-            onClick={goNext}
-            className="home-slide__control home-slide__control--next"
-            disabled={isSliding}
-          >
-            <svg
-              className="home-slide__icon"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" />
-            </svg>
-          </button>
-        </>
-      )}
+              <div
+                style={{
+                  width: '48px',
+                  height: '48px',
+                  border: '4px solid #e0e0e0',
+                  borderTop: '4px solid #4caf50',
+                  borderRadius: '50%',
+                  animation: 'spin 1s linear infinite',
+                  margin: '0 auto 16px',
+                }}
+              />
+              <p style={{ margin: 0, fontSize: '14px', fontWeight: 500 }}>
+                Loading images...
+              </p>
+            </div>
+          </div>
+        )}
+        {/* Show static first image until slideshow is ready, or during initial render */}
+        {(!isReady || (isInitialRender && index === 0)) && isFirstImageReady && (
+          <img
+            key={`static-${imageUrls[0]}`}
+            src={getRenderUrl(imageUrls[0])}
+            alt="home slide"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              objectPosition: 'center center',
+              transform: 'translateZ(0)',
+              WebkitTransform: 'translateZ(0)',
+              backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden',
+              zIndex: isInitialRender && index === 0 ? 2 : 1,
+              animation: 'fadeIn 0.5s ease-in',
+            }}
+            draggable={false}
+          />
+        )}
+        {/* Only render slideshow when ALL images are ready */}
+        {isReady && prevIndex !== index && (
+          <motion.img
+            key={`leave-${imageUrls[prevIndex]}-${direction}`}
+            src={getRenderUrl(imageUrls[prevIndex])}
+            alt="home slide previous"
+            initial={{ x: 0, opacity: 1 }}
+            animate={{ x: direction === 'forward' ? '-100%' : '100%' }}
+            transition={{ duration: 0.8, ease: 'easeInOut' }}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              objectPosition: 'center center',
+              willChange: 'transform',
+              transform: 'translateZ(0)',
+              WebkitTransform: 'translateZ(0)',
+              backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden',
+              perspective: 1000,
+              WebkitPerspective: 1000,
+            }}
+            draggable={false}
+            onError={e => {
+              const target = e.currentTarget as HTMLImageElement;
+              if (target.src.endsWith('.jpg'))
+                target.src = target.src.replace('.jpg', '.png');
+            }}
+          />
+        )}
+        {/* Entering (current) image */}
+        {isReady && (
+          <motion.img
+            key={`enter-${imageUrls[index]}-${direction}`}
+            src={getRenderUrl(imageUrls[index])}
+            alt="home slide"
+            initial={
+              isInitialRender && index === 0
+                ? { x: 0, opacity: 1 }
+                : { x: direction === 'forward' ? '100%' : '-100%', opacity: 1 }
+            }
+            animate={{ x: 0 }}
+            transition={
+              isInitialRender && index === 0
+                ? { duration: 0 }
+                : { duration: 0.8, ease: 'easeInOut' }
+            }
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              objectPosition: 'center center',
+              willChange: 'transform',
+              transform: 'translateZ(0)',
+              WebkitTransform: 'translateZ(0)',
+              backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden',
+              perspective: 1000,
+              WebkitPerspective: 1000,
+            }}
+            draggable={false}
+            onError={e => {
+              const target = e.currentTarget as HTMLImageElement;
+              if (target.src.endsWith('.jpg'))
+                target.src = target.src.replace('.jpg', '.png');
+            }}
+          />
+        )}
 
-      {/* Bubbles removed as requested */}
-    </div>
+        {/* Controls (arrows) */}
+        {isReady && imageUrls.length > 1 && (
+          <>
+            <button
+              type="button"
+              aria-label="Previous image"
+              onClick={goPrev}
+              className="home-slide__control home-slide__control--prev"
+              disabled={isSliding}
+            >
+              <svg
+                className="home-slide__icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              aria-label="Next image"
+              onClick={goNext}
+              className="home-slide__control home-slide__control--next"
+              disabled={isSliding}
+            >
+              <svg
+                className="home-slide__icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" />
+              </svg>
+            </button>
+          </>
+        )}
+
+        {/* Bubbles removed as requested */}
+      </div>
+    </>
   );
 };
 
