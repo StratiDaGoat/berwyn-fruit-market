@@ -38,66 +38,62 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
   const [isReady, setIsReady] = useState(false);
   const [isFirstImageReady, setIsFirstImageReady] = useState(false);
   const [isInitialRender, setIsInitialRender] = useState(true);
-  const decodedSetRef = useRef<Set<string>>(new Set());
-  const inflightRef = useRef<Record<string, Promise<void>>>({});
-  const blobUrlMapRef = useRef<Record<string, string>>({});
-  const abortControllersRef = useRef<Record<string, AbortController>>({});
+  
+  // Simplified loading - no blob URLs for faster mobile performance
+  const loadedImagesRef = useRef<Set<string>>(new Set());
+  const loadingImagesRef = useRef<Set<string>>(new Set());
 
-  const getRenderUrl = (originalUrl: string): string => {
-    return blobUrlMapRef.current[originalUrl] || originalUrl;
-  };
-
-  const preloadAndDecode = React.useCallback((url: string): Promise<void> => {
-    const renderUrl = getRenderUrl(url);
-    if (decodedSetRef.current.has(renderUrl)) return Promise.resolve();
-    if (renderUrl in inflightRef.current) return inflightRef.current[renderUrl];
+  // Simplified image preloading - faster for mobile
+  const preloadImage = React.useCallback((url: string): Promise<void> => {
+    if (loadedImagesRef.current.has(url)) return Promise.resolve();
+    if (loadingImagesRef.current.has(url)) {
+      // Wait for existing load
+      return new Promise(resolve => {
+        const checkInterval = setInterval(() => {
+          if (loadedImagesRef.current.has(url)) {
+            clearInterval(checkInterval);
+            resolve();
+          }
+        }, 50);
+        setTimeout(() => {
+          clearInterval(checkInterval);
+          resolve(); // Timeout after 5s
+        }, 5000);
+      });
+    }
+    
+    loadingImagesRef.current.add(url);
     const promise = new Promise<void>(resolve => {
       const img = new Image();
-      img.src = renderUrl;
-      img.loading = 'eager';
-
-      const decodePromise: Promise<void> | undefined =
-        typeof img.decode === 'function' ? img.decode() : undefined;
+      img.src = url;
+      img.loading = 'lazy'; // Use lazy loading for non-critical images
+      
       const finalize = () => {
-        decodedSetRef.current.add(renderUrl);
-        delete inflightRef.current[renderUrl];
+        loadedImagesRef.current.add(url);
+        loadingImagesRef.current.delete(url);
         resolve();
       };
-      if (decodePromise) {
-        decodePromise.then(finalize).catch(finalize);
+      
+      if (img.complete) {
+        finalize();
       } else {
         img.onload = finalize;
         img.onerror = finalize;
+        // Timeout after 3 seconds
+        setTimeout(finalize, 3000);
       }
     });
-    inflightRef.current[renderUrl] = promise;
     return promise;
   }, []);
 
-  const prefetchToBlobUrl = async (url: string): Promise<string> => {
-    if (blobUrlMapRef.current[url]) return blobUrlMapRef.current[url];
-    const controller = new AbortController();
-    abortControllersRef.current[url] = controller;
-    try {
-      const response = await fetch(url, {
-        cache: 'force-cache',
-        signal: controller.signal,
-      });
-      const blob = await response.blob();
-      const blobUrl = URL.createObjectURL(blob);
-      blobUrlMapRef.current[url] = blobUrl;
-      return blobUrl;
-    } catch {
-      // Fallback to original URL on any error
-      return url;
-    }
-  };
-
+  // Auto-advance timer - works on both desktop and mobile
   useEffect(() => {
     if (imageUrls.length <= 1) return;
+    if (!isReady) return;
+    
     const timer = setInterval(() => {
-      if (!isSliding && isReady && Date.now() >= pausedUntil) {
-        setIsInitialRender(false); // Disable initial render flag on first auto-advance
+      if (!isSliding && Date.now() >= pausedUntil) {
+        setIsInitialRender(false);
         setDirection('forward');
         setIndex(i => {
           setPrevIndex(i);
@@ -105,10 +101,11 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
         });
       }
     }, intervalMs);
+    
     return () => clearInterval(timer);
   }, [imageUrls.length, intervalMs, pausedUntil, isSliding, isReady]);
 
-  // Preload ALL images to Blobs and decode them before showing slideshow
+  // Optimized loading: Show first image immediately, lazy load others
   useEffect(() => {
     if (imageUrls.length <= 1) {
       setIsReady(true);
@@ -120,34 +117,23 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
 
     (async () => {
       try {
-        // Step 1: Fetch first image ASAP to show it immediately
+        // Step 1: Load first image immediately - show it right away
         const firstUrl = imageUrls[0];
-        await prefetchToBlobUrl(firstUrl);
-        await preloadAndDecode(firstUrl);
+        await preloadImage(firstUrl);
         if (!isCancelled) {
           setIsFirstImageReady(true);
+          setIsReady(true); // Allow slideshow to start
+          setIsInitialRender(false);
         }
 
-        // Step 2: Fetch ALL remaining images to Blob URLs in parallel
-        const remainingPromises = imageUrls
-          .slice(1)
-          .map(url => prefetchToBlobUrl(url));
-        await Promise.all(remainingPromises);
+        // Step 2: Preload next 2-3 images in background (for smooth transitions)
+        const nextImages = imageUrls.slice(1, 4);
+        Promise.all(nextImages.map(url => preloadImage(url))).catch(() => {
+          // Ignore errors, continue anyway
+        });
 
-        if (isCancelled) return;
-
-        // Step 3: Decode ALL remaining images in parallel
-        const remainingDecodePromises = imageUrls
-          .slice(1)
-          .map(url => preloadAndDecode(url));
-        await Promise.all(remainingDecodePromises);
-
-        if (isCancelled) return;
-
-        // Step 4: Mark slideshow ready - all images are now fully loaded and decoded
-        setIsReady(true);
-        // After a brief moment, allow animations for subsequent transitions
-        setTimeout(() => setIsInitialRender(false), 100);
+        // Step 3: Lazy load remaining images as user progresses
+        // This happens in the opportunistic preload effect below
       } catch {
         // Even on error, show first frame to avoid blank screen
         if (!isCancelled) {
@@ -159,27 +145,21 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
 
     return () => {
       isCancelled = true;
-      // Cleanup inflight fetches and blob URLs
-      Object.values(abortControllersRef.current).forEach(c => c.abort());
-      abortControllersRef.current = {};
-      Object.values(blobUrlMapRef.current).forEach(u => URL.revokeObjectURL(u));
-      blobUrlMapRef.current = {} as Record<string, string>;
     };
-  }, [imageUrls, preloadAndDecode]);
+  }, [imageUrls, preloadImage]);
 
-  // Opportunistically ensure next couple of images are decoded
+  // Opportunistically preload next images for smooth transitions
   useEffect(() => {
-    if (imageUrls.length <= 1) return;
+    if (imageUrls.length <= 1 || !isReady) return;
     const preloadTargets = [
       (index + 1) % imageUrls.length,
       (index + 2) % imageUrls.length,
     ];
     preloadTargets.forEach(t => {
       const url = imageUrls[t];
-
-      void prefetchToBlobUrl(url).then(() => preloadAndDecode(url));
+      void preloadImage(url);
     });
-  }, [index, imageUrls, preloadAndDecode]);
+  }, [index, imageUrls, isReady, preloadImage]);
 
   // No pre-active phase; keep bubbles smooth with layout transitions only
 
@@ -187,13 +167,14 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
 
   const slideToIndex = async (target: number) => {
     if (isSliding) return;
-    setIsInitialRender(false); // Disable initial render flag on manual navigation
+    setIsInitialRender(false);
     const normalizedTarget =
       ((target % imageUrls.length) + imageUrls.length) % imageUrls.length;
     const targetUrl = imageUrls[normalizedTarget];
-    await prefetchToBlobUrl(targetUrl);
-    // Ensure target frame is decoded before transition
-    await preloadAndDecode(targetUrl);
+    
+    // Preload target image if not already loaded (non-blocking)
+    void preloadImage(targetUrl);
+    
     setIsSliding(true);
     pauseAuto();
     setIndex(i => {
@@ -209,6 +190,7 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
     setDirection('backward');
     void slideToIndex(index - 1);
   };
+  
   const goNext = () => {
     if (isSliding) return;
     setDirection('forward');
@@ -239,7 +221,7 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
           width: '100%',
           height: '100%',
           overflow: 'hidden',
-          backgroundColor: '#f0f0f0', // Background fallback while first image loads
+          backgroundColor: '#f0f0f0',
           transform: 'translateZ(0)',
           WebkitTransform: 'translateZ(0)',
           willChange: 'contents',
@@ -284,11 +266,11 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
             </div>
           </div>
         )}
-        {/* Show static first image until slideshow is ready, or during initial render */}
+        {/* Show static first image until slideshow is ready */}
         {(!isReady || (isInitialRender && index === 0)) && isFirstImageReady && (
           <img
             key={`static-${imageUrls[0]}`}
-            src={getRenderUrl(imageUrls[0])}
+            src={imageUrls[0]}
             alt="home slide"
             style={{
               position: 'absolute',
@@ -305,13 +287,15 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
               animation: 'fadeIn 0.5s ease-in',
             }}
             draggable={false}
+            loading="eager"
+            fetchPriority="high"
           />
         )}
-        {/* Only render slideshow when ALL images are ready */}
+        {/* Previous image (leaving) */}
         {isReady && prevIndex !== index && (
           <motion.img
             key={`leave-${imageUrls[prevIndex]}-${direction}`}
-            src={getRenderUrl(imageUrls[prevIndex])}
+            src={imageUrls[prevIndex]}
             alt="home slide previous"
             initial={{ x: 0, opacity: 1 }}
             animate={{ x: direction === 'forward' ? '-100%' : '100%' }}
@@ -332,6 +316,7 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
               WebkitPerspective: 1000,
             }}
             draggable={false}
+            loading="lazy"
             onError={e => {
               const target = e.currentTarget as HTMLImageElement;
               if (target.src.endsWith('.jpg'))
@@ -339,11 +324,11 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
             }}
           />
         )}
-        {/* Entering (current) image */}
+        {/* Current image (entering) */}
         {isReady && (
           <motion.img
             key={`enter-${imageUrls[index]}-${direction}`}
-            src={getRenderUrl(imageUrls[index])}
+            src={imageUrls[index]}
             alt="home slide"
             initial={
               isInitialRender && index === 0
@@ -372,6 +357,8 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
               WebkitPerspective: 1000,
             }}
             draggable={false}
+            loading={index === 0 ? 'eager' : 'lazy'}
+            fetchPriority={index === 0 ? 'high' : 'auto'}
             onError={e => {
               const target = e.currentTarget as HTMLImageElement;
               if (target.src.endsWith('.jpg'))
@@ -387,12 +374,43 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
               type="button"
               aria-label="Previous image"
               onClick={goPrev}
-              className="home-slide__control home-slide__control--prev"
               disabled={isSliding}
+              style={{
+                position: 'absolute',
+                left: '16px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                zIndex: 10,
+                background: 'rgba(255, 255, 255, 0.9)',
+                border: 'none',
+                borderRadius: '50%',
+                width: '48px',
+                height: '48px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
+                transition: 'background 0.2s, opacity 0.2s',
+                opacity: isSliding ? 0.5 : 1,
+                pointerEvents: isSliding ? 'none' : 'auto',
+                touchAction: 'manipulation',
+                WebkitTapHighlightColor: 'transparent',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 1)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.9)';
+              }}
             >
               <svg
-                className="home-slide__icon"
                 viewBox="0 0 24 24"
+                style={{
+                  width: '24px',
+                  height: '24px',
+                  fill: '#333',
+                }}
                 aria-hidden="true"
               >
                 <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
@@ -402,12 +420,43 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
               type="button"
               aria-label="Next image"
               onClick={goNext}
-              className="home-slide__control home-slide__control--next"
               disabled={isSliding}
+              style={{
+                position: 'absolute',
+                right: '16px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                zIndex: 10,
+                background: 'rgba(255, 255, 255, 0.9)',
+                border: 'none',
+                borderRadius: '50%',
+                width: '48px',
+                height: '48px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
+                transition: 'background 0.2s, opacity 0.2s',
+                opacity: isSliding ? 0.5 : 1,
+                pointerEvents: isSliding ? 'none' : 'auto',
+                touchAction: 'manipulation',
+                WebkitTapHighlightColor: 'transparent',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 1)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.9)';
+              }}
             >
               <svg
-                className="home-slide__icon"
                 viewBox="0 0 24 24"
+                style={{
+                  width: '24px',
+                  height: '24px',
+                  fill: '#333',
+                }}
                 aria-hidden="true"
               >
                 <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" />
