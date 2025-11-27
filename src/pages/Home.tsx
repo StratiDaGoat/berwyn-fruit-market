@@ -92,7 +92,7 @@ export const Home: React.FC = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{
               opacity: showOverlay ? 1 : 0,
-              y: showOverlay ? 0 : -30
+              y: showOverlay ? 0 : -30,
             }}
             transition={{ duration: 1.2, ease: 'easeOut' }}
           >
@@ -245,7 +245,7 @@ export const Home: React.FC = () => {
                           const trimmed =
                             firstSentence.length > maxLen
                               ? firstSentence.slice(0, maxLen - 1).trimEnd() +
-                              '…'
+                                '…'
                               : firstSentence;
                           return (
                             <p className="department-card__description">

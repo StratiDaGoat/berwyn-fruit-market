@@ -32,13 +32,11 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
 
   const [index, setIndex] = useState(0);
   const [prevIndex, setPrevIndex] = useState(0);
-  const [pausedUntil, setPausedUntil] = useState<number>(0);
-  const [isSliding, setIsSliding] = useState<boolean>(false);
   const [direction, setDirection] = useState<'forward' | 'backward'>('forward');
   const [isReady, setIsReady] = useState(false);
   const [isFirstImageReady, setIsFirstImageReady] = useState(false);
   const [isInitialRender, setIsInitialRender] = useState(true);
-  
+
   // Simplified loading - no blob URLs for faster mobile performance
   const loadedImagesRef = useRef<Set<string>>(new Set());
   const loadingImagesRef = useRef<Set<string>>(new Set());
@@ -61,19 +59,19 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
         }, 5000);
       });
     }
-    
+
     loadingImagesRef.current.add(url);
     const promise = new Promise<void>(resolve => {
       const img = new Image();
       img.src = url;
       img.loading = 'lazy'; // Use lazy loading for non-critical images
-      
+
       const finalize = () => {
         loadedImagesRef.current.add(url);
         loadingImagesRef.current.delete(url);
         resolve();
       };
-      
+
       if (img.complete) {
         finalize();
       } else {
@@ -90,20 +88,18 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
   useEffect(() => {
     if (imageUrls.length <= 1) return;
     if (!isReady) return;
-    
+
     const timer = setInterval(() => {
-      if (!isSliding && Date.now() >= pausedUntil) {
-        setIsInitialRender(false);
-        setDirection('forward');
-        setIndex(i => {
-          setPrevIndex(i);
-          return (i + 1) % imageUrls.length;
-        });
-      }
+      setIsInitialRender(false);
+      setDirection('forward');
+      setIndex(i => {
+        setPrevIndex(i);
+        return (i + 1) % imageUrls.length;
+      });
     }, intervalMs);
-    
+
     return () => clearInterval(timer);
-  }, [imageUrls.length, intervalMs, pausedUntil, isSliding, isReady]);
+  }, [imageUrls.length, intervalMs, isReady]);
 
   // Optimized loading: Show first image immediately, lazy load others
   useEffect(() => {
@@ -160,42 +156,6 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
       void preloadImage(url);
     });
   }, [index, imageUrls, isReady, preloadImage]);
-
-  // No pre-active phase; keep bubbles smooth with layout transitions only
-
-  const pauseAuto = () => setPausedUntil(Date.now() + 3000);
-
-  const slideToIndex = async (target: number) => {
-    if (isSliding) return;
-    setIsInitialRender(false);
-    const normalizedTarget =
-      ((target % imageUrls.length) + imageUrls.length) % imageUrls.length;
-    const targetUrl = imageUrls[normalizedTarget];
-    
-    // Preload target image if not already loaded (non-blocking)
-    void preloadImage(targetUrl);
-    
-    setIsSliding(true);
-    pauseAuto();
-    setIndex(i => {
-      setPrevIndex(i);
-      return normalizedTarget;
-    });
-    const unlockMs = 820;
-    setTimeout(() => setIsSliding(false), unlockMs);
-  };
-
-  const goPrev = () => {
-    if (isSliding) return;
-    setDirection('backward');
-    void slideToIndex(index - 1);
-  };
-  
-  const goNext = () => {
-    if (isSliding) return;
-    setDirection('forward');
-    void slideToIndex(index + 1);
-  };
 
   return (
     <>
@@ -267,30 +227,31 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
           </div>
         )}
         {/* Show static first image until slideshow is ready */}
-        {(!isReady || (isInitialRender && index === 0)) && isFirstImageReady && (
-          <img
-            key={`static-${imageUrls[0]}`}
-            src={imageUrls[0]}
-            alt="home slide"
-            style={{
-              position: 'absolute',
-              inset: 0,
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              objectPosition: 'center center',
-              transform: 'translateZ(0)',
-              WebkitTransform: 'translateZ(0)',
-              backfaceVisibility: 'hidden',
-              WebkitBackfaceVisibility: 'hidden',
-              zIndex: isInitialRender && index === 0 ? 2 : 1,
-              animation: 'fadeIn 0.5s ease-in',
-            }}
-            draggable={false}
-            loading="eager"
-            fetchPriority="high"
-          />
-        )}
+        {(!isReady || (isInitialRender && index === 0)) &&
+          isFirstImageReady && (
+            <img
+              key={`static-${imageUrls[0]}`}
+              src={imageUrls[0]}
+              alt="home slide"
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center center',
+                transform: 'translateZ(0)',
+                WebkitTransform: 'translateZ(0)',
+                backfaceVisibility: 'hidden',
+                WebkitBackfaceVisibility: 'hidden',
+                zIndex: isInitialRender && index === 0 ? 2 : 1,
+                animation: 'fadeIn 0.5s ease-in',
+              }}
+              draggable={false}
+              loading="eager"
+              fetchPriority="high"
+            />
+          )}
         {/* Previous image (leaving) */}
         {isReady && prevIndex !== index && (
           <motion.img

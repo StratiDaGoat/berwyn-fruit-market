@@ -22,14 +22,11 @@ export const About: React.FC = () => {
     },
   ];
 
-  console.log('Current image index:', currentImageIndex);
-
   // Auto-rotate images every 7.5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex(prevIndex => {
         const newIndex = (prevIndex + 1) % images.length;
-        console.log('Switching to image index:', newIndex);
         return newIndex;
       });
     }, 7500);

@@ -31,14 +31,6 @@ export const WeeklyAds: React.FC = () => {
         deviceType = 'desktop';
       }
 
-      console.log('Device detection:', {
-        width,
-        deviceType,
-        userAgent: navigator.userAgent,
-        isTablet,
-        isMobile,
-      });
-
       setDeviceType(deviceType);
     };
 
