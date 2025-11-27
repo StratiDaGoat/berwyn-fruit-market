@@ -24,6 +24,7 @@ export const Home: React.FC = () => {
   const [deviceType, setDeviceType] = useState<'mobile' | 'tablet' | 'desktop'>(
     'desktop'
   );
+  const [showOverlay, setShowOverlay] = useState(true);
 
   // Determine visible departments based on device type
   const visible = deviceType === 'mobile' ? 1 : deviceType === 'tablet' ? 2 : 3;
@@ -36,6 +37,21 @@ export const Home: React.FC = () => {
   );
   const [startIndex, setStartIndex] = useState(total * centerBlock);
   const [isSnapping, setIsSnapping] = useState(false);
+
+  // Handle scroll to hide/show overlay
+  React.useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      if (scrollY > 20) {
+        setShowOverlay(false);
+      } else if (scrollY < 5) {
+        setShowOverlay(true);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Check device type on mount and resize
   React.useEffect(() => {
@@ -74,8 +90,11 @@ export const Home: React.FC = () => {
           <motion.div
             className="hero__content"
             initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            animate={{
+              opacity: showOverlay ? 1 : 0,
+              y: showOverlay ? 0 : -30
+            }}
+            transition={{ duration: 1.2, ease: 'easeOut' }}
           >
             <motion.h2
               className="hero__welcome"
@@ -226,7 +245,7 @@ export const Home: React.FC = () => {
                           const trimmed =
                             firstSentence.length > maxLen
                               ? firstSentence.slice(0, maxLen - 1).trimEnd() +
-                                '…'
+                              '…'
                               : firstSentence;
                           return (
                             <p className="department-card__description">
