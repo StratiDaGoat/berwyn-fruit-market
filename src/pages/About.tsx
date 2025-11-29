@@ -13,11 +13,11 @@ export const About: React.FC = () => {
 
   const images = [
     {
-      src: '/old-store.jpg',
+      src: '/old-store.webp',
       alt: 'Berwyn Fruit Market storefront - original location',
     },
     {
-      src: '/76-store.jpeg',
+      src: '/76-store.webp',
       alt: 'Berwyn Fruit Market storefront - current location',
     },
   ];
@@ -118,15 +118,10 @@ export const About: React.FC = () => {
                     src={image.src}
                     alt={image.alt}
                     className={`story__image-media ${index === currentImageIndex ? 'story__image-media--active' : ''}`}
-                    decoding={index === 0 ? 'sync' : 'async'}
-                    loading={index === 0 ? 'eager' : 'lazy'}
-                    fetchPriority={index === 0 ? 'high' : undefined}
+                    loading="lazy"
+                    width="1000"
+                    height="694"
                     draggable={false}
-                    onError={e => {
-                      const target = e.currentTarget as HTMLImageElement;
-                      if (target.src.endsWith('.jpg'))
-                        target.src = target.src.replace('.jpg', '.png');
-                    }}
                   />
                 ))}
               </div>

@@ -16,7 +16,7 @@ export const departments: Department[] = [
       'Fresh fruits and vegetables sourced from local farms. Always crisp, always fresh.',
     icon: '🥬',
     color: '#4CAF50',
-    images: ['/produce-1.jpg', '/produce-2.jpg'],
+    images: ['/produce-1.webp', '/produce-2.webp'],
     features: [
       'Local Sourcing',
       'Organic Options',
@@ -31,7 +31,7 @@ export const departments: Department[] = [
       'Fresh cuts of beef, pork, chicken, and specialty meats. Our expert butchers prepare everything daily.',
     icon: '🥩',
     color: '#E91E63',
-    images: ['/meat-1.jpg', '/meat-2.jpg'],
+    images: ['/meat-1.webp', '/meat-2.webp'],
     features: [
       'Fresh Daily Cuts',
       'Custom Orders',
@@ -47,10 +47,10 @@ export const departments: Department[] = [
     icon: '🍲',
     color: '#F44336',
     images: [
-      '/hotFood-1.jpg',
-      '/hotFood-2.jpg',
-      '/hotFood-3.jpg',
-      '/hotFood-4.jpg',
+      '/hotFood-1.webp',
+      '/hotFood-2.webp',
+      '/hotFood-3.webp',
+      '/hotFood-4.webp',
     ],
     features: ['Ready-to-Eat', 'Fresh Prepared', 'Family Meals'],
   },
@@ -61,7 +61,7 @@ export const departments: Department[] = [
       'Premium deli meats, cheeses, and prepared foods. Perfect for sandwiches and entertaining.',
     icon: '🧀',
     color: '#FF9800',
-    images: ['/deli-1.jpg', '/deli-2.jpg'],
+    images: ['/deli-1.webp', '/deli-2.webp'],
     features: [
       'Premium Meats',
       'Artisan Cheeses',
@@ -76,7 +76,7 @@ export const departments: Department[] = [
       'International foods and specialty items from around the world. Discover new flavors.',
     icon: '🌍',
     color: '#2196F3',
-    images: ['/imports-1.jpg', '/imports-2.jpg'],
+    images: ['/imports-1.webp', '/imports-2.webp'],
     features: [
       'International Foods',
       'Specialty Items',
@@ -91,7 +91,7 @@ export const departments: Department[] = [
       'Curated selection of craft beers, fine wines, and premium spirits for every occasion.',
     icon: '🍷',
     color: '#9C27B0',
-    images: ['/beer-1.jpg'],
+    images: ['/beer-1.webp'],
     features: [
       'Craft Beers',
       'Fine Wines',

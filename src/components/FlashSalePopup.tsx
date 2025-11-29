@@ -68,7 +68,13 @@ const FlashSalePopup: React.FC = () => {
               </button>
             </div>
             <div className="popup-image">
-              <img src="/egg promo.png" alt="Egg Promo - Jumbo Eggs $1.99" />
+              <img
+                src="/egg-promo.webp"
+                alt="Egg Promo - Jumbo Eggs $1.99"
+                loading="lazy"
+                width="3300"
+                height="5100"
+              />
             </div>
           </div>
         </div>

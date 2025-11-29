@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFacebookF, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import './Footer.scss';
 
 /**
@@ -21,12 +23,12 @@ export const Footer: React.FC = () => {
     {
       name: 'Facebook',
       url: 'https://www.facebook.com/berwynfruitmarket',
-      icon: 'fab fa-facebook-f',
+      icon: faFacebookF,
     },
     {
       name: 'Instagram',
       url: 'https://www.instagram.com/berwynfruit/',
-      icon: 'fab fa-instagram',
+      icon: faInstagram,
     },
   ];
 
@@ -45,7 +47,7 @@ export const Footer: React.FC = () => {
             <div className="footer__logo">
               <div className="footer__logo-icon">
                 <img
-                  src="/logo.png"
+                  src="/logo.webp"
                   alt="Berwyn Fruit Market Logo"
                   className="footer__logo-image"
                 />
@@ -105,7 +107,7 @@ export const Footer: React.FC = () => {
                   rel="noopener noreferrer"
                   aria-label={`Follow us on ${social.name}`}
                 >
-                  <i className={social.icon}></i>
+                  <FontAwesomeIcon icon={social.icon} />
                 </motion.a>
               ))}
             </div>

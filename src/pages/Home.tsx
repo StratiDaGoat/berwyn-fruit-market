@@ -227,9 +227,8 @@ export const Home: React.FC = () => {
                           src={department.images[0]}
                           alt={department.name}
                           className="department-card__media"
-                          loading="eager"
-                          decoding="sync"
-                          fetchPriority="high"
+                          loading="lazy"
+                          style={{ aspectRatio: '16/9' }}
                         />
                         <h3 className="department-card__title">
                           {department.name}
@@ -245,7 +244,7 @@ export const Home: React.FC = () => {
                           const trimmed =
                             firstSentence.length > maxLen
                               ? firstSentence.slice(0, maxLen - 1).trimEnd() +
-                                '…'
+                              '…'
                               : firstSentence;
                           return (
                             <p className="department-card__description">

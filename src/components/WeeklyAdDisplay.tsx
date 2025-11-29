@@ -33,12 +33,12 @@ export const WeeklyAdDisplay: React.FC<WeeklyAdDisplayProps> = ({
   const adFiles = [
     {
       pdf: '/weekly-ad-47.pdf',
-      image: '/weekly-ad-47-1.jpg',
+      image: '/weekly-ad-47-1.webp',
       alt: 'Weekly Ad Page 1',
     },
     {
       pdf: '/weekly-ad-47.pdf',
-      image: '/weekly-ad-47-2.jpg',
+      image: '/weekly-ad-47-2.webp',
       alt: 'Weekly Ad Page 2',
     },
   ];
@@ -50,9 +50,9 @@ export const WeeklyAdDisplay: React.FC<WeeklyAdDisplayProps> = ({
           src={file.image}
           alt={file.alt}
           className="weekly-ad__image"
-          loading="eager"
-          decoding="sync"
-          fetchPriority="high"
+          loading="lazy"
+          width="2550"
+          height="3300"
           onError={() => {
             // If image fails, try PDF as last resort
             setUseImageFallback(false);

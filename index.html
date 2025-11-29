@@ -33,36 +33,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     
-    <!-- Google Fonts -->
+    <!-- Google Fonts with optimized loading -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-    <!-- Preload home slideshow images to avoid mobile lag -->
-    <link rel="preload" as="image" href="/home-slide-1.jpg" imagesrcset="/home-slide-1.jpg" fetchpriority="high" />
-    <link rel="preload" as="image" href="/home-slide-2.jpg" />
-    <link rel="preload" as="image" href="/home-slide-3.jpg" />
-    <link rel="preload" as="image" href="/home-slide-4.jpg" />
-    <link rel="preload" as="image" href="/home-slide-5.jpg" />
-    <link rel="preload" as="image" href="/home-slide-6.jpg" />
-    <link rel="preload" as="image" href="/home-slide-7.jpg" />
-    <link rel="preload" as="image" href="/home-slide-8.jpg" />
-    <link rel="preload" as="image" href="/home-slide-9.jpg" />
-    <link rel="preload" as="image" href="/home-slide-10.jpg" />
-    <link rel="preload" as="image" href="/home-slide-11.jpg" />
-    
-    <!-- Preload weekly ad images for instant mobile loading -->
-    <link rel="preload" as="image" href="/weekly-ad-47-1.jpg" fetchpriority="high" />
-    <link rel="preload" as="image" href="/weekly-ad-47-2.jpg" fetchpriority="high" />
-    
-    <!-- Preload department images for instant mobile loading -->
-    <link rel="preload" as="image" href="/produce-1.jpg" fetchpriority="high" />
-    <link rel="preload" as="image" href="/meat-1.jpg" />
-    <link rel="preload" as="image" href="/hotFood-1.jpg" />
-    <link rel="preload" as="image" href="/deli-1.jpg" />
-    <link rel="preload" as="image" href="/imports-1.jpg" />
-    <link rel="preload" as="image" href="/beer-1.jpg" />
+    <!-- Preload only LCP image (hero slideshow) for optimal performance -->
+    <link rel="preload" as="image" href="/home-slide-1.webp" fetchpriority="high" />
   </head>
   <body>
     <div id="root"></div>

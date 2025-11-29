@@ -44,7 +44,7 @@ export const Header: React.FC = () => {
               whileTap={{ scale: 0.95 }}
             >
               <img
-                src="/logo.png"
+                src="/logo.webp"
                 alt="Berwyn Fruit Market Logo"
                 className="header__logo-image"
                 width="150"
@@ -80,11 +80,10 @@ export const Header: React.FC = () => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`header__nav-link ${
-                  location.pathname === item.path
+                className={`header__nav-link ${location.pathname === item.path
                     ? 'header__nav-link--active'
                     : ''
-                }`}
+                  }`}
               >
                 {item.label}
               </Link>
@@ -111,11 +110,10 @@ export const Header: React.FC = () => {
                 >
                   <Link
                     to={item.path}
-                    className={`header__nav-link ${
-                      location.pathname === item.path
+                    className={`header__nav-link ${location.pathname === item.path
                         ? 'header__nav-link--active'
                         : ''
-                    }`}
+                      }`}
                     onClick={closeMobileMenu}
                   >
                     {item.label}

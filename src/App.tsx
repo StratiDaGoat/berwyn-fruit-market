@@ -4,7 +4,9 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
-import FlashSalePopup from './components/FlashSalePopup';
+
+// Lazy load FlashSalePopup to defer 10MB egg promo image
+const FlashSalePopup = React.lazy(() => import('./components/FlashSalePopup'));
 
 // Lazy load pages
 const Home = React.lazy(() =>
@@ -33,7 +35,11 @@ const IS_FLASH_SALE_ACTIVE = true;
 function App() {
   return (
     <div className="app">
-      {IS_FLASH_SALE_ACTIVE && <FlashSalePopup />}
+      {IS_FLASH_SALE_ACTIVE && (
+        <Suspense fallback={null}>
+          <FlashSalePopup />
+        </Suspense>
+      )}
       <Header />
       <main className="main-content">
         <Suspense fallback={<div className="loading-spinner">Loading...</div>}>

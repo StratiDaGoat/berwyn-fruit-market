@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 
 interface HomeSlideshowProps {
@@ -14,19 +14,19 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
 }) => {
   const imageUrls = useMemo(() => {
     if (images && images.length > 0) return images;
-    // Default: include home slides 1-11
+    // Default: include home slides 1-11 (now in WebP format)
     return [
-      '/home-slide-1.jpg',
-      '/home-slide-2.jpg',
-      '/home-slide-3.jpg',
-      '/home-slide-4.jpg',
-      '/home-slide-5.jpg',
-      '/home-slide-6.jpg',
-      '/home-slide-7.jpg',
-      '/home-slide-8.jpg',
-      '/home-slide-9.jpg',
-      '/home-slide-10.jpg',
-      '/home-slide-11.jpg',
+      '/home-slide-1.webp',
+      '/home-slide-2.webp',
+      '/home-slide-3.webp',
+      '/home-slide-4.webp',
+      '/home-slide-5.webp',
+      '/home-slide-6.webp',
+      '/home-slide-7.webp',
+      '/home-slide-8.webp',
+      '/home-slide-9.webp',
+      '/home-slide-10.webp',
+      '/home-slide-11.webp',
     ];
   }, [images]);
 
@@ -36,53 +36,6 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
   const [isReady, setIsReady] = useState(false);
   const [isFirstImageReady, setIsFirstImageReady] = useState(false);
   const [isInitialRender, setIsInitialRender] = useState(true);
-
-  // Simplified loading - no blob URLs for faster mobile performance
-  const loadedImagesRef = useRef<Set<string>>(new Set());
-  const loadingImagesRef = useRef<Set<string>>(new Set());
-
-  // Simplified image preloading - faster for mobile
-  const preloadImage = React.useCallback((url: string): Promise<void> => {
-    if (loadedImagesRef.current.has(url)) return Promise.resolve();
-    if (loadingImagesRef.current.has(url)) {
-      // Wait for existing load
-      return new Promise(resolve => {
-        const checkInterval = setInterval(() => {
-          if (loadedImagesRef.current.has(url)) {
-            clearInterval(checkInterval);
-            resolve();
-          }
-        }, 50);
-        setTimeout(() => {
-          clearInterval(checkInterval);
-          resolve(); // Timeout after 5s
-        }, 5000);
-      });
-    }
-
-    loadingImagesRef.current.add(url);
-    const promise = new Promise<void>(resolve => {
-      const img = new Image();
-      img.src = url;
-      img.loading = 'lazy'; // Use lazy loading for non-critical images
-
-      const finalize = () => {
-        loadedImagesRef.current.add(url);
-        loadingImagesRef.current.delete(url);
-        resolve();
-      };
-
-      if (img.complete) {
-        finalize();
-      } else {
-        img.onload = finalize;
-        img.onerror = finalize;
-        // Timeout after 3 seconds
-        setTimeout(finalize, 3000);
-      }
-    });
-    return promise;
-  }, []);
 
   // Auto-advance timer - works on both desktop and mobile
   useEffect(() => {
@@ -101,61 +54,13 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
     return () => clearInterval(timer);
   }, [imageUrls.length, intervalMs, isReady]);
 
-  // Optimized loading: Show first image immediately, lazy load others
+  // Simple ready state - images will load via native lazy loading
   useEffect(() => {
-    if (imageUrls.length <= 1) {
-      setIsReady(true);
-      setIsFirstImageReady(true);
-      return;
-    }
-
-    let isCancelled = false;
-
-    (async () => {
-      try {
-        // Step 1: Load first image immediately - show it right away
-        const firstUrl = imageUrls[0];
-        await preloadImage(firstUrl);
-        if (!isCancelled) {
-          setIsFirstImageReady(true);
-          setIsReady(true); // Allow slideshow to start
-          setIsInitialRender(false);
-        }
-
-        // Step 2: Preload next 2-3 images in background (for smooth transitions)
-        const nextImages = imageUrls.slice(1, 4);
-        Promise.all(nextImages.map(url => preloadImage(url))).catch(() => {
-          // Ignore errors, continue anyway
-        });
-
-        // Step 3: Lazy load remaining images as user progresses
-        // This happens in the opportunistic preload effect below
-      } catch {
-        // Even on error, show first frame to avoid blank screen
-        if (!isCancelled) {
-          setIsFirstImageReady(true);
-          setIsReady(true);
-        }
-      }
-    })();
-
-    return () => {
-      isCancelled = true;
-    };
-  }, [imageUrls, preloadImage]);
-
-  // Opportunistically preload next images for smooth transitions
-  useEffect(() => {
-    if (imageUrls.length <= 1 || !isReady) return;
-    const preloadTargets = [
-      (index + 1) % imageUrls.length,
-      (index + 2) % imageUrls.length,
-    ];
-    preloadTargets.forEach(t => {
-      const url = imageUrls[t];
-      void preloadImage(url);
-    });
-  }, [index, imageUrls, isReady, preloadImage]);
+    // Mark as ready immediately - browser handles image loading
+    setIsFirstImageReady(true);
+    setIsReady(true);
+    setIsInitialRender(false);
+  }, []);
 
   return (
     <>
@@ -278,11 +183,7 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
             }}
             draggable={false}
             loading="lazy"
-            onError={e => {
-              const target = e.currentTarget as HTMLImageElement;
-              if (target.src.endsWith('.jpg'))
-                target.src = target.src.replace('.jpg', '.png');
-            }}
+
           />
         )}
         {/* Current image (entering) */}
@@ -320,11 +221,7 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
             draggable={false}
             loading={index === 0 ? 'eager' : 'lazy'}
             fetchPriority={index === 0 ? 'high' : 'auto'}
-            onError={e => {
-              const target = e.currentTarget as HTMLImageElement;
-              if (target.src.endsWith('.jpg'))
-                target.src = target.src.replace('.jpg', '.png');
-            }}
+
           />
         )}
 
