@@ -138,6 +138,8 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
               key={`static-${imageUrls[0]}`}
               src={imageUrls[0]}
               alt="home slide"
+              width="1920"
+              height="1080"
               style={{
                 position: 'absolute',
                 inset: 0,
@@ -163,6 +165,8 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
             key={`leave-${imageUrls[prevIndex]}-${direction}`}
             src={imageUrls[prevIndex]}
             alt="home slide previous"
+            width="1920"
+            height="1080"
             initial={{ x: 0, opacity: 1 }}
             animate={{ x: direction === 'forward' ? '-100%' : '100%' }}
             transition={{ duration: 0.8, ease: 'easeInOut' }}
@@ -192,6 +196,8 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
             key={`enter-${imageUrls[index]}-${direction}`}
             src={imageUrls[index]}
             alt="home slide"
+            width="1920"
+            height="1080"
             initial={
               isInitialRender && index === 0
                 ? { x: 0, opacity: 1 }

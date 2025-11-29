@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import './FlashSalePopup.scss';
 
-const FlashSalePopup: React.FC = () => {
+interface FlashSalePopupProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const [isBannerVisible, setIsBannerVisible] = useState(true);
   const [timeLeft, setTimeLeft] = useState('');
 
   useEffect(() => {
+    if (!isOpen) return;
+
     const targetDate = new Date('2025-11-29T00:00:00');
 
     const updateTimer = () => {
@@ -14,7 +20,7 @@ const FlashSalePopup: React.FC = () => {
       const difference = targetDate.getTime() - now.getTime();
 
       if (difference <= 0) {
-        setIsBannerVisible(false);
+        onClose();
         setTimeLeft('00:00:00');
         return true;
       }
@@ -31,6 +37,7 @@ const FlashSalePopup: React.FC = () => {
       return false;
     };
 
+    // Run immediately
     if (updateTimer()) return;
 
     const interval = setInterval(() => {
@@ -40,28 +47,7 @@ const FlashSalePopup: React.FC = () => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const header = document.querySelector('.header');
-    const mainContent = document.querySelector('.main-content');
-
-    if (header) {
-      if (isBannerVisible) {
-        header.classList.add('with-banner');
-      } else {
-        header.classList.remove('with-banner');
-      }
-    }
-
-    if (mainContent) {
-      if (isBannerVisible) {
-        mainContent.classList.add('with-banner');
-      } else {
-        mainContent.classList.remove('with-banner');
-      }
-    }
-  }, [isBannerVisible]);
+  }, [isOpen, onClose]);
 
   const handleViewClick = () => {
     setIsPopupVisible(true);
@@ -71,14 +57,10 @@ const FlashSalePopup: React.FC = () => {
     setIsPopupVisible(false);
   };
 
-  const handleCloseBanner = () => {
-    setIsBannerVisible(false);
-  };
-
   return (
     <>
       {/* Flash Sale Banner */}
-      {isBannerVisible && (
+      {isOpen && (
         <div className="flash-sale-banner visible">
           <div className="banner-content">
             <span className="banner-text">
@@ -92,7 +74,7 @@ const FlashSalePopup: React.FC = () => {
             <button className="view-btn" onClick={handleViewClick}>
               VIEW
             </button>
-            <button className="banner-close-btn" onClick={handleCloseBanner}>
+            <button className="banner-close-btn" onClick={onClose}>
               ×
             </button>
           </div>

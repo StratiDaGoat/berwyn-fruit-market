@@ -50,6 +50,8 @@ export const Footer: React.FC = () => {
                   src="/logo.webp"
                   alt="Berwyn Fruit Market Logo"
                   className="footer__logo-image"
+                  width="150"
+                  height="50"
                 />
               </div>
               <h3 className="footer__logo-text">Berwyn Fruit Market</h3>

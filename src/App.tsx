@@ -1,12 +1,11 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 
-// Lazy load FlashSalePopup to defer 10MB egg promo image
-const FlashSalePopup = React.lazy(() => import('./components/FlashSalePopup'));
+import FlashSalePopup from './components/FlashSalePopup';
 
 // Lazy load pages
 const Home = React.lazy(() =>
@@ -33,15 +32,25 @@ const IS_FLASH_SALE_ACTIVE = true;
  * Sets up the main layout with header, footer, and page routes
  */
 function App() {
+  // Calculate initial visibility synchronously to prevent layout shift
+  const [isBannerVisible, setIsBannerVisible] = useState(() => {
+    if (!IS_FLASH_SALE_ACTIVE) return false;
+    const targetDate = new Date('2025-11-29T00:00:00');
+    const now = new Date();
+    return targetDate.getTime() > now.getTime();
+  });
+
+  const handleCloseBanner = () => {
+    setIsBannerVisible(false);
+  };
+
   return (
     <div className="app">
       {IS_FLASH_SALE_ACTIVE && (
-        <Suspense fallback={null}>
-          <FlashSalePopup />
-        </Suspense>
+        <FlashSalePopup isOpen={isBannerVisible} onClose={handleCloseBanner} />
       )}
-      <Header />
-      <main className="main-content">
+      <Header isBannerVisible={isBannerVisible} />
+      <main className={`main-content ${isBannerVisible ? 'with-banner' : ''}`}>
         <Suspense fallback={<div className="loading-spinner">Loading...</div>}>
           <Routes>
             <Route path="/" element={<Home />} />

@@ -228,6 +228,8 @@ export const Home: React.FC = () => {
                           alt={department.name}
                           className="department-card__media"
                           loading="lazy"
+                          width="400"
+                          height="225"
                           style={{ aspectRatio: '16/9' }}
                         />
                         <h3 className="department-card__title">
