@@ -4,6 +4,43 @@ import './FlashSalePopup.scss';
 const FlashSalePopup: React.FC = () => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [isBannerVisible, setIsBannerVisible] = useState(true);
+  const [timeLeft, setTimeLeft] = useState('');
+
+  useEffect(() => {
+    const targetDate = new Date('2025-11-29T00:00:00');
+
+    const updateTimer = () => {
+      const now = new Date();
+      const difference = targetDate.getTime() - now.getTime();
+
+      if (difference <= 0) {
+        setIsBannerVisible(false);
+        setTimeLeft('00:00:00');
+        return true;
+      }
+
+      const hours = Math.floor(difference / (1000 * 60 * 60));
+      const minutes = Math.floor((difference / 1000 / 60) % 60);
+      const seconds = Math.floor((difference / 1000) % 60);
+
+      setTimeLeft(
+        `${hours.toString().padStart(2, '0')}:${minutes
+          .toString()
+          .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+      );
+      return false;
+    };
+
+    if (updateTimer()) return;
+
+    const interval = setInterval(() => {
+      if (updateTimer()) {
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const header = document.querySelector('.header');
@@ -46,6 +83,11 @@ const FlashSalePopup: React.FC = () => {
           <div className="banner-content">
             <span className="banner-text">
               EGG-SCELLENT DEALS! CHEAPEST EGGS IN THE CHICAGOLAND AREA
+              {timeLeft && (
+                <span style={{ marginLeft: '10px', fontWeight: 'bold', color: '#ffeb3b' }}>
+                  ENDS IN {timeLeft}
+                </span>
+              )}
             </span>
             <button className="view-btn" onClick={handleViewClick}>
               VIEW
