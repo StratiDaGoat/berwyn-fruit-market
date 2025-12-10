@@ -10,12 +10,12 @@ export const WeeklyAdImages: React.FC<WeeklyAdImagesProps> = ({
 }) => {
   const adImages = [
     {
-      src: '/weekly-ad-49-1.webp',
+      src: '/weekly-ad-50-1.webp',
       alt: 'Weekly Ad Page 1',
       page: 1,
     },
     {
-      src: '/weekly-ad-49-2.webp',
+      src: '/weekly-ad-50-2.webp',
       alt: 'Weekly Ad Page 2',
       page: 2,
     },
@@ -23,7 +23,7 @@ export const WeeklyAdImages: React.FC<WeeklyAdImagesProps> = ({
 
   // Preload all images immediately on mount for instant mobile loading
   useEffect(() => {
-    const imageUrls = ['/weekly-ad-49-1.webp', '/weekly-ad-49-2.webp'];
+    const imageUrls = ['/weekly-ad-50-1.webp', '/weekly-ad-50-2.webp'];
 
     imageUrls.forEach(url => {
       const img = new Image();
