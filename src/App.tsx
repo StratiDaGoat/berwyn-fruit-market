@@ -6,7 +6,6 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 
 import FlashSalePopup from './components/FlashSalePopup';
-import SuperBowlRaffle from './components/SuperBowlRaffle';
 
 // Lazy load pages
 const Home = React.lazy(() =>
@@ -27,8 +26,6 @@ const Contact = React.lazy(() =>
 
 // Feature flag: Set to true to show flash sale banner, false to hide it
 const IS_FLASH_SALE_ACTIVE = true;
-// Feature flag: Set to true to show Super Bowl Raffle banner, false to hide it
-const IS_SUPER_BOWL_RAFFLE_ACTIVE = true;
 
 /**
  * Main App component with routing configuration
@@ -38,25 +35,13 @@ function App() {
   // Calculate initial visibility synchronously to prevent layout shift
   const [isBannerVisible, setIsBannerVisible] = useState(() => {
     if (!IS_FLASH_SALE_ACTIVE) return false;
-    const targetDate = new Date('2025-11-29T00:00:00');
+    const targetDate = new Date('2026-12-31T00:00:00');
     const now = new Date();
     return targetDate.getTime() > now.getTime();
   });
 
-  const [isRaffleBannerVisible, setIsRaffleBannerVisible] = useState(() => {
-    if (!IS_SUPER_BOWL_RAFFLE_ACTIVE) return false;
-    const startDate = new Date('2025-12-22T10:00:00-06:00'); // Dec 22, 2025 10:00 AM Central Time
-    const endDate = new Date('2026-02-08T21:00:00-06:00'); // Feb 8, 2026 9:00 PM Central Time
-    const now = new Date();
-    return now.getTime() >= startDate.getTime() && now.getTime() < endDate.getTime();
-  });
-
   const handleCloseBanner = () => {
     setIsBannerVisible(false);
-  };
-
-  const handleCloseRaffleBanner = () => {
-    setIsRaffleBannerVisible(false);
   };
 
   return (
@@ -64,11 +49,8 @@ function App() {
       {IS_FLASH_SALE_ACTIVE && (
         <FlashSalePopup isOpen={isBannerVisible} onClose={handleCloseBanner} />
       )}
-      {IS_SUPER_BOWL_RAFFLE_ACTIVE && (
-        <SuperBowlRaffle isOpen={isRaffleBannerVisible} onClose={handleCloseRaffleBanner} />
-      )}
-      <Header isBannerVisible={isBannerVisible || isRaffleBannerVisible} />
-      <main className={`main-content ${(isBannerVisible || isRaffleBannerVisible) ? 'with-banner' : ''}`}>
+      <Header isBannerVisible={isBannerVisible} />
+      <main className={`main-content ${isBannerVisible ? 'with-banner' : ''}`}>
         <Suspense fallback={<div className="loading-spinner">Loading...</div>}>
           <Routes>
             <Route path="/" element={<Home />} />
