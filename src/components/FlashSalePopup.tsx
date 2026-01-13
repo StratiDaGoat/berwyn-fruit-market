@@ -47,7 +47,7 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
   useEffect(() => {
     if (!isOpen) return;
 
-    const targetDate = new Date('2026-01-14T21:00:00-06:00'); // Updated to match PromoBanner logic
+    const targetDate = new Date('2026-01-20T21:00:00-06:00'); // Updated to match PromoBanner logic
 
     const updateTimer = () => {
       const now = new Date();
@@ -236,26 +236,37 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
               className="popup-header"
               style={{
                 backgroundColor: popupType === 'raffle' ? '#0B162A' : '#0ea5e9',
-                color: popupType === 'raffle' ? '#c83803' : 'white'
+                color: popupType === 'raffle' ? '#c83803' : 'white',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                padding: '10px'
               }}
             >
-              <span className="flash-sale-text">
-                {popupType === 'eggs' ? 'JUMBO EGGS 99¢' : 'SUPER BOWL RAFFLE'}
-              </span>
-              <button
-                className="close-btn"
-                onClick={handleClosePopup}
-                style={{
-                  borderColor: popupType === 'raffle' ? '#c83803' : 'white',
-                  color: popupType === 'raffle' ? '#c83803' : 'white'
-                }}
-              >
-                ×
-              </button>
+              <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span className="flash-sale-text">
+                  {popupType === 'eggs' ? 'JUMBO EGGS 99¢' : 'SUPER BOWL RAFFLE'}
+                </span>
+                <button
+                  className="close-btn"
+                  onClick={handleClosePopup}
+                  style={{
+                    borderColor: popupType === 'raffle' ? '#c83803' : 'white',
+                    color: popupType === 'raffle' ? '#c83803' : 'white'
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+              {popupType === 'eggs' && timeLeft && (
+                 <span style={{ marginTop: '5px', fontWeight: 'bold', fontSize: '0.9em', color: '#ffeb3b' }}>
+                   ENDS IN {timeLeft}
+                 </span>
+               )}
             </div>
             <div className="popup-image">
               <img
-                src={popupType === 'eggs' ? '/egg-promo-1-7.webp' : '/super-bowl-raffle.webp'}
+                src={popupType === 'eggs' ? '/egg promo extended.webp' : '/super-bowl-raffle.webp'}
                 alt={popupType === 'eggs' ? 'Egg Promo' : 'Super Bowl Raffle'}
                 loading="lazy"
                 width="3300"
