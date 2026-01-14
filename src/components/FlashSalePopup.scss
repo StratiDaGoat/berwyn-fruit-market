@@ -113,7 +113,8 @@
   position: relative;
   max-width: 1200px;
   margin: 0 auto;
-  // padding-right removed to ensure perfect centering
+  padding-right: 50px; // Reserve space for close button
+  padding-left: 50px; // Balance centering
 }
 
 .banner-slider {
@@ -260,9 +261,14 @@
     height: 28px;
   }
 
+  .banner-container {
+    padding-left: 10px;
+    padding-right: 40px;
+  }
+
   .banner-content {
     gap: 8px;
-    padding-right: 40px;
+    // padding-right moved to container
     flex-direction: row; // Keep horizontal layout like desktop
     align-items: center;
     flex-wrap: wrap;

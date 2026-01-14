@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './FlashSalePopup.scss';
 
 interface FlashSalePopupProps {
@@ -14,13 +14,18 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
+  // Use refs for intervals to ensure cleanups
+  const eggTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const raffleTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const carouselTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
   const banners = [
     {
       id: 'eggs',
       text: 'EGG-SCELLENT DEALS! CHEAPEST EGGS IN THE CHICAGOLAND AREA',
       showTimer: true,
       timerValue: timeLeft,
-      popupImage: '/egg-promo-1-7.webp',
+      popupImage: '/egg promo extended.webp',
       popupTitle: 'JUMBO EGGS 99¢',
       backgroundColor: '#0ea5e9', // Light Blue
       textColor: 'white',
@@ -47,7 +52,7 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
   useEffect(() => {
     if (!isOpen) return;
 
-    const targetDate = new Date('2026-01-20T21:00:00-06:00'); // Updated to match PromoBanner logic
+    const targetDate = new Date('2026-01-20T21:00:00-06:00');
 
     const updateTimer = () => {
       const now = new Date();
@@ -83,8 +88,14 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
     };
 
     if (updateTimer()) return;
-    const interval = setInterval(updateTimer, 1000);
-    return () => clearInterval(interval);
+
+    // Optimize: Update every second, but ensure we clear previous
+    if (eggTimerRef.current) clearInterval(eggTimerRef.current);
+    eggTimerRef.current = setInterval(updateTimer, 1000);
+
+    return () => {
+      if (eggTimerRef.current) clearInterval(eggTimerRef.current);
+    };
   }, [isOpen]);
 
   // Raffle Timer
@@ -155,15 +166,21 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
     };
 
     if (updateTimer()) return;
-    const interval = setInterval(updateTimer, 1000);
-    return () => clearInterval(interval);
+
+    if (raffleTimerRef.current) clearInterval(raffleTimerRef.current);
+    raffleTimerRef.current = setInterval(updateTimer, 1000);
+
+    return () => {
+      if (raffleTimerRef.current) clearInterval(raffleTimerRef.current);
+    };
   }, [isOpen]);
 
   // Carousel Logic
   useEffect(() => {
     if (!isOpen) return;
 
-    const interval = setInterval(() => {
+    if (carouselTimerRef.current) clearInterval(carouselTimerRef.current);
+    carouselTimerRef.current = setInterval(() => {
       setIsTransitioning(true);
       setTimeout(() => {
         setCurrentBannerIndex((prevIndex) => (prevIndex + 1) % banners.length);
@@ -171,7 +188,9 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
       }, 500);
     }, 6500);
 
-    return () => clearInterval(interval);
+    return () => {
+      if (carouselTimerRef.current) clearInterval(carouselTimerRef.current);
+    };
   }, [isOpen, banners.length]);
 
   const handleViewClick = () => {
@@ -191,7 +210,11 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
           className="flash-sale-banner visible"
           style={{
             backgroundColor: banners[currentBannerIndex].backgroundColor,
-            transition: 'background-color 0.5s ease-in-out'
+            transition: 'background-color 0.5s ease-in-out',
+            minHeight: '60px', // Enforce min-height to reduce CLS
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}
         >
           <div className="banner-container">
@@ -221,7 +244,7 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
                 </button>
               </div>
             </div>
-            <button className="banner-close-btn" onClick={onClose}>
+            <button className="banner-close-btn" onClick={onClose} aria-label="Close banner">
               ×
             </button>
           </div>
@@ -254,23 +277,30 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
                     borderColor: popupType === 'raffle' ? '#c83803' : 'white',
                     color: popupType === 'raffle' ? '#c83803' : 'white'
                   }}
+                  aria-label="Close popup"
                 >
                   ×
                 </button>
               </div>
               {popupType === 'eggs' && timeLeft && (
-                 <span style={{ marginTop: '5px', fontWeight: 'bold', fontSize: '0.9em', color: '#ffeb3b' }}>
-                   ENDS IN {timeLeft}
-                 </span>
-               )}
+                <span style={{ marginTop: '5px', fontWeight: 'bold', fontSize: '0.9em', color: '#ffeb3b' }}>
+                  ENDS IN {timeLeft}
+                </span>
+              )}
             </div>
             <div className="popup-image">
               <img
                 src={popupType === 'eggs' ? '/egg promo extended.webp' : '/super-bowl-raffle.webp'}
                 alt={popupType === 'eggs' ? 'Egg Promo' : 'Super Bowl Raffle'}
                 loading="lazy"
-                width="3300"
-                height="5100"
+                width={popupType === 'eggs' ? "3300" : "1440"}
+                height={popupType === 'eggs' ? "5100" : "1800"}
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                  maxHeight: '80vh',
+                  objectFit: 'contain'
+                }}
               />
             </div>
           </div>

@@ -34,7 +34,6 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
   const [prevIndex, setPrevIndex] = useState(0);
   const [direction, setDirection] = useState<'forward' | 'backward'>('forward');
   const [isReady, setIsReady] = useState(false);
-  const [isFirstImageReady, setIsFirstImageReady] = useState(false);
   const [isInitialRender, setIsInitialRender] = useState(true);
 
   // Auto-advance timer - works on both desktop and mobile
@@ -57,7 +56,6 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
   // Simple ready state - images will load via native lazy loading
   useEffect(() => {
     // Mark as ready immediately - browser handles image loading
-    setIsFirstImageReady(true);
     setIsReady(true);
     setIsInitialRender(false);
   }, []);
@@ -92,73 +90,36 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
           willChange: 'contents',
         }}
       >
-        {/* Loading skeleton - shown before first image loads */}
-        {!isFirstImageReady && (
-          <div
+        {/* Loading skeleton - shown while image is loading (handled by onLoad if needed, but for LCP we want img tag immediately) */}
+        {/* Removed blocking skeleton to allow immediate LCP image discovery */}
+
+        {/* Show static first image immediately for LCP */}
+        {(!isReady || (isInitialRender && index === 0)) && (
+          <img
+            key={`static-${imageUrls[0]}`}
+            src={imageUrls[0]}
+            alt="home slide"
+            width="1920"
+            height="1080"
             style={{
               position: 'absolute',
               inset: 0,
-              background: 'linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%)',
-              animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-              zIndex: 10,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              objectPosition: 'center center',
+              transform: 'translateZ(0)',
+              WebkitTransform: 'translateZ(0)',
+              backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden',
+              zIndex: isInitialRender && index === 0 ? 2 : 1,
+              animation: 'fadeIn 0.5s ease-in',
             }}
-          >
-            <div
-              style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                textAlign: 'center',
-                color: '#9e9e9e',
-                fontFamily: 'Poppins, sans-serif',
-              }}
-            >
-              <div
-                style={{
-                  width: '48px',
-                  height: '48px',
-                  border: '4px solid #e0e0e0',
-                  borderTop: '4px solid #4caf50',
-                  borderRadius: '50%',
-                  animation: 'spin 1s linear infinite',
-                  margin: '0 auto 16px',
-                }}
-              />
-              <p style={{ margin: 0, fontSize: '14px', fontWeight: 500 }}>
-                Loading images...
-              </p>
-            </div>
-          </div>
+            draggable={false}
+            loading="eager"
+            fetchPriority="high"
+          />
         )}
-        {/* Show static first image until slideshow is ready */}
-        {(!isReady || (isInitialRender && index === 0)) &&
-          isFirstImageReady && (
-            <img
-              key={`static-${imageUrls[0]}`}
-              src={imageUrls[0]}
-              alt="home slide"
-              width="1920"
-              height="1080"
-              style={{
-                position: 'absolute',
-                inset: 0,
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                objectPosition: 'center center',
-                transform: 'translateZ(0)',
-                WebkitTransform: 'translateZ(0)',
-                backfaceVisibility: 'hidden',
-                WebkitBackfaceVisibility: 'hidden',
-                zIndex: isInitialRender && index === 0 ? 2 : 1,
-                animation: 'fadeIn 0.5s ease-in',
-              }}
-              draggable={false}
-              loading="eager"
-              fetchPriority="high"
-            />
-          )}
         {/* Previous image (leaving) */}
         {isReady && prevIndex !== index && (
           <motion.img
