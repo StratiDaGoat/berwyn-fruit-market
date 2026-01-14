@@ -100,11 +100,11 @@ const PromoBanner: React.FC<PromoBannerProps> = ({ isOpen, onClose }) => {
     return () => clearInterval(interval);
   }, [isOpen]);
 
-  // Timer calculation for eggs (ends January 20th at 9:00 PM)
+  // Timer calculation for eggs (ends January 14th at 9:00 PM)
   useEffect(() => {
     if (!isOpen) return;
 
-    const targetDate = new Date('2026-01-20T21:00:00-06:00');
+    const targetDate = new Date('2026-01-14T21:00:00-06:00');
 
     const updateTimer = () => {
       const now = new Date();
@@ -263,7 +263,7 @@ const PromoBanner: React.FC<PromoBannerProps> = ({ isOpen, onClose }) => {
                 />
               ) : (
                 <img
-                  src="/egg promo extended.webp"
+                  src="/ egg promo 1:7.png"
                   alt="Egg Promo"
                   loading="lazy"
                   width="3300"

@@ -35,7 +35,7 @@ function App() {
   // Calculate initial visibility synchronously to prevent layout shift
   const [isBannerVisible, setIsBannerVisible] = useState(() => {
     if (!IS_FLASH_SALE_ACTIVE) return false;
-    const targetDate = new Date('2026-12-31T00:00:00');
+    const targetDate = new Date('2025-11-29T00:00:00');
     const now = new Date();
     return targetDate.getTime() > now.getTime();
   });

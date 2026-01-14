@@ -74,8 +74,8 @@ export const WeeklyAds: React.FC = () => {
   }
 
   const handlePrint = () => {
-    // Open the Week 52 PDF file for printing
-    const printWindow = window.open('/weekly-ad-52.pdf', '_blank');
+    // Open the Week 3 PDF file for printing
+    const printWindow = window.open('/weekly-ad-week-3.pdf', '_blank');
     if (printWindow) {
       printWindow.onload = () => {
         setTimeout(() => {
@@ -86,11 +86,11 @@ export const WeeklyAds: React.FC = () => {
   };
 
   const handleDownload = () => {
-    // Download the Week 52 PDF file
+    // Download the Week 3 PDF file
     try {
       const link = document.createElement('a');
-      link.href = '/weekly-ad-52.pdf';
-      link.download = 'weekly-specials-week52.pdf';
+      link.href = '/weekly-ad-week-3.pdf';
+      link.download = 'weekly-specials-week3.pdf';
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       document.body.appendChild(link);
@@ -98,7 +98,7 @@ export const WeeklyAds: React.FC = () => {
       document.body.removeChild(link);
     } catch {
       // Fallback: open PDF in new tab
-      window.open('/weekly-ad-52.pdf', '_blank');
+      window.open('/weekly-ad-week-3.pdf', '_blank');
     }
   };
 

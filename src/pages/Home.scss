@@ -20,6 +20,11 @@
     right: 0;
     bottom: 0;
     z-index: 1;
+
+    // Remove slideshow controls
+    .home-slide__control {
+      display: none !important;
+    }
   }
 
   .container {
