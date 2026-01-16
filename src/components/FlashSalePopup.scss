@@ -91,7 +91,7 @@
   animation: bannerSlideDown 0.5s ease-out;
   transform: translateY(0);
   opacity: 1;
-  z-index: 1001; // Higher than header z-index
+  z-index: 1030; // Higher than header z-index (1020)
 }
 
 // Header adjustment when banner is visible
@@ -161,6 +161,10 @@
   font-size: 14px;
   letter-spacing: 0.5px;
   text-align: center;
+
+  .text-mobile {
+    display: none;
+  }
 }
 
 .view-btn {
@@ -245,9 +249,26 @@
   }
 
   .banner-text {
-    font-size: 12px;
+    font-size: 18px;
     flex: 1;
     min-width: 200px;
+    display: flex;
+    flex-direction: column; // Stack text and timer on mobile
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+
+    .text-desktop {
+      display: none;
+    }
+
+    .text-mobile {
+      display: inline-block;
+    }
+  }
+
+  .banner-timer {
+    display: none;
   }
 
   .view-btn {
@@ -292,7 +313,7 @@
 
 @media (max-width: 480px) {
   .banner-text {
-    font-size: 11px;
+    font-size: 16px;
     text-align: center;
   }
 

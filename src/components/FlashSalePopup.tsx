@@ -23,6 +23,7 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
     {
       id: 'eggs',
       text: 'EGG-SCELLENT DEALS! CHEAPEST EGGS IN THE CHICAGOLAND AREA',
+      mobileText: 'JUMBO EGGS 99¢',
       showTimer: true,
       timerValue: timeLeft,
       popupImage: '/egg promo extended.webp',
@@ -36,6 +37,7 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
     {
       id: 'raffle',
       text: 'SUPER BOWL RAFFLE',
+      mobileText: 'SUPER BOWL RAFFLE',
       showTimer: true,
       timerValue: raffleTimeLeft,
       popupImage: '/super-bowl-raffle.webp',
@@ -72,18 +74,18 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
 
       const parts: string[] = [];
       if (days > 0) {
-        parts.push(`${days} ${days === 1 ? 'DAY' : 'DAYS'}`);
-        parts.push(`${hours} ${hours === 1 ? 'HOUR' : 'HOURS'}`);
-        parts.push(`${minutes} ${minutes === 1 ? 'MIN' : 'MIN'}`);
+        parts.push(`${days}D`);
+        parts.push(`${hours}H`);
+        parts.push(`${minutes}M`);
       } else {
         // Less than 24 hours: Show Hours, Min, Sec
         const seconds = totalSeconds % 60;
-        if (hours > 0) parts.push(`${hours} ${hours === 1 ? 'HOUR' : 'HOURS'}`);
-        parts.push(`${minutes} ${minutes === 1 ? 'MIN' : 'MIN'}`);
-        parts.push(`${seconds} SEC`);
+        if (hours > 0) parts.push(`${hours}H`);
+        parts.push(`${minutes}M`);
+        parts.push(`${seconds}S`);
       }
 
-      setTimeLeft(parts.join(' ') || '0 MIN');
+      setTimeLeft(parts.join(' ') || '0M');
       return false;
     };
 
@@ -109,7 +111,7 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
       const difference = targetDate.getTime() - now.getTime();
 
       if (difference <= 0) {
-        setRaffleTimeLeft('0 MONTHS 0 DAYS');
+        setRaffleTimeLeft('0MO 0D');
         return true;
       }
 
@@ -123,9 +125,9 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
         const seconds = totalSeconds % 60;
 
         const parts: string[] = [];
-        if (hours > 0) parts.push(`${hours} ${hours === 1 ? 'HOUR' : 'HOURS'}`);
-        parts.push(`${minutes} ${minutes === 1 ? 'MIN' : 'MIN'}`);
-        parts.push(`${seconds} SEC`);
+        if (hours > 0) parts.push(`${hours}H`);
+        parts.push(`${minutes}M`);
+        parts.push(`${seconds}S`);
 
         setRaffleTimeLeft(parts.join(' '));
       } else {
@@ -150,14 +152,14 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
 
         const parts: string[] = [];
         if (months > 0) {
-          parts.push(`${months} ${months === 1 ? 'MONTH' : 'MONTHS'}`);
-          parts.push(`${days} ${days === 1 ? 'DAY' : 'DAYS'}`);
-          parts.push(`${hours} ${hours === 1 ? 'HOUR' : 'HOURS'}`);
+          parts.push(`${months}MO`);
+          parts.push(`${days}D`);
+          parts.push(`${hours}H`);
         } else {
           // 0 Months left: Show Days, Hours, Min
-          parts.push(`${days} ${days === 1 ? 'DAY' : 'DAYS'}`);
-          parts.push(`${hours} ${hours === 1 ? 'HOUR' : 'HOURS'}`);
-          parts.push(`${minutes} ${minutes === 1 ? 'MIN' : 'MIN'}`);
+          parts.push(`${days}D`);
+          parts.push(`${hours}H`);
+          parts.push(`${minutes}M`);
         }
 
         setRaffleTimeLeft(parts.join(' '));
@@ -224,9 +226,10 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
                   className="banner-text"
                   style={{ color: banners[currentBannerIndex].textColor }}
                 >
-                  {banners[currentBannerIndex].text}
+                  <span className="text-desktop">{banners[currentBannerIndex].text}</span>
+                  <span className="text-mobile">{banners[currentBannerIndex].mobileText}</span>
                   {banners[currentBannerIndex].showTimer && banners[currentBannerIndex].timerValue && (
-                    <span style={{ marginLeft: '10px', fontWeight: 'bold', color: banners[currentBannerIndex].timerColor }}>
+                    <span className="banner-timer" style={{ marginLeft: '10px', fontWeight: 'bold', color: banners[currentBannerIndex].timerColor }}>
                       ENDS IN {banners[currentBannerIndex].timerValue}
                     </span>
                   )}
@@ -261,32 +264,43 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
                 backgroundColor: popupType === 'raffle' ? '#0B162A' : '#0ea5e9',
                 color: popupType === 'raffle' ? '#c83803' : 'white',
                 display: 'flex',
-                flexDirection: 'column',
+                justifyContent: 'space-between',
                 alignItems: 'center',
-                padding: '10px'
+                padding: '5px 10px',
+                minHeight: '50px', // Ensure consistent height
+                gap: '5px'
               }}
             >
-              <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span className="flash-sale-text">
-                  {popupType === 'eggs' ? 'JUMBO EGGS 99¢' : 'SUPER BOWL RAFFLE'}
-                </span>
-                <button
-                  className="close-btn"
-                  onClick={handleClosePopup}
-                  style={{
-                    borderColor: popupType === 'raffle' ? '#c83803' : 'white',
-                    color: popupType === 'raffle' ? '#c83803' : 'white'
-                  }}
-                  aria-label="Close popup"
-                >
-                  ×
-                </button>
-              </div>
+              {/* Spacer to balance the close button for perfect centering */}
+              <div style={{ width: '30px' }} />
+
+              {/* Timer for Eggs */}
               {popupType === 'eggs' && timeLeft && (
-                <span style={{ marginTop: '5px', fontWeight: 'bold', fontSize: '0.9em', color: '#ffeb3b' }}>
+                <span style={{ fontWeight: 'bold', fontSize: '0.85em', color: '#ffeb3b', whiteSpace: 'nowrap', flex: 1, textAlign: 'center' }}>
                   ENDS IN {timeLeft}
                 </span>
               )}
+              {/* Timer for Raffle */}
+              {popupType === 'raffle' && raffleTimeLeft && (
+                <span style={{ fontWeight: 'bold', fontSize: '0.85em', color: '#c83803', whiteSpace: 'nowrap', flex: 1, textAlign: 'center' }}>
+                  ENDS IN {raffleTimeLeft}
+                </span>
+              )}
+
+              <button
+                className="close-btn"
+                onClick={handleClosePopup}
+                style={{
+                  width: '30px',
+                  height: '30px',
+                  borderColor: popupType === 'raffle' ? '#c83803' : 'white',
+                  color: popupType === 'raffle' ? '#c83803' : 'white',
+                  flexShrink: 0 // Prevent button from squishing
+                }}
+                aria-label="Close popup"
+              >
+                ×
+              </button>
             </div>
             <div className="popup-image">
               <img
