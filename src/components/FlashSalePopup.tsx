@@ -14,6 +14,12 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
+  // Initialize expiration state based on current time to prevent flash of expired content
+  const [isEggExpired, setIsEggExpired] = useState(() => {
+    const targetDate = new Date('2026-01-20T21:00:00-06:00');
+    return new Date() > targetDate;
+  });
+
   // Use refs for intervals to ensure cleanups
   const eggTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const raffleTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -48,7 +54,7 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
       buttonBackgroundColor: '#c83803',
       buttonTextColor: '#0B162A',
     },
-  ];
+  ].filter(banner => banner.id !== 'eggs' || !isEggExpired);
 
   // Egg Timer
   useEffect(() => {
@@ -62,6 +68,7 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
 
       if (difference <= 0) {
         setTimeLeft('0 DAYS 0 HOURS 0 MIN');
+        setIsEggExpired(true);
         return true;
       }
 
@@ -179,7 +186,7 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
 
   // Carousel Logic
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen || banners.length <= 1) return;
 
     if (carouselTimerRef.current) clearInterval(carouselTimerRef.current);
     carouselTimerRef.current = setInterval(() => {
@@ -196,62 +203,80 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
   }, [isOpen, banners.length]);
 
   const handleViewClick = () => {
-    setPopupType(banners[currentBannerIndex].id as 'eggs' | 'raffle');
-    setIsPopupVisible(true);
+    const safeIndex = currentBannerIndex >= banners.length ? 0 : currentBannerIndex;
+    const activeBanner = banners[safeIndex];
+    if (activeBanner) {
+      setPopupType(activeBanner.id as 'eggs' | 'raffle');
+      setIsPopupVisible(true);
+    }
   };
 
   const handleClosePopup = () => {
     setIsPopupVisible(false);
   };
 
+  // Ensure currentBannerIndex is valid if banners array shrinks
+  useEffect(() => {
+    if (currentBannerIndex >= banners.length && banners.length > 0) {
+      setCurrentBannerIndex(0);
+    }
+  }, [banners.length, currentBannerIndex]);
+
   return (
     <>
       {/* Flash Sale Banner */}
-      {isOpen && (
-        <div
-          className="flash-sale-banner visible"
-          style={{
-            backgroundColor: banners[currentBannerIndex].backgroundColor,
-            transition: 'background-color 0.5s ease-in-out',
-            minHeight: '60px', // Enforce min-height to reduce CLS
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          <div className="banner-container">
-            <div className={`banner-slider ${isTransitioning ? 'sliding' : ''}`}>
-              <div className="banner-content">
-                <span
-                  className="banner-text"
-                  style={{ color: banners[currentBannerIndex].textColor }}
-                >
-                  <span className="text-desktop">{banners[currentBannerIndex].text}</span>
-                  <span className="text-mobile">{banners[currentBannerIndex].mobileText}</span>
-                  {banners[currentBannerIndex].showTimer && banners[currentBannerIndex].timerValue && (
-                    <span className="banner-timer" style={{ marginLeft: '10px', fontWeight: 'bold', color: banners[currentBannerIndex].timerColor }}>
-                      ENDS IN {banners[currentBannerIndex].timerValue}
+      {/* Flash Sale Banner */}
+      {isOpen && banners.length > 0 && (
+        (() => {
+          const safeIndex = currentBannerIndex >= banners.length ? 0 : currentBannerIndex;
+          const activeBanner = banners[safeIndex];
+          return (
+            <div
+              className="flash-sale-banner visible"
+              style={{
+                backgroundColor: activeBanner.backgroundColor,
+                transition: 'background-color 0.5s ease-in-out',
+                minHeight: '60px', // Enforce min-height to reduce CLS
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <div className="banner-container">
+                <div className={`banner-slider ${isTransitioning ? 'sliding' : ''}`}>
+                  <div className="banner-content">
+                    <span
+                      className="banner-text"
+                      style={{ color: activeBanner.textColor }}
+                    >
+                      <span className="text-desktop">{activeBanner.text}</span>
+                      <span className="text-mobile">{activeBanner.mobileText}</span>
+                      {activeBanner.showTimer && activeBanner.timerValue && (
+                        <span className="banner-timer" style={{ marginLeft: '10px', fontWeight: 'bold', color: activeBanner.timerColor }}>
+                          ENDS IN {activeBanner.timerValue}
+                        </span>
+                      )}
                     </span>
-                  )}
-                </span>
-                <button
-                  className="view-btn"
-                  onClick={handleViewClick}
-                  style={{
-                    backgroundColor: banners[currentBannerIndex].buttonBackgroundColor,
-                    color: banners[currentBannerIndex].buttonTextColor,
-                    borderColor: banners[currentBannerIndex].buttonBackgroundColor
-                  }}
-                >
-                  VIEW
+                    <button
+                      className="view-btn"
+                      onClick={handleViewClick}
+                      style={{
+                        backgroundColor: activeBanner.buttonBackgroundColor,
+                        color: activeBanner.buttonTextColor,
+                        borderColor: activeBanner.buttonBackgroundColor
+                      }}
+                    >
+                      VIEW
+                    </button>
+                  </div>
+                </div>
+                <button className="banner-close-btn" onClick={onClose} aria-label="Close banner">
+                  ×
                 </button>
               </div>
             </div>
-            <button className="banner-close-btn" onClick={onClose} aria-label="Close banner">
-              ×
-            </button>
-          </div>
-        </div>
+          );
+        })()
       )}
 
       {/* Popup Modal */}
