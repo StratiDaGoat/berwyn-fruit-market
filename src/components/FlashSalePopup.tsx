@@ -14,9 +14,9 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // Initialize expiration state based on current time to prevent flash of expired content
+  // Initialize expiration state based on current time to prevent flash of expired content (Feb 3, 9 PM Central)
   const [isEggExpired, setIsEggExpired] = useState(() => {
-    const targetDate = new Date('2026-01-20T21:00:00-06:00');
+    const targetDate = new Date('2026-02-03T21:00:00-06:00');
     return new Date() > targetDate;
   });
 
@@ -32,7 +32,7 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
       mobileText: 'JUMBO EGGS 99¢',
       showTimer: true,
       timerValue: timeLeft,
-      popupImage: '/egg promo extended.webp',
+      popupImage: '/egg-promo-til-feb3.webp',
       popupTitle: 'JUMBO EGGS 99¢',
       backgroundColor: '#0ea5e9', // Light Blue
       textColor: 'white',
@@ -60,7 +60,7 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
   useEffect(() => {
     if (!isOpen) return;
 
-    const targetDate = new Date('2026-01-20T21:00:00-06:00');
+    const targetDate = new Date('2026-02-03T21:00:00-06:00'); // Feb 3, 9:00 PM Central
 
     const updateTimer = () => {
       const now = new Date();
@@ -329,7 +329,7 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
             </div>
             <div className="popup-image">
               <img
-                src={popupType === 'eggs' ? '/egg promo extended.webp' : '/super-bowl-raffle.webp'}
+                src={popupType === 'eggs' ? '/egg-promo-til-feb3.webp' : '/super-bowl-raffle.webp'}
                 alt={popupType === 'eggs' ? 'Egg Promo' : 'Super Bowl Raffle'}
                 loading="lazy"
                 width={popupType === 'eggs' ? "3300" : "1440"}
