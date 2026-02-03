@@ -20,6 +20,12 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
     return new Date() > targetDate;
   });
 
+  // Super Bowl raffle ends Friday 9:00 PM Central — hide ad when countdown hits 0
+  const [isRaffleExpired, setIsRaffleExpired] = useState(() => {
+    const targetDate = new Date('2026-02-06T21:00:00-06:00'); // Feb 6, 2026 9 PM Central
+    return new Date() > targetDate;
+  });
+
   // Use refs for intervals to ensure cleanups
   const eggTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const raffleTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -46,7 +52,7 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
       mobileText: 'SUPER BOWL RAFFLE',
       showTimer: true,
       timerValue: raffleTimeLeft,
-      popupImage: '/super-bowl-raffle.webp',
+      popupImage: '/super-bowl-promo-date-changed.webp',
       popupTitle: 'SUPER BOWL RAFFLE',
       backgroundColor: '#0B162A', // Bears Navy Blue
       textColor: '#c83803', // Bears Orange
@@ -54,7 +60,7 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
       buttonBackgroundColor: '#c83803',
       buttonTextColor: '#0B162A',
     },
-  ].filter(banner => banner.id !== 'eggs' || !isEggExpired);
+  ].filter(banner => (banner.id !== 'eggs' || !isEggExpired) && (banner.id !== 'raffle' || !isRaffleExpired));
 
   // Egg Timer
   useEffect(() => {
@@ -107,18 +113,19 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
     };
   }, [isOpen]);
 
-  // Raffle Timer
+  // Raffle Timer — ends Friday 9:00 PM Central; ad disappears at 0:00:00
   useEffect(() => {
     if (!isOpen) return;
 
-    const targetDate = new Date('2026-02-08T21:00:00-06:00');
+    const targetDate = new Date('2026-02-06T21:00:00-06:00'); // Feb 6, 2026 9 PM Central
 
     const updateTimer = () => {
       const now = new Date();
       const difference = targetDate.getTime() - now.getTime();
 
       if (difference <= 0) {
-        setRaffleTimeLeft('0MO 0D');
+        setRaffleTimeLeft('0H 0M 0S');
+        setIsRaffleExpired(true);
         return true;
       }
 
@@ -329,7 +336,7 @@ const FlashSalePopup: React.FC<FlashSalePopupProps> = ({ isOpen, onClose }) => {
             </div>
             <div className="popup-image">
               <img
-                src={popupType === 'eggs' ? '/egg-promo-til-feb3.webp' : '/super-bowl-raffle.webp'}
+                src={popupType === 'eggs' ? '/egg-promo-til-feb3.webp' : '/super-bowl-promo-date-changed.webp'}
                 alt={popupType === 'eggs' ? 'Egg Promo' : 'Super Bowl Raffle'}
                 loading="lazy"
                 width={popupType === 'eggs' ? "3300" : "1440"}
