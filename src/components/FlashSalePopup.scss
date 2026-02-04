@@ -34,8 +34,8 @@
 }
 
 .close-btn {
-  background: rgba(255, 255, 255, 0.1); // Subtle background
-  border: 2px solid white; // Default, overridden by inline style
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid white;
   color: white;
   font-size: 20px;
   font-weight: bold;
@@ -46,7 +46,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%; // Restore circle
+  border-radius: 50%;
   transition: all 0.2s;
 
   &:hover {

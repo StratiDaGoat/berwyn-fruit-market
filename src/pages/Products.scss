@@ -124,59 +124,61 @@
   background: $white;
   border-radius: $radius-xl;
   padding: $spacing-3xl;
-  box-shadow: $shadow-lg;
-  max-width: 100%; // Full width to eliminate horizontal black bars
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.08),
+    0 2px 4px -1px rgba(0, 0, 0, 0.04),
+    0 0 0 1px rgba(0, 0, 0, 0.04);
+  max-width: 100%;
   margin: 0 auto;
   text-align: center;
 
   @media (min-width: $breakpoint-lg) {
-    max-width: 100%; // Full width to eliminate horizontal black bars
+    max-width: 100%;
   }
 
   @media (max-width: $breakpoint-md) {
-    padding: $spacing-lg; // Less padding on mobile to maximize ad space
-    margin: 0 $spacing-sm; // Minimal side margins on mobile
+    padding: $spacing-xl $spacing-lg;
+    margin: 0 $spacing-sm;
   }
 
   @media (max-width: $breakpoint-sm) {
-    padding: $spacing-sm; // Minimal padding on phones to eliminate black space
-    margin: 0; // No side margins on phones to use full width
-    width: 100%; // Full width on mobile
-    max-width: 100%; // Prevent overflow
-    box-sizing: border-box; // Include padding in width calculation
+    padding: $spacing-md $spacing-sm;
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
-  // Optimize for small phones (393px width)
   @media (max-width: 400px) {
-    padding: $spacing-xs; // Even smaller padding for small phones
-    margin: 0; // No margins
-    width: 100%; // Full width
-    max-width: 100%; // No overflow
+    padding: $spacing-sm $spacing-xs;
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
   }
 }
 
 .weekly-specials__pdf-container {
-  background: transparent; // No background to eliminate black bars
-  border: none; // Remove border to eliminate black bars
-  border-radius: 0; // Remove border radius to eliminate black bars
+  background: transparent;
+  border: none;
+  border-radius: 0;
   margin-bottom: $spacing-3xl;
-  overflow: visible; // Allow content to be fully visible
-  box-shadow: none; // Remove shadow to eliminate black bars
-  padding: 0; // Remove any padding that could create black space
+  overflow: visible;
+  box-shadow: none;
+  padding: 0;
 
   @media (max-width: $breakpoint-md) {
-    margin-bottom: $spacing-xl; // Less margin on mobile
+    margin-bottom: $spacing-xl;
   }
 
   @media (max-width: $breakpoint-sm) {
-    margin: 0; // Remove ALL margins to eliminate black space
-    width: 100%; // Full width on mobile
-    max-width: 100%; // Prevent overflow
-    padding: 0; // Remove any padding that could create black space
-    height: auto; // Auto height to show whole PDF
-    overflow: visible; // Allow whole PDF to be visible
-    position: relative; // Normal positioning
-    box-sizing: border-box; // Include any borders in width calculation
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    height: auto;
+    overflow: visible;
+    position: relative;
+    box-sizing: border-box;
   }
 }
 

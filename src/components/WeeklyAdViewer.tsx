@@ -46,8 +46,8 @@ export const WeeklyAdViewer: React.FC<WeeklyAdViewerProps> = ({
   }, []);
 
   const pdfFiles = [
-    { pdf: '/weekly-ad-week-5.pdf', image: '/weekly-ad-week-5-1.webp' },
-    { pdf: '/weekly-ad-week-5.pdf', image: '/weekly-ad-week-5-2.webp' },
+    { pdf: '/weekly-ad-week-6.pdf', image: '/weekly-ad-week-6-1.webp' },
+    { pdf: '/weekly-ad-week-6.pdf', image: '/weekly-ad-week-6-2.webp' },
   ];
 
   const renderPDF = (pdfPath: string, imagePath: string, index: number) => {

@@ -12,10 +12,10 @@
   &__container {
     display: flex;
     width: 100%;
-    max-width: 100%;
-    margin: 0;
+    max-width: 1100px;
+    margin: 0 auto;
     padding: 0;
-    gap: 0;
+    gap: $spacing-md;
     box-sizing: border-box;
   }
 
@@ -25,8 +25,6 @@
     margin: 0;
     padding: 0;
     background: transparent;
-    border: none;
-    box-shadow: none;
     overflow: hidden;
     position: relative;
     box-sizing: border-box;
@@ -54,7 +52,7 @@
   @media (max-width: 767px) {
     &__container {
       flex-direction: column;
-      gap: $spacing-md;
+      gap: $spacing-lg;
     }
 
     &__item {
@@ -103,7 +101,7 @@
   @media (min-width: 1024px) {
     &__container {
       flex-direction: row;
-      gap: $spacing-lg;
+      gap: $spacing-md;
     }
 
     &__item {
@@ -138,7 +136,7 @@
 @media (max-width: 480px) {
   .weekly-ad-images {
     &__container {
-      gap: $spacing-sm;
+      gap: $spacing-md;
     }
   }
 }
