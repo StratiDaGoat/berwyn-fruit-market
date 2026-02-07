@@ -25,7 +25,7 @@ const Contact = React.lazy(() =>
 );
 
 // Feature flag: Set to true to show flash sale banner, false to hide it
-const IS_FLASH_SALE_ACTIVE = true;
+const IS_FLASH_SALE_ACTIVE = false;
 
 /**
  * Main App component with routing configuration
