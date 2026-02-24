@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getCurrentWeeklyAdWeek, WEEKLY_AD_ASSETS } from '../utils/weeklyAdSchedule';
 import './WeeklyAdDisplay.scss';
 
 interface WeeklyAdDisplayProps {
@@ -10,8 +11,19 @@ export const WeeklyAdDisplay: React.FC<WeeklyAdDisplayProps> = ({
 }) => {
   const [useImageFallback, setUseImageFallback] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [week, setWeek] = useState(getCurrentWeeklyAdWeek);
+  const assets = WEEKLY_AD_ASSETS[week];
+  const adFiles = [
+    { pdf: assets.pdf, image: assets.images[0], alt: 'Weekly Ad Page 1' },
+    { pdf: assets.pdf, image: assets.images[1], alt: 'Weekly Ad Page 2' },
+  ];
 
-  // Check if we should use image fallback for better mobile performance
+  useEffect(() => {
+    const check = () => setWeek(getCurrentWeeklyAdWeek());
+    const id = setInterval(check, 60_000);
+    return () => clearInterval(id);
+  }, []);
+
   useEffect(() => {
     const checkFallback = () => {
       const isMobile = window.innerWidth < 768;
@@ -20,7 +32,6 @@ export const WeeklyAdDisplay: React.FC<WeeklyAdDisplayProps> = ({
       );
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
-      // Use image fallback for mobile Safari and iOS devices for best performance
       if (isMobile && (isSafari || isIOS)) {
         setUseImageFallback(true);
       }
@@ -29,19 +40,6 @@ export const WeeklyAdDisplay: React.FC<WeeklyAdDisplayProps> = ({
     checkFallback();
     setIsLoading(false);
   }, []);
-
-  const adFiles = [
-    {
-      pdf: '/weekly-ad-week-8.pdf',
-      image: '/weekly-ad-week-8-1.webp',
-      alt: 'Weekly Ad Page 1',
-    },
-    {
-      pdf: '/weekly-ad-week-8.pdf',
-      image: '/weekly-ad-week-8-2.webp',
-      alt: 'Weekly Ad Page 2',
-    },
-  ];
 
   const renderAd = (file: (typeof adFiles)[0]) => {
     if (useImageFallback) {

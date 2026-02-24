@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { getCurrentWeeklyAdWeek, WEEKLY_AD_ASSETS } from '../utils/weeklyAdSchedule';
 import './WeeklyAdImages.scss';
 
 interface WeeklyAdImagesProps {
@@ -8,31 +9,27 @@ interface WeeklyAdImagesProps {
 export const WeeklyAdImages: React.FC<WeeklyAdImagesProps> = ({
   className = '',
 }) => {
+  const [week, setWeek] = useState(getCurrentWeeklyAdWeek);
+  const assets = WEEKLY_AD_ASSETS[week];
   const adImages = [
-    {
-      src: '/weekly-ad-week-8-1.webp',
-      alt: 'Weekly Ad Page 1',
-      page: 1,
-    },
-    {
-      src: '/weekly-ad-week-8-2.webp',
-      alt: 'Weekly Ad Page 2',
-      page: 2,
-    },
+    { src: assets.images[0], alt: 'Weekly Ad Page 1', page: 1 },
+    { src: assets.images[1], alt: 'Weekly Ad Page 2', page: 2 },
   ];
 
-  // Preload all images immediately on mount for instant mobile loading
   useEffect(() => {
-    const imageUrls = ['/weekly-ad-week-8-1.webp', '/weekly-ad-week-8-2.webp'];
+    const check = () => setWeek(getCurrentWeeklyAdWeek());
+    const id = setInterval(check, 60_000);
+    return () => clearInterval(id);
+  }, []);
 
-    imageUrls.forEach(url => {
+  useEffect(() => {
+    assets.images.forEach(url => {
       const img = new Image();
       img.src = url;
       img.loading = 'eager';
-
       img.fetchPriority = 'high';
     });
-  }, []);
+  }, [week]);
 
   return (
     <div className={`weekly-ad-images ${className}`}>

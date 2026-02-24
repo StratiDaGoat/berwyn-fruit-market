@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getCurrentWeeklyAdWeek, WEEKLY_AD_ASSETS } from '../utils/weeklyAdSchedule';
 import './WeeklyAdViewer.scss';
 
 interface WeeklyAdViewerProps {
@@ -11,6 +12,18 @@ export const WeeklyAdViewer: React.FC<WeeklyAdViewerProps> = ({
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
   const [useImageFallback, setUseImageFallback] = useState(false);
+  const [week, setWeek] = useState(getCurrentWeeklyAdWeek);
+  const assets = WEEKLY_AD_ASSETS[week];
+  const pdfFiles = [
+    { pdf: assets.pdf, image: assets.images[0] },
+    { pdf: assets.pdf, image: assets.images[1] },
+  ];
+
+  useEffect(() => {
+    const check = () => setWeek(getCurrentWeeklyAdWeek());
+    const id = setInterval(check, 60_000);
+    return () => clearInterval(id);
+  }, []);
 
   // Device detection
   useEffect(() => {
@@ -44,11 +57,6 @@ export const WeeklyAdViewer: React.FC<WeeklyAdViewerProps> = ({
 
     checkPDFSupport();
   }, []);
-
-  const pdfFiles = [
-    { pdf: '/weekly-ad-week-8.pdf', image: '/weekly-ad-week-8-1.webp' },
-    { pdf: '/weekly-ad-week-8.pdf', image: '/weekly-ad-week-8-2.webp' },
-  ];
 
   const renderPDF = (pdfPath: string, imagePath: string, index: number) => {
     if (useImageFallback) {

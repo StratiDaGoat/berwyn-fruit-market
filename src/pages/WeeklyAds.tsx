@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import WeeklyAdImages from '../components/WeeklyAdImages';
+import { getCurrentWeeklyAdWeek, WEEKLY_AD_ASSETS } from '../utils/weeklyAdSchedule';
 import './Products.scss';
 
 export const WeeklyAds: React.FC = () => {
@@ -73,9 +74,11 @@ export const WeeklyAds: React.FC = () => {
     setDeviceType(currentDeviceType);
   }
 
+  const week = getCurrentWeeklyAdWeek();
+  const pdfUrl = WEEKLY_AD_ASSETS[week].pdf;
+
   const handlePrint = () => {
-    // Open the Week 8 PDF file for printing
-    const printWindow = window.open('/weekly-ad-week-8.pdf', '_blank');
+    const printWindow = window.open(pdfUrl, '_blank');
     if (printWindow) {
       printWindow.onload = () => {
         setTimeout(() => {
@@ -86,19 +89,17 @@ export const WeeklyAds: React.FC = () => {
   };
 
   const handleDownload = () => {
-    // Download the Week 8 PDF file
     try {
       const link = document.createElement('a');
-      link.href = '/weekly-ad-week-8.pdf';
-      link.download = 'weekly-specials-week8.pdf';
+      link.href = pdfUrl;
+      link.download = `weekly-specials-week${week}.pdf`;
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     } catch {
-      // Fallback: open PDF in new tab
-      window.open('/weekly-ad-week-8.pdf', '_blank');
+      window.open(pdfUrl, '_blank');
     }
   };
 
