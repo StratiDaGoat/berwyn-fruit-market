@@ -1,6 +1,7 @@
 /**
  * Weekly ad goes live Tuesday 10:00 PM store time (America/Chicago).
  * Before that moment we show the previous week's ad.
+ * After Tuesday 10pm we show the new ad and never switch back — no "revert" time.
  */
 
 const STORE_TIMEZONE = 'America/Chicago';
@@ -62,13 +63,18 @@ function tuesday10pmChicago(year: number, month: number, day: number): Date {
 }
 
 /**
- * True if the new weekly ad is live: we're at or past *this* week's Tuesday 10pm in Chicago.
+ * True if the new weekly ad is live: we're at or past Tuesday 10pm in Chicago.
+ * New ad runs from Tue 10pm through the following Tue 9:59pm. There is no
+ * "change back" time — we only switch once at Tuesday 10pm.
  */
 export function isNewWeeklyAdLive(): boolean {
   const now = new Date();
-  const { year, month, day, weekday } = getChicagoDateParts(now);
-  const daysToThisWeeksTuesday = 2 - weekday;
-  const tueDate = new Date(year, month - 1, day + daysToThisWeeksTuesday);
+  const { year, month, day, weekday, hour } = getChicagoDateParts(now);
+  // Tuesday before 10pm: haven't hit the switch yet, show previous (week 8)
+  if (weekday === 2 && hour < 22) return false;
+  // At or past the most recent Tuesday 10pm → show new ad (week 9). Never revert.
+  const daysBack = weekday === 2 ? 0 : (weekday - 2 + 7) % 7;
+  const tueDate = new Date(year, month - 1, day - daysBack);
   const tueYear = tueDate.getFullYear();
   const tueMonth = tueDate.getMonth() + 1;
   const tueDayNum = tueDate.getDate();

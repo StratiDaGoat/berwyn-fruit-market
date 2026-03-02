@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { getCurrentWeeklyAdWeek, WEEKLY_AD_ASSETS } from '../utils/weeklyAdSchedule';
 import './WeeklyAdImages.scss';
 
@@ -9,18 +9,12 @@ interface WeeklyAdImagesProps {
 export const WeeklyAdImages: React.FC<WeeklyAdImagesProps> = ({
   className = '',
 }) => {
-  const [week, setWeek] = useState(getCurrentWeeklyAdWeek);
+  const week = getCurrentWeeklyAdWeek();
   const assets = WEEKLY_AD_ASSETS[week];
   const adImages = [
     { src: assets.images[0], alt: 'Weekly Ad Page 1', page: 1 },
     { src: assets.images[1], alt: 'Weekly Ad Page 2', page: 2 },
   ];
-
-  useEffect(() => {
-    const check = () => setWeek(getCurrentWeeklyAdWeek());
-    const id = setInterval(check, 60_000);
-    return () => clearInterval(id);
-  }, []);
 
   useEffect(() => {
     assets.images.forEach(url => {
