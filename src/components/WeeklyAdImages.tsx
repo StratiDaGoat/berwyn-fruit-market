@@ -21,7 +21,7 @@ export const WeeklyAdImages: React.FC<WeeklyAdImagesProps> = ({
       const img = new Image();
       img.src = url;
       img.loading = 'eager';
-      img.fetchPriority = 'high';
+      (img as HTMLImageElement).fetchPriority = 'high';
     });
   }, [week]);
 
