@@ -1,7 +1,7 @@
 /**
  * Weekly ad goes live Tuesday 10:00 PM store time (America/Chicago).
- * Before that moment we show the previous week's ad (currently week 9).
- * After Tuesday 10pm we show the new ad (week 10) and never switch back — no "revert" time.
+ * Before that moment we show the previous week's ad (currently week 10).
+ * After Tuesday 10pm we show the new ad (week 11) and never switch back — no "revert" time.
  */
 
 const STORE_TIMEZONE = 'America/Chicago';
@@ -64,15 +64,15 @@ function tuesday10pmChicago(year: number, month: number, day: number): Date {
 
 /**
  * True if the new weekly ad is live: we're at or past Tuesday 10pm in Chicago.
- * New ad (week 10) runs from Tue 10pm through the following Tue 9:59pm. There is no
+ * New ad (week 11) runs from Tue 10pm through the following Tue 9:59pm. There is no
  * "change back" time — we only switch once at Tuesday 10pm.
  */
 export function isNewWeeklyAdLive(): boolean {
   const now = new Date();
   const { year, month, day, weekday, hour } = getChicagoDateParts(now);
-  // Tuesday before 10pm: haven't hit the switch yet, show previous (week 9)
+  // Tuesday before 10pm: haven't hit the switch yet, show previous (week 10)
   if (weekday === 2 && hour < 22) return false;
-  // At or past the most recent Tuesday 10pm → show new ad (week 10). Never revert.
+  // At or past the most recent Tuesday 10pm → show new ad (week 11). Never revert.
   const daysBack = weekday === 2 ? 0 : (weekday - 2 + 7) % 7;
   const tueDate = new Date(year, month - 1, day - daysBack);
   const tueYear = tueDate.getFullYear();
@@ -82,18 +82,18 @@ export function isNewWeeklyAdLive(): boolean {
   return now.getTime() >= cutoff.getTime();
 }
 
-/** Current ad is week 9 (previous) until Tue 10pm Chicago, then week 10 */
-export function getCurrentWeeklyAdWeek(): 9 | 10 {
-  return isNewWeeklyAdLive() ? 10 : 9;
+/** Current ad is week 10 (previous) until Tue 10pm Chicago, then week 11 */
+export function getCurrentWeeklyAdWeek(): 10 | 11 {
+  return isNewWeeklyAdLive() ? 11 : 10;
 }
 
 export const WEEKLY_AD_ASSETS = {
-  9: {
-    pdf: '/weekly-ad-week-9.pdf',
-    images: ['/weekly-ad-week-9-1.webp', '/weekly-ad-week-9-2.webp'],
-  },
   10: {
     pdf: '/weekly-ad-week-10.pdf',
     images: ['/weekly-ad-week-10-1.webp', '/weekly-ad-week-10-2.webp'],
+  },
+  11: {
+    pdf: '/weekly-ad-week-11.pdf',
+    images: ['/weekly-ad-week-11-1.webp', '/weekly-ad-week-11-2.webp'],
   },
 } as const;
