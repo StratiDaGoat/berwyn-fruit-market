@@ -74,8 +74,13 @@ export const WeeklyAds: React.FC = () => {
     setDeviceType(currentDeviceType);
   }
 
-  const week = getCurrentWeeklyAdWeek();
-  const pdfUrl = WEEKLY_AD_ASSETS[week].pdf;
+  const [adWeek, setAdWeek] = useState(getCurrentWeeklyAdWeek);
+  useEffect(() => {
+    const tick = () => setAdWeek(getCurrentWeeklyAdWeek());
+    const id = setInterval(tick, 60_000);
+    return () => clearInterval(id);
+  }, []);
+  const pdfUrl = WEEKLY_AD_ASSETS[adWeek].pdf;
 
   const handlePrint = () => {
     const printWindow = window.open(pdfUrl, '_blank');
@@ -92,7 +97,10 @@ export const WeeklyAds: React.FC = () => {
     try {
       const link = document.createElement('a');
       link.href = pdfUrl;
-      link.download = `weekly-specials-week${week}.pdf`;
+      link.download =
+        adWeek === 18
+          ? 'weekly-specials-march-18.pdf'
+          : 'weekly-specials-march-11.pdf';
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       document.body.appendChild(link);

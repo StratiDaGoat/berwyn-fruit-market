@@ -11,12 +11,18 @@ export const WeeklyAdDisplay: React.FC<WeeklyAdDisplayProps> = ({
 }) => {
   const [useImageFallback, setUseImageFallback] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const week = getCurrentWeeklyAdWeek();
+  const [week, setWeek] = useState(getCurrentWeeklyAdWeek);
   const assets = WEEKLY_AD_ASSETS[week];
   const adFiles = [
     { pdf: assets.pdf, image: assets.images[0], alt: 'Weekly Ad Page 1' },
     { pdf: assets.pdf, image: assets.images[1], alt: 'Weekly Ad Page 2' },
   ];
+
+  useEffect(() => {
+    const tick = () => setWeek(getCurrentWeeklyAdWeek());
+    const id = setInterval(tick, 60_000);
+    return () => clearInterval(id);
+  }, []);
 
   useEffect(() => {
     const checkFallback = () => {
