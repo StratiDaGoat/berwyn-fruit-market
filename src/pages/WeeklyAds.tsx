@@ -98,9 +98,9 @@ export const WeeklyAds: React.FC = () => {
       const link = document.createElement('a');
       link.href = pdfUrl;
       link.download =
-        adWeek === 18
-          ? 'weekly-specials-march-18.pdf'
-          : 'weekly-specials-march-11.pdf';
+        adWeek === 24
+          ? 'weekly-specials-march-24.pdf'
+          : 'weekly-specials-march-18.pdf';
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       document.body.appendChild(link);
