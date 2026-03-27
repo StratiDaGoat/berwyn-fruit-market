@@ -6,6 +6,8 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 
 import FlashSalePopup from './components/FlashSalePopup';
+import BananaFlashSalePopup from './components/BananaFlashSalePopup';
+import { isBananaFlashSaleInWindow } from './utils/bananaFlashSaleTimes';
 
 // Lazy load pages
 const Home = React.lazy(() =>
@@ -27,6 +29,8 @@ const Contact = React.lazy(() =>
 // Feature flag: Set to true to show flash sale banner, false to hide it
 const IS_FLASH_SALE_ACTIVE = false;
 
+const IS_BANANA_FLASH_ACTIVE = true;
+
 /**
  * Main App component with routing configuration
  * Sets up the main layout with header, footer, and page routes
@@ -40,8 +44,16 @@ function App() {
     return targetDate.getTime() > now.getTime();
   });
 
+  const [isBananaBannerVisible, setIsBananaBannerVisible] = useState(
+    () => IS_BANANA_FLASH_ACTIVE && isBananaFlashSaleInWindow()
+  );
+
   const handleCloseBanner = () => {
     setIsBannerVisible(false);
+  };
+
+  const handleCloseBananaBanner = () => {
+    setIsBananaBannerVisible(false);
   };
 
   return (
@@ -49,8 +61,18 @@ function App() {
       {IS_FLASH_SALE_ACTIVE && (
         <FlashSalePopup isOpen={isBannerVisible} onClose={handleCloseBanner} />
       )}
-      <Header isBannerVisible={isBannerVisible} />
-      <main className={`main-content ${isBannerVisible ? 'with-banner' : ''}`}>
+      {IS_BANANA_FLASH_ACTIVE && (
+        <BananaFlashSalePopup
+          isOpen={isBananaBannerVisible}
+          onClose={handleCloseBananaBanner}
+        />
+      )}
+      <Header
+        isBannerVisible={isBannerVisible || isBananaBannerVisible}
+      />
+      <main
+        className={`main-content ${isBannerVisible || isBananaBannerVisible ? 'with-banner' : ''}`}
+      >
         <Suspense fallback={<div className="loading-spinner">Loading...</div>}>
           <Routes>
             <Route path="/" element={<Home />} />
