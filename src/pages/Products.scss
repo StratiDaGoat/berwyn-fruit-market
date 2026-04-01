@@ -3,96 +3,116 @@
 
 .departments {
   min-height: 100vh;
+  background: $win-bg;
 }
 
+// === Departments Hero – Win2K title bar style banner ===
 .departments-hero {
-  background: linear-gradient(135deg, $primary-green, $secondary-green);
-  color: #fff8e1;
-  padding: $spacing-xl 0;
+  background: linear-gradient(90deg, $win-title-active 0%, $win-title-active-end 100%);
+  color: $white;
+  padding: $spacing-sm 0;
   text-align: center;
+  border-bottom: 2px solid $win-border-darker;
 
   &__content {
     max-width: 800px;
     margin: 0 auto;
+    padding: $spacing-sm $spacing-lg;
   }
 
   &__title {
-    font-size: $font-4xl;
-    margin-bottom: $spacing-lg;
-    color: #fff8e1;
+    font-size: $font-3xl;
+    margin-bottom: 4px;
+    color: $white;
+    font-family: $font-display;
+    font-weight: $font-bold;
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.3);
 
     @media (max-width: $breakpoint-md) {
-      font-size: $font-3xl;
+      font-size: $font-2xl;
     }
 
     @media (max-width: $breakpoint-sm) {
-      font-size: $font-2xl;
+      font-size: $font-xl;
     }
   }
 
   &__subtitle {
-    font-size: $font-base;
-    line-height: 1.6;
+    font-size: $font-sm;
+    line-height: 1.4;
     opacity: 0.9;
     margin: 0;
-    color: #fff8e1;
+    color: $white;
+    font-family: $font-primary;
 
     @media (max-width: $breakpoint-md) {
-      font-size: $font-sm;
+      font-size: $font-xs;
     }
   }
 }
 
+// === Departments Grid – Win2K panel style ===
 .departments-grid {
-  padding: $spacing-4xl 0;
-  background: $bg-secondary;
+  padding: $spacing-2xl 0;
+  background: $win-bg;
 
   &__content {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: $spacing-2xl;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: $spacing-md;
 
     @media (max-width: $breakpoint-sm) {
       grid-template-columns: 1fr;
-      gap: $spacing-xl;
+      gap: $spacing-sm;
     }
   }
 }
 
-
-
+// === CTA Section ===
 .departments-cta {
-  padding: $spacing-4xl 0;
-  background: $white;
+  padding: $spacing-2xl 0;
+  background: $win-bg;
+  border-top: 2px solid;
+  border-color: $win-border-darker $win-border-light $win-border-light $win-border-darker;
 
   &__content {
     text-align: center;
     max-width: 600px;
     margin: 0 auto;
+    // Win2K dialog box feel
+    background: $win-bg;
+    border: 2px solid;
+    border-color: $win-border-light $win-border-darker $win-border-darker $win-border-light;
+    padding: $spacing-xl;
   }
 
   &__title {
-    font-size: $font-4xl;
-    margin-bottom: $spacing-lg;
-    color: $text-primary;
+    font-size: $font-2xl;
+    margin-bottom: $spacing-md;
+    color: $win-title-active;
+    font-family: $font-display;
 
     @media (max-width: $breakpoint-md) {
-      font-size: $font-3xl;
+      font-size: $font-xl;
     }
   }
 
   &__description {
-    font-size: $font-lg;
-    line-height: 1.6;
+    font-size: $font-base;
+    line-height: 1.4;
     color: $text-secondary;
-    margin-bottom: $spacing-3xl;
+    margin-bottom: $spacing-xl;
+    font-family: $font-primary;
   }
 
   &__actions {
     display: flex;
-    gap: $spacing-lg;
+    gap: $spacing-sm;
     justify-content: center;
     flex-wrap: wrap;
+    padding-top: $spacing-md;
+    border-top: 2px solid;
+    border-color: $win-border-darker $win-border-light $win-border-light $win-border-darker;
 
     @media (max-width: $breakpoint-sm) {
       flex-direction: column;
@@ -101,48 +121,54 @@
   }
 }
 
-// Weekly Specials specific styles
+// === Weekly Specials – Win2K Window ===
 .weekly-specials-content {
-  padding: $spacing-4xl 0;
-  background: $bg-secondary;
+  padding: $spacing-xl 0;
+  background: $win-bg;
 
   @media (max-width: $breakpoint-md) {
-    padding: $spacing-2xl 0; // Less padding on mobile
+    padding: $spacing-lg 0;
   }
 
   @media (max-width: $breakpoint-sm) {
-    padding: $spacing-xl 0; // Even less padding on phones
+    padding: $spacing-md 0;
 
     .container {
-      padding: 0; // Remove container padding on mobile for full width
-      max-width: 100%; // Allow full width
+      padding: 0;
+      max-width: 100%;
     }
   }
 }
 
 .weekly-specials__card {
-  background: $white;
-  border-radius: $radius-xl;
-  padding: $spacing-3xl;
-  box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.08),
-    0 2px 4px -1px rgba(0, 0, 0, 0.04),
-    0 0 0 1px rgba(0, 0, 0, 0.04);
+  background: $win-bg;
+  border: 2px solid;
+  border-color: $win-border-light $win-border-darker $win-border-darker $win-border-light;
+  padding: 0;
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
   max-width: 100%;
   margin: 0 auto;
   text-align: center;
+  overflow: hidden;
 
-  @media (min-width: $breakpoint-lg) {
-    max-width: 100%;
+  // Title bar for the weekly specials window
+  &::before {
+    content: '📰  Weekly Specials';
+    display: block;
+    background: linear-gradient(90deg, $win-title-active 0%, $win-title-active-end 100%);
+    color: $white;
+    font-family: $font-primary;
+    font-size: $font-base;
+    font-weight: $font-bold;
+    padding: 3px 6px;
+    text-align: left;
   }
 
   @media (max-width: $breakpoint-md) {
-    padding: $spacing-xl $spacing-lg;
     margin: 0 $spacing-sm;
   }
 
   @media (max-width: $breakpoint-sm) {
-    padding: $spacing-md $spacing-sm;
     margin: 0;
     width: 100%;
     max-width: 100%;
@@ -150,7 +176,6 @@
   }
 
   @media (max-width: 400px) {
-    padding: $spacing-sm $spacing-xs;
     margin: 0;
     width: 100%;
     max-width: 100%;
@@ -161,13 +186,14 @@
   background: transparent;
   border: none;
   border-radius: 0;
-  margin-bottom: $spacing-3xl;
+  margin-bottom: 0;
   overflow: visible;
   box-shadow: none;
-  padding: 0;
+  padding: $spacing-sm;
 
   @media (max-width: $breakpoint-md) {
-    margin-bottom: $spacing-xl;
+    margin-bottom: 0;
+    padding: 4px;
   }
 
   @media (max-width: $breakpoint-sm) {
@@ -184,24 +210,22 @@
 
 .weekly-specials__pdf-viewer {
   display: flex;
-  flex-direction: row; // Side by side layout
-  gap: 0; // No gap between pages
+  flex-direction: row;
+  gap: 0;
   position: relative;
-  border-radius: 0; // Remove border radius to eliminate black bars
-  background: transparent; // No background color
-  border: none; // Remove any borders
-  box-shadow: none; // Remove any shadows
+  background: $white;
+  border: 2px solid;
+  border-color: $win-border-darker $win-border-light $win-border-light $win-border-darker;
 
-  // Force mobile/tablet layout with media queries as fallback
   @media (max-width: $breakpoint-lg) {
     flex-direction: column !important;
-    gap: $spacing-md !important;
+    gap: $spacing-sm !important;
 
     .weekly-specials__pdf-page {
       width: 100% !important;
       flex: none !important;
       height: 80vh !important;
-      margin-bottom: $spacing-md !important;
+      margin-bottom: $spacing-sm !important;
 
       &:last-child {
         margin-bottom: 0 !important;
@@ -209,100 +233,88 @@
     }
   }
 
-  // Web version specific styling
   &--web {
-    height: 600px; // Smaller height to fit both pages
-    width: 100%; // Full width to show whole ad horizontally
-    overflow: visible; // Allow both pages to be visible
-    padding: 0; // Remove any padding
-    margin: 0; // Remove any margins
-    justify-content: space-between; // Ensure proper side-by-side spacing
+    height: 600px;
+    width: 100%;
+    overflow: visible;
+    padding: 0;
+    margin: 0;
+    justify-content: space-between;
   }
 
-  // Mobile and tablet version specific styling
   &--mobile {
-    height: auto !important; // Auto height for mobile/tablet
-    width: 100% !important; // Ensure full width on mobile/tablet
-    max-width: 100% !important; // Prevent overflow
-    overflow: visible !important; // Allow both pages to be visible
-    margin: 0 !important; // Remove ALL margins to eliminate black bar
-    padding: 0 !important; // Remove ALL padding to eliminate black bar
-    position: relative !important; // Normal positioning
-    box-sizing: border-box !important; // Include any borders in width calculation
-    flex-direction: column !important; // FORCE vertical stacking on mobile/tablet
-    gap: $spacing-md !important; // Add gap between stacked pages on mobile/tablet
-    display: flex !important; // Force flex display
+    height: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative !important;
+    box-sizing: border-box !important;
+    flex-direction: column !important;
+    gap: $spacing-sm !important;
+    display: flex !important;
 
-    // Force each page to be full width and stack vertically
     .weekly-specials__pdf-page {
       width: 100% !important;
       flex: none !important;
-      height: auto !important; // Auto height for responsive design
-      min-height: 400px !important; // Minimum height to ensure visibility
-      margin-bottom: $spacing-md !important;
+      height: auto !important;
+      min-height: 400px !important;
+      margin-bottom: $spacing-sm !important;
 
       &:last-child {
         margin-bottom: 0 !important;
       }
     }
 
-    // Optimize for small phones (393px width)
     @media (max-width: 400px) {
-      gap: $spacing-sm !important; // Smaller gap for small phones
+      gap: 4px !important;
 
       .weekly-specials__pdf-page {
-        height: auto !important; // Auto height for small phones
-        min-height: 300px !important; // Minimum height for small phones
-        margin-bottom: $spacing-sm !important; // Smaller margin
-
-        &:last-child {
-          margin-bottom: 0 !important;
-        }
+        height: auto !important;
+        min-height: 300px !important;
+        margin-bottom: 4px !important;
       }
     }
   }
 
   @media (max-width: $breakpoint-md) {
-    gap: $spacing-sm; // Smaller gap on mobile
+    gap: $spacing-sm;
   }
 
   @media (max-width: $breakpoint-sm) {
-    gap: $spacing-xs; // Minimal gap on phones
+    gap: 4px;
   }
 }
 
 .weekly-specials__pdf-page {
-  flex: 0 0 50%; // Equal width for side-by-side layout
-  height: 100%; // Full height of container
+  flex: 0 0 50%;
+  height: 100%;
   position: relative;
   overflow: hidden;
-  border-radius: 0; // Remove border radius to eliminate black bars
-  background: transparent; // Transparent background to eliminate black bars
-  box-shadow: none; // Remove shadow to eliminate black bars
-  border: none; // Remove border to eliminate black bars
-  margin: 0; // Remove any margins
-  padding: 0; // Remove any padding
+  background: $white;
+  box-shadow: none;
+  border: none;
+  margin: 0;
+  padding: 0;
 
-  // Mobile: stack vertically with responsive height
   @media (max-width: $breakpoint-md) {
-    flex: none !important; // Remove flex for mobile
-    width: 100% !important; // Full width on mobile
-    height: auto !important; // Auto height for responsive design
-    min-height: 400px !important; // Minimum height to ensure visibility
-    max-width: 100% !important; // Ensure no overflow
+    flex: none !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 400px !important;
+    max-width: 100% !important;
   }
 
   @media (max-width: $breakpoint-sm) {
-    height: auto !important; // Auto height for phones
-    min-height: 350px !important; // Minimum height for phones
-    border-radius: 0; // No border radius on mobile either
-    max-width: 100% !important; // Ensure no overflow
+    height: auto !important;
+    min-height: 350px !important;
+    max-width: 100% !important;
   }
 
-  // Specific styling for small phones (393px width)
   @media (max-width: 400px) {
-    height: auto !important; // Auto height for small phones
-    min-height: 300px !important; // Minimum height for small phones
+    height: auto !important;
+    min-height: 300px !important;
     max-width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
@@ -311,109 +323,128 @@
 
 .weekly-specials__pdf-iframe {
   width: 100% !important;
-  height: auto !important; // Auto height for responsive design
-  min-height: 400px !important; // Minimum height to ensure visibility
+  height: auto !important;
+  min-height: 400px !important;
   border: none !important;
-  background: transparent !important; // No background to eliminate black bars
+  background: transparent !important;
   margin: 0 !important;
   padding: 0 !important;
   display: block !important;
-  overflow: hidden !important; // Prevent internal scrolling
-  object-fit: contain !important; // Contain the entire PDF within the container
-  max-width: 100% !important; // Prevent overflow
+  overflow: hidden !important;
+  object-fit: contain !important;
+  max-width: 100% !important;
 
-  // Mobile responsive adjustments
   @media (max-width: $breakpoint-md) {
-    height: auto !important; // Auto height on mobile
-    min-height: 350px !important; // Minimum height for mobile
+    height: auto !important;
+    min-height: 350px !important;
   }
 
   @media (max-width: $breakpoint-sm) {
-    height: auto !important; // Auto height on phones
-    min-height: 300px !important; // Minimum height for phones
+    height: auto !important;
+    min-height: 300px !important;
   }
 
-  // Small phones (393px width)
   @media (max-width: 400px) {
-    height: auto !important; // Auto height for small phones
-    min-height: 250px !important; // Minimum height for small phones
+    height: auto !important;
+    min-height: 250px !important;
   }
 }
 
 .weekly-specials__actions {
   display: flex;
-  gap: $spacing-lg;
+  gap: $spacing-sm;
   justify-content: center;
-  margin-bottom: $spacing-3xl;
+  margin-bottom: $spacing-md;
   flex-wrap: wrap;
+  padding: $spacing-sm;
+  background: $win-bg;
+  border-top: 1px solid $win-border-dark;
 
   @media (max-width: $breakpoint-md) {
-    display: none; // Hide buttons on mobile
+    display: none;
   }
 }
 
 .weekly-specials__action-btn {
   display: flex;
   align-items: center;
-  gap: $spacing-sm;
-  padding: $spacing-md $spacing-xl;
-  font-weight: $font-medium;
-  transition: all $transition-normal;
-  min-height: 48px; // Better touch target for mobile
-
-  @media (max-width: $breakpoint-sm) {
-    width: 100%; // Full width on mobile for easier tapping
-    max-width: 280px; // But not too wide
-    padding: $spacing-lg $spacing-xl; // More padding for better touch
-  }
+  gap: $spacing-xs;
+  font-weight: $font-regular;
+  transition: none;
+  min-height: 23px;
+  padding: 3px 12px;
+  font-size: $font-base;
+  border: 2px solid;
+  border-color: $win-border-light $win-border-darker $win-border-darker $win-border-light;
+  background: $win-bg;
+  color: $text-primary;
+  font-family: $font-primary;
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: $shadow-lg;
+    background: darken(#d4d0c8, 5%);
+    transform: none;
+    box-shadow: none;
+  }
+
+  &:active {
+    border-color: $win-border-darker $win-border-light $win-border-light $win-border-darker;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    width: 100%;
+    max-width: 280px;
+    padding: 3px 12px;
   }
 }
 
 // Page Navigation Styles
 .weekly-ad__page-nav {
-  display: flex; // Show navigation on both desktop and mobile
+  display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: $spacing-lg;
-  background: $bg-secondary;
-  border-top: 1px solid $light-gray;
-  gap: $spacing-md;
+  padding: $spacing-sm $spacing-md;
+  background: $win-bg;
+  border-top: 2px solid;
+  border-color: $win-border-darker $win-border-light $win-border-light $win-border-darker;
+  gap: $spacing-sm;
 
   @media (max-width: $breakpoint-sm) {
-    display: flex !important; // Force show navigation on mobile
-    padding: $spacing-sm $spacing-md; // Less padding on mobile
-    gap: $spacing-sm;
-    position: sticky; // Sticky positioning to stick to bottom
+    display: flex !important;
+    padding: 4px $spacing-sm;
+    gap: $spacing-xs;
+    position: sticky;
     bottom: 0;
     z-index: 10;
-    margin: 0; // Remove any margin that creates black space
-    background: $white; // Ensure solid background
-    width: 100%; // Full width to eliminate black bar
-    visibility: visible; // Ensure visibility
-    opacity: 1; // Ensure opacity
+    margin: 0;
+    background: $win-bg;
+    width: 100%;
+    visibility: visible;
+    opacity: 1;
   }
 }
 
 .weekly-ad__nav-btn {
   display: flex;
   align-items: center;
-  gap: $spacing-sm;
-  padding: $spacing-sm $spacing-lg;
-  font-weight: $font-medium;
-  transition: all $transition-normal;
-  min-height: 44px;
-  min-width: 120px;
+  gap: $spacing-xs;
+  padding: 3px 12px;
+  font-family: $font-primary;
+  font-size: $font-base;
+  font-weight: $font-regular;
+  transition: none;
+  min-height: 23px;
+  min-width: 80px;
   justify-content: center;
+  background: $win-bg;
+  color: $text-primary;
+  border: 2px solid;
+  border-color: $win-border-light $win-border-darker $win-border-darker $win-border-light;
 
   @media (max-width: $breakpoint-sm) {
-    flex: 1; // Equal width buttons
-    min-width: 80px; // Smaller minimum width
-    padding: $spacing-sm $spacing-md; // Smaller padding
-    font-size: $font-sm; // Smaller text
+    flex: 1;
+    min-width: 60px;
+    padding: 3px 8px;
+    font-size: $font-xs;
   }
 
   &:disabled {
@@ -421,22 +452,30 @@
     cursor: not-allowed;
     transform: none !important;
     box-shadow: none !important;
+    color: $medium-gray;
+    text-shadow: 1px 1px 0 $white;
   }
 
   &:not(:disabled):hover {
-    transform: translateY(-2px);
-    box-shadow: $shadow-lg;
+    background: darken(#d4d0c8, 5%);
+    transform: none;
+    box-shadow: none;
+  }
+
+  &:not(:disabled):active {
+    border-color: $win-border-darker $win-border-light $win-border-light $win-border-darker;
   }
 }
 
 .weekly-ad__page-info {
-  font-weight: $font-medium;
+  font-weight: $font-regular;
   color: $text-secondary;
-  font-size: $font-sm;
+  font-size: $font-xs;
   white-space: nowrap;
+  font-family: $font-primary;
 
   @media (max-width: $breakpoint-sm) {
-    font-size: $font-xs; // Smaller text on mobile
-    flex-shrink: 0; // Don't shrink the page info
+    font-size: $font-xs;
+    flex-shrink: 0;
   }
 }

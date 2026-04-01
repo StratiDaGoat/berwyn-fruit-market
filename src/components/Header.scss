@@ -5,27 +5,116 @@
   top: 0;
   left: 0;
   right: 0;
-  background-color: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(76, 175, 80, 0.1);
   z-index: $z-sticky;
-  transition: all $transition-normal;
+  background: $win-bg;
+  border-bottom: 2px solid $win-border-darker;
+
+  // === Title Bar ===
+  &__titlebar {
+    background: linear-gradient(90deg, $win-title-active 0%, $win-title-active-end 100%);
+    color: $white;
+    font-family: $font-primary;
+    font-size: $font-xs;
+    font-weight: $font-bold;
+    padding: 2px 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+    height: 22px;
+  }
+
+  &__titlebar-left {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    overflow: hidden;
+  }
+
+  &__titlebar-icon {
+    font-size: 12px;
+    line-height: 1;
+  }
+
+  &__titlebar-text {
+    font-size: $font-xs;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__titlebar-controls {
+    display: flex;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+
+  &__titlebar-btn {
+    width: 16px;
+    height: 14px;
+    background: $win-bg;
+    border: 2px solid;
+    border-color: $win-border-light $win-border-darker $win-border-darker $win-border-light;
+    cursor: default;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    font-weight: bold;
+    color: $black;
+    line-height: 1;
+    padding: 0;
+
+    &--close {
+      // Win XP-ish close button accent
+    }
+
+    &:active {
+      border-color: $win-border-darker $win-border-light $win-border-light $win-border-darker;
+    }
+  }
+
+  // === Marquee ticker bar ===
+  &__marquee {
+    background: $white;
+    border-bottom: 1px solid $win-border-dark;
+    border-top: 1px solid $win-border-light;
+    padding: 1px 0;
+    font-family: $font-primary;
+    font-size: $font-xs;
+    color: $win-title-active;
+    font-weight: bold;
+    height: 18px;
+    overflow: hidden;
+    line-height: 16px;
+  }
+
+  // Remove the ::before pseudo since we now have the title bar element
+  &::before {
+    display: none;
+  }
 
   &__content {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: $spacing-md 0;
+    padding: 4px 0;
     position: relative;
-    margin: 0; // Ensure no margin
 
-    // Mobile layout: center logo, hamburger on right
     @media (max-width: 768px) {
       display: grid !important;
       grid-template-columns: 1fr auto 1fr !important;
       align-items: center !important;
       justify-items: center !important;
     }
+  }
+
+  // Title-bar style brand strip at very top
+  &::before {
+    content: '';
+    display: block;
+    height: 26px;
+    background: linear-gradient(90deg, $win-title-active 0%, $win-title-active-end 100%);
   }
 
   &__logo {
@@ -35,10 +124,10 @@
     color: $text-primary;
 
     &:hover {
-      color: $primary-green;
+      color: $text-primary;
+      text-decoration: none;
     }
 
-    // Mobile: use grid positioning
     @media (max-width: 768px) {
       grid-column: 2 !important;
       justify-self: center !important;
@@ -52,10 +141,8 @@
     width: 70px;
     height: 70px;
     background: transparent;
-    border-radius: $radius-lg;
     overflow: visible;
 
-    // Mobile: center the logo icon
     @media (max-width: 768px) {
       justify-content: center !important;
     }
@@ -66,8 +153,8 @@
     height: 350%;
     object-fit: contain;
     transform: translateX(-20%);
+    image-rendering: pixelated; // Classic pixelated Win2K look
 
-    // Mobile: center the logo image
     @media (max-width: 768px) {
       transform: translateX(0) !important;
     }
@@ -77,9 +164,8 @@
     &--desktop {
       display: flex;
       align-items: center;
-      gap: $spacing-xl;
+      gap: 2px;
 
-      // Hide on mobile and tablet (iPad Air, iPad Mini)
       @media (max-width: $breakpoint-lg) {
         display: none;
       }
@@ -88,11 +174,10 @@
     &--mobile {
       display: none;
       flex-direction: column;
-      gap: $spacing-md;
-      padding: $spacing-lg 0;
-      border-top: 1px solid rgba(76, 175, 80, 0.1);
+      background: $win-bg;
+      border-top: 1px solid $win-border-darker;
+      padding: 4px 0;
 
-      // Show on mobile and tablet (iPad Air, iPad Mini)
       @media (max-width: $breakpoint-lg) {
         display: flex;
       }
@@ -101,32 +186,30 @@
 
   &__nav-link {
     position: relative;
-    padding: $spacing-sm $spacing-md;
-    color: $text-secondary;
-    font-weight: $font-medium;
+    padding: 3px 10px;
+    color: $text-primary;
+    font-family: $font-primary;
+    font-size: $font-base;
+    font-weight: $font-regular;
     text-decoration: none;
-    border-radius: $radius-md;
-    transition: all $transition-fast;
+    border: 1px solid transparent;
+    border-radius: 0;
+    transition: none;
 
     &:hover {
-      color: $primary-green;
-      background-color: rgba(76, 175, 80, 0.05);
+      background: $win-highlight;
+      color: $win-highlight-text;
+      border-color: transparent;
+      text-decoration: none;
     }
 
     &--active {
-      color: $primary-green;
-      background-color: rgba(76, 175, 80, 0.1);
+      background: $win-highlight;
+      color: $win-highlight-text;
+      border: 1px solid $win-border-darker;
 
       &::after {
-        content: '';
-        position: absolute;
-        bottom: -2px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 20px;
-        height: 2px;
-        background-color: $primary-green;
-        border-radius: $radius-full;
+        display: none;
       }
     }
   }
@@ -136,15 +219,15 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 40px;
-    height: 40px;
-    background: none;
-    border: none;
+    width: 24px;
+    height: 22px;
+    background: $win-bg;
+    border: 2px solid;
+    border-color: $win-border-light $win-border-darker $win-border-darker $win-border-light;
     cursor: pointer;
     padding: 0;
-    gap: 4px;
+    gap: 3px;
 
-    // Show on mobile only
     @media (max-width: 768px) {
       display: flex !important;
       grid-column: 3 !important;
@@ -152,21 +235,19 @@
     }
 
     &:focus {
-      outline: 2px solid $primary-green;
-      outline-offset: 2px;
+      outline: 1px dotted $black;
+    }
+
+    &:active {
+      border-color: $win-border-darker $win-border-light $win-border-light $win-border-darker;
     }
   }
 
   &__hamburger {
-    width: 24px;
-    height: 2px;
+    width: 12px;
+    height: 1px;
     background-color: $text-primary;
-    border-radius: $radius-full;
-    transition: all $transition-fast;
+    border-radius: 0;
     transform-origin: center;
-
-    &--open {
-      position: absolute;
-    }
   }
 }

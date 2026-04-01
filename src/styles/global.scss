@@ -9,17 +9,20 @@
 
 html {
   font-size: 16px;
-  scroll-behavior: smooth;
+  scroll-behavior: auto; // Win2K doesn't do smooth scroll
 }
 
 body {
   font-family: $font-primary;
   font-weight: $font-regular;
-  line-height: 1.6;
+  font-size: $font-base;
+  line-height: 1.4;
   color: $text-primary;
-  background-color: $bg-primary;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  background-color: $win-bg;
+  // Classic Win2K tiled desktop pattern
+  background-image: none;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
 }
 
 // App Layout
@@ -27,150 +30,184 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background: $win-bg;
 }
 
 .main-content {
   flex: 1;
-  padding-top: 80px; // Account for fixed header
+  padding-top: 125px; // titlebar(22) + marquee(18) + menubar(~85px)
 }
 
 // Typography
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
   font-family: $font-display;
-  font-weight: $font-semibold;
+  font-weight: $font-bold;
   line-height: 1.2;
   margin-bottom: $spacing-md;
   color: $text-primary;
 }
 
-h1 {
-  font-size: $font-5xl;
-  font-weight: $font-bold;
-
-  @media (max-width: $breakpoint-md) {
-    font-size: $font-4xl;
-  }
-}
-
-h2 {
-  font-size: $font-4xl;
-
-  @media (max-width: $breakpoint-md) {
-    font-size: $font-3xl;
-  }
-}
-
-h3 {
-  font-size: $font-3xl;
-
-  @media (max-width: $breakpoint-md) {
-    font-size: $font-2xl;
-  }
-}
-
-h4 {
-  font-size: $font-2xl;
-}
-
-h5 {
-  font-size: $font-xl;
-}
-
-h6 {
-  font-size: $font-lg;
-}
+h1 { font-size: $font-5xl; }
+h2 { font-size: $font-4xl; }
+h3 { font-size: $font-3xl; }
+h4 { font-size: $font-2xl; }
+h5 { font-size: $font-xl; }
+h6 { font-size: $font-lg; }
 
 p {
   margin-bottom: $spacing-md;
   color: $text-secondary;
+  font-size: $font-base;
+  line-height: 1.4;
 }
 
 a {
-  color: $primary-green;
-  text-decoration: none;
+  color: $win-title-active;
+  text-decoration: underline;
   transition: color $transition-fast;
 
   &:hover {
-    color: $secondary-green;
+    color: $primary-orange;
   }
 }
 
-// Avoid overriding button link colors on hover
 a.btn:hover {
   color: inherit;
 }
 
-// Button Styles
-.btn {
+// === Windows 2000 Button Styles ===
+// Classic raised beveled button
+@mixin win-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: $spacing-sm $spacing-lg;
-  border: none;
-  border-radius: $radius-md;
+  background: $win-control-face;
+  color: $text-primary;
+  border: 2px solid;
+  border-color: $win-border-light $win-border-darker $win-border-darker $win-border-light;
+  border-radius: 0;
   font-family: $font-primary;
-  font-weight: $font-medium;
   font-size: $font-base;
-  text-decoration: none;
+  font-weight: $font-regular;
+  padding: 3px 12px;
+  min-height: 23px;
   cursor: pointer;
-  transition: all $transition-fast;
-  min-height: 44px; // Accessibility: minimum touch target
+  text-decoration: none;
 
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+  &:hover {
+    background: $win-control-face;
   }
 
-  &--primary {
-    background-color: $primary-green;
-    color: $white;
+  &:active {
+    border-color: $win-border-darker $win-border-light $win-border-light $win-border-darker;
+    padding: 4px 11px 2px 13px;
+  }
+}
 
-    &:hover:not(:disabled) {
-      background-color: $secondary-green;
-      color: $white !important;
-      transform: translateY(-2px);
-      box-shadow: $shadow-lg;
-    }
+.btn {
+  @include win-button;
+
+  &--primary {
+    background: $win-control-face;
+    color: $text-primary;
+    border-color: $win-border-light $win-border-darker $win-border-darker $win-border-light;
+    &:hover { background: darken(#d4d0c8, 5%); color: $text-primary !important; }
   }
 
   &--secondary {
-    background-color: transparent;
-    color: $primary-green;
-    border: 2px solid $primary-green;
-
-    &:hover:not(:disabled) {
-      background-color: $primary-green;
-      color: $white;
-    }
+    background: $win-control-face;
+    color: $text-primary;
+    border-color: $win-border-light $win-border-darker $win-border-darker $win-border-light;
+    &:hover { background: darken(#d4d0c8, 5%); color: $text-primary; }
   }
 
   &--accent {
-    background-color: $primary-orange;
-    color: $white;
-
-    &:hover:not(:disabled) {
-      background-color: $secondary-orange;
-      transform: translateY(-2px);
-      box-shadow: $shadow-lg;
-    }
+    background: $win-control-face;
+    color: $text-primary;
+    border-color: $win-border-light $win-border-darker $win-border-darker $win-border-light;
+    &:hover { background: darken(#d4d0c8, 5%); }
   }
 
   &--large {
-    padding: $spacing-md $spacing-xl;
+    padding: 5px 18px;
     font-size: $font-lg;
-    min-height: 56px;
+    min-height: 27px;
   }
 
   &--small {
-    padding: $spacing-xs $spacing-md;
-    font-size: $font-sm;
-    min-height: 36px;
+    padding: 2px 8px;
+    font-size: $font-xs;
+    min-height: 19px;
   }
+
+  &:disabled {
+    color: $medium-gray;
+    text-shadow: 1px 1px 0 $white;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+// === Window Panel Mixin ===
+@mixin win-panel {
+  background: $win-bg;
+  border: 2px solid;
+  border-color: $win-border-light $win-border-darker $win-border-darker $win-border-light;
+}
+
+@mixin win-inset {
+  background: $white;
+  border: 2px solid;
+  border-color: $win-border-darker $win-border-light $win-border-light $win-border-darker;
+}
+
+// === Title Bar ===
+.win-titlebar {
+  background: linear-gradient(90deg, $win-title-active 0%, $win-title-active-end 100%);
+  color: $white;
+  font-family: $font-primary;
+  font-size: $font-base;
+  font-weight: $font-bold;
+  padding: 3px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  &__controls {
+    display: flex;
+    gap: 2px;
+  }
+
+  &__btn {
+    width: 16px;
+    height: 14px;
+    background: $win-bg;
+    border: 1px solid;
+    border-color: $win-border-light $win-border-darker $win-border-darker $win-border-light;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: bold;
+    color: $black;
+    line-height: 1;
+    padding: 0;
+    font-family: 'Marlett', 'Wingdings', sans-serif;
+  }
+}
+
+// === Window Frame ===
+.win-window {
+  @include win-panel;
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.4);
 }
 
 // Container and Layout
@@ -202,84 +239,38 @@ a.btn:hover {
   display: grid;
   gap: $spacing-lg;
 
-  &--2 {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  }
-
-  &--3 {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  }
-
-  &--4 {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  }
+  &--2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+  &--3 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+  &--4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
 }
 
 // Utility Classes
-.text-center {
-  text-align: center;
-}
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
 
-.text-left {
-  text-align: left;
-}
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: $spacing-xs; }
+.mb-2 { margin-bottom: $spacing-sm; }
+.mb-3 { margin-bottom: $spacing-md; }
+.mb-4 { margin-bottom: $spacing-lg; }
+.mb-5 { margin-bottom: $spacing-xl; }
 
-.text-right {
-  text-align: right;
-}
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: $spacing-xs; }
+.mt-2 { margin-top: $spacing-sm; }
+.mt-3 { margin-top: $spacing-md; }
+.mt-4 { margin-top: $spacing-lg; }
+.mt-5 { margin-top: $spacing-xl; }
 
-.mb-0 {
-  margin-bottom: 0;
-}
-.mb-1 {
-  margin-bottom: $spacing-xs;
-}
-.mb-2 {
-  margin-bottom: $spacing-sm;
-}
-.mb-3 {
-  margin-bottom: $spacing-md;
-}
-.mb-4 {
-  margin-bottom: $spacing-lg;
-}
-.mb-5 {
-  margin-bottom: $spacing-xl;
-}
-
-.mt-0 {
-  margin-top: 0;
-}
-.mt-1 {
-  margin-top: $spacing-xs;
-}
-.mt-2 {
-  margin-top: $spacing-sm;
-}
-.mt-3 {
-  margin-top: $spacing-md;
-}
-.mt-4 {
-  margin-top: $spacing-lg;
-}
-.mt-5 {
-  margin-top: $spacing-xl;
-}
-
-// Animation Classes
+// Minimal animations for Win2K
 .fade-in {
   animation: fadeIn $transition-slow ease-in-out;
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .slide-up {
@@ -287,34 +278,75 @@ a.btn:hover {
 }
 
 @keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+// Marquee for that classic feel
+.win-marquee {
+  background: $win-bg;
+  border: 2px solid;
+  border-color: $win-border-darker $win-border-light $win-border-light $win-border-darker;
+  padding: 2px 0;
+  overflow: hidden;
+  font-size: $font-sm;
+  color: $win-title-active;
+  font-weight: bold;
+
+  marquee {
+    font-family: $font-primary;
   }
 }
 
-// Focus styles for accessibility
+// Focus styles
 *:focus {
-  outline: none;
+  outline: 1px dotted $black;
+  outline-offset: 0;
 }
 
-// Skip to content link for accessibility
+// Skip to content
 .skip-link {
   position: absolute;
   top: -40px;
   left: 6px;
-  background: $primary-green;
-  color: $white;
-  padding: 8px;
+  background: $win-control-face;
+  color: $text-primary;
+  padding: 4px 8px;
   text-decoration: none;
-  border-radius: $radius-sm;
+  border: 2px solid;
+  border-color: $win-border-light $win-border-darker $win-border-darker $win-border-light;
   z-index: $z-tooltip;
 
-  &:focus {
-    top: 6px;
-  }
+  &:focus { top: 6px; }
+}
+
+// Scrollbar styling (IE-style)
+::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+::-webkit-scrollbar-track {
+  background: $win-bg;
+}
+::-webkit-scrollbar-thumb {
+  background: $win-bg;
+  border: 1px solid;
+  border-color: $win-border-light $win-border-darker $win-border-darker $win-border-light;
+}
+::-webkit-scrollbar-button {
+  background: $win-bg;
+  border: 1px solid;
+  border-color: $win-border-light $win-border-darker $win-border-darker $win-border-light;
+  width: 16px;
+  height: 16px;
+}
+
+// Loading spinner
+.loading-spinner {
+  background: $win-bg;
+  padding: $spacing-xl;
+  text-align: center;
+  font-family: $font-primary;
+  font-size: $font-base;
+  color: $text-primary;
 }
