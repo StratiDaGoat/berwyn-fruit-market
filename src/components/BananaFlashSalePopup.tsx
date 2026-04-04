@@ -1,8 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import {
-  BANANA_EVENT_START_MS,
-  BANANA_EVENT_END_MS,
-} from '../utils/bananaFlashSaleTimes';
+import { BANANA_EVENT_END_MS } from '../utils/bananaFlashSaleTimes';
 import './FlashSalePopup.scss';
 import './BananaFlashSalePopup.scss';
 
@@ -11,14 +8,21 @@ interface BananaFlashSalePopupProps {
   onClose: () => void;
 }
 
-function formatCountdown(msRemaining: number): string {
+/** ≥24h left: e.g. 2D:14H:43M. Under 24h: e.g. 23:42:32 */
+function formatBananaCountdown(msRemaining: number): string {
   if (msRemaining <= 0) return '00:00:00';
   const totalSec = Math.floor(msRemaining / 1000);
-  const h = Math.floor(totalSec / 3600);
-  const m = Math.floor((totalSec % 3600) / 60);
-  const s = totalSec % 60;
-  const hs = h > 99 ? String(h) : String(h).padStart(2, '0');
-  return `${hs}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  const daySec = 24 * 3600;
+  if (totalSec >= daySec) {
+    const days = Math.floor(totalSec / 86400);
+    const hours = Math.floor((totalSec % 86400) / 3600);
+    const minutes = Math.floor((totalSec % 3600) / 60);
+    return `${days}D:${String(hours).padStart(2, '0')}H:${String(minutes).padStart(2, '0')}M`;
+  }
+  const hours = Math.floor(totalSec / 3600);
+  const minutes = Math.floor((totalSec % 3600) / 60);
+  const seconds = totalSec % 60;
+  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 }
 
 const BananaFlashSalePopup: React.FC<BananaFlashSalePopupProps> = ({
@@ -29,18 +33,10 @@ const BananaFlashSalePopup: React.FC<BananaFlashSalePopupProps> = ({
   const [displayNow, setDisplayNow] = useState(() => Date.now());
 
   const now = displayNow;
-  const phase: 'upcoming' | 'live' | 'ended' =
-    now >= BANANA_EVENT_END_MS
-      ? 'ended'
-      : now >= BANANA_EVENT_START_MS
-        ? 'live'
-        : 'upcoming';
-
-  const targetMs =
-    phase === 'upcoming' ? BANANA_EVENT_START_MS : BANANA_EVENT_END_MS;
-  const label = phase === 'upcoming' ? 'Starting in' : 'Ends in';
-  const remaining = Math.max(0, targetMs - now);
-  const timeStr = formatCountdown(remaining);
+  const ended = now >= BANANA_EVENT_END_MS;
+  const remaining = Math.max(0, BANANA_EVENT_END_MS - now);
+  const timeStr = formatBananaCountdown(remaining);
+  const label = 'Ends in';
 
   const syncExpired = useCallback(() => {
     if (Date.now() >= BANANA_EVENT_END_MS) {
@@ -59,7 +55,7 @@ const BananaFlashSalePopup: React.FC<BananaFlashSalePopupProps> = ({
     return () => clearInterval(id);
   }, [isOpen, syncExpired]);
 
-  if (!isOpen || phase === 'ended') return null;
+  if (!isOpen || ended) return null;
 
   return (
     <>
@@ -70,9 +66,9 @@ const BananaFlashSalePopup: React.FC<BananaFlashSalePopupProps> = ({
               <span className="banner-text banana-banner-text">
                 <span className="banana-banner-headline">
                   <span className="text-desktop">
-                    1 BUNCH FREE BANANAS — SATURDAY, MARCH 28
+                    1 FREE BUNCH OF BANANAS — WHILE SUPPLIES LAST
                   </span>
-                  <span className="text-mobile">FREE BANANAS · SAT MAR 28</span>
+                  <span className="text-mobile">FREE BANANA BUNCH · WHILE SUPPLIES LAST</span>
                 </span>
                 <span className="banner-timer banana-banner-timer">
                   <span className="banner-countdown-label">{label}</span>
@@ -120,8 +116,8 @@ const BananaFlashSalePopup: React.FC<BananaFlashSalePopupProps> = ({
           </div>
           <div className="banana-popup-image-wrap">
             <img
-              src="/banana-ad-copy.webp"
-              alt="Free bananas Saturday March 28 — 1 bunch"
+              src="/new-banana-ad.webp"
+              alt="Free bunch of bananas — while supplies last"
               loading="lazy"
               width="1200"
               height="1600"
