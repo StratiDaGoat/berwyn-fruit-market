@@ -1,44 +1,68 @@
 @use '../styles/variables.scss' as *;
 
 .footer {
-  background: linear-gradient(135deg, $primary-green, $secondary-green);
-  color: $white;
+  background: $win-bg;
+  color: $text-primary;
   margin-top: auto;
+  border-top: 2px solid;
+  border-color: $win-border-light $win-border-darker $win-border-darker $win-border-light;
+
+  // Classic Windows taskbar-like status bar at top of footer
+  &::before {
+    content: '  Berwyn Fruit Market  |  3811 S. Harlem Ave, Berwyn, IL 60402  |  (708) 795-6670';
+    display: block;
+    background: $win-bg;
+    border-bottom: 2px solid $win-border-darker;
+    padding: 2px $spacing-lg;
+    font-family: $font-primary;
+    font-size: $font-xs;
+    color: $text-secondary;
+    border-top: 2px solid;
+    border-color: $win-border-light $win-border-darker;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
   &__content {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: $spacing-3xl;
-    padding: $spacing-4xl 0 $spacing-3xl;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: $spacing-lg;
+    padding: $spacing-xl 0 $spacing-lg;
 
     @media (max-width: $breakpoint-md) {
       grid-template-columns: 1fr;
-      gap: $spacing-2xl;
-      padding: $spacing-3xl 0 $spacing-2xl;
+      gap: $spacing-lg;
+      padding: $spacing-lg 0;
     }
   }
 
   &__section {
     display: flex;
     flex-direction: column;
-    gap: $spacing-md;
+    gap: $spacing-sm;
+    padding: $spacing-sm;
+    background: $win-bg;
+    border: 2px solid;
+    border-color: $win-border-light $win-border-darker $win-border-darker $win-border-light;
   }
 
   &__logo {
     display: flex;
     align-items: center;
     gap: $spacing-sm;
-    margin-bottom: $spacing-md;
+    margin-bottom: $spacing-sm;
   }
 
   &__logo-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 70px;
-    height: 70px;
-    background: transparent;
-    border-radius: $radius-lg;
+    width: 48px;
+    height: 48px;
+    background: $white;
+    border: 2px solid;
+    border-color: $win-border-darker $win-border-light $win-border-light $win-border-darker;
     overflow: hidden;
   }
 
@@ -46,81 +70,88 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
+    image-rendering: pixelated;
   }
 
   &__logo-text {
     font-family: $font-display;
-    font-size: $font-2xl;
+    font-size: $font-xl;
     font-weight: $font-bold;
-    color: $white;
+    color: $win-title-active;
     margin: 0;
+    text-shadow: 1px 1px 0 rgba(255,255,255,0.6);
   }
 
   &__text {
-    color: rgba(255, 255, 255, 0.9);
-    line-height: 1.6;
-    margin-bottom: $spacing-lg;
+    color: $text-secondary;
+    line-height: 1.4;
+    font-size: $font-sm;
+    margin-bottom: $spacing-sm;
   }
 
   &__contact {
     display: flex;
     flex-direction: column;
-    gap: $spacing-sm;
+    gap: 4px;
   }
 
   &__contact-item {
     display: flex;
     align-items: center;
     gap: $spacing-sm;
-    color: rgba(255, 255, 255, 0.9);
+    color: $text-secondary;
     font-size: $font-sm;
   }
 
   &__contact-icon {
-    font-size: $font-lg;
-    width: 20px;
+    font-size: $font-base;
+    width: 16px;
     text-align: center;
   }
 
   &__section-title {
-    font-family: $font-display;
-    font-size: $font-xl;
-    font-weight: $font-semibold;
-    color: $white;
-    margin: 0 0 $spacing-md 0;
+    font-family: $font-primary;
+    font-size: $font-base;
+    font-weight: $font-bold;
+    color: $win-title-active;
+    margin: 0 0 $spacing-sm 0;
+    padding-bottom: 3px;
+    border-bottom: 1px solid $win-border-dark;
   }
 
   &__nav {
     display: flex;
     flex-direction: column;
-    gap: $spacing-sm;
+    gap: 2px;
   }
 
   &__nav-link {
-    color: rgba(255, 255, 255, 0.8);
-    text-decoration: none;
+    color: $win-title-active;
+    text-decoration: underline;
     font-size: $font-sm;
-    transition: all $transition-fast;
-    padding: $spacing-xs 0;
+    padding: 1px 2px;
+    transition: none;
 
     &:hover {
-      color: $white;
-      transform: translateX(5px);
+      background: $win-highlight;
+      color: $win-highlight-text;
+      text-decoration: none;
     }
   }
 
   &__hours {
     display: flex;
     flex-direction: column;
-    gap: $spacing-sm;
+    gap: 4px;
   }
 
   &__hours-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: $spacing-xs 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2px 0;
+    border-bottom: 1px solid $win-border-dark;
+    font-size: $font-sm;
 
     &:last-child {
       border-bottom: none;
@@ -128,74 +159,42 @@
   }
 
   &__hours-day {
-    font-weight: $font-medium;
-    color: $white;
+    font-weight: $font-bold;
+    color: $text-primary;
+    font-size: $font-sm;
   }
 
   &__hours-time {
-    color: rgba(255, 255, 255, 0.8);
+    color: $text-secondary;
     font-size: $font-sm;
-  }
-
-  &__social {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-sm;
-  }
-
-  &__social-link {
-    display: flex;
-    align-items: center;
-    gap: $spacing-sm;
-    color: rgba(255, 255, 255, 0.8);
-    text-decoration: none;
-    padding: $spacing-sm;
-    border-radius: $radius-md;
-    transition: all $transition-fast;
-    background: rgba(255, 255, 255, 0.05);
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.1);
-      color: $white;
-    }
-  }
-
-  &__social-icon {
-    font-size: $font-lg;
-    width: 24px;
-    text-align: center;
-  }
-
-  &__social-name {
-    font-size: $font-sm;
-    font-weight: $font-medium;
   }
 
   &__social-inline {
     display: flex;
-    gap: $spacing-md;
-    margin-top: $spacing-lg;
-    padding-top: $spacing-lg;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    gap: $spacing-sm;
+    margin-top: $spacing-sm;
+    padding-top: $spacing-sm;
+    border-top: 1px solid $win-border-dark;
   }
 
   &__social-link-inline {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.1);
-    color: $white;
+    width: 24px;
+    height: 22px;
+    background: $win-bg;
+    color: $text-primary;
     text-decoration: none;
-    border-radius: 50%;
-    transition: all $transition-fast;
-    font-size: $font-lg;
+    border: 2px solid;
+    border-color: $win-border-light $win-border-darker $win-border-darker $win-border-light;
+    font-size: $font-sm;
+    transition: none;
 
     &:hover {
-      background: #f5f5dc; // Cream color
-      color: $primary-green; // Dark green text for contrast
-      transform: translateY(-2px);
+      background: $win-highlight;
+      color: $win-highlight-text;
+      border-color: $win-border-light $win-border-darker $win-border-darker $win-border-light;
     }
   }
 
@@ -203,27 +202,29 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: $spacing-lg 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 4px $spacing-lg;
+    background: $win-bg;
+    border-top: 2px solid $win-border-darker;
 
     @media (max-width: $breakpoint-sm) {
       flex-direction: column;
-      gap: $spacing-sm;
+      gap: 4px;
       text-align: center;
     }
   }
 
   &__copyright {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: $font-sm;
+    color: $text-secondary;
+    font-size: $font-xs;
     margin: 0;
   }
 
   &__tagline {
-    color: rgba(255, 255, 255, 0.9);
-    font-size: $font-sm;
-    font-weight: $font-medium;
-    font-style: italic;
+    color: $text-secondary;
+    font-size: $font-xs;
+    font-weight: $font-regular;
+    font-style: normal;
     margin: 0;
+    font-family: $font-primary;
   }
 }

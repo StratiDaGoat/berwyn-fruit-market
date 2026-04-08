@@ -3,8 +3,10 @@
 
 .home {
   min-height: 100vh;
+  background: $win-bg;
 }
 
+// === Hero Section – Win2K "Welcome" Window ===
 .hero {
   position: relative;
   min-height: 100vh;
@@ -21,10 +23,12 @@
     bottom: 0;
     z-index: 1;
 
-    // Remove slideshow controls
     .home-slide__control {
       display: none !important;
     }
+
+    // Desaturate/dim for that CRT look
+    filter: brightness(0.7) contrast(0.85) saturate(0.6);
   }
 
   .container {
@@ -37,207 +41,142 @@
     min-height: 100vh;
   }
 
+  // The hero content looks like a Windows dialog box
   &__content {
     display: flex;
     flex-direction: column;
-    gap: $spacing-lg;
-    background: linear-gradient(135deg,
-        rgba(255, 255, 255, 0.95),
-        rgba(248, 250, 252, 0.9));
-    padding: $spacing-3xl;
-    border-radius: $radius-xl;
-    backdrop-filter: blur(20px);
-    box-shadow:
-      0 25px 50px -12px rgba(0, 0, 0, 0.25),
-      0 0 0 1px rgba(255, 255, 255, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    max-width: 650px;
+    gap: 0;
+    background: $win-bg;
+    max-width: 520px;
     margin: 0 auto;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    position: relative;
+    // Classic Win2K raised window border
+    border: 2px solid;
+    border-color: $win-border-light $win-border-darker $win-border-darker $win-border-light;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.5);
     overflow: hidden;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(90deg,
-          transparent,
-          rgba(255, 255, 255, 0.4),
-          transparent);
-    }
+    padding: 0;
 
     @media (max-width: $breakpoint-md) {
-      padding: $spacing-2xl;
       margin: 0 $spacing-lg;
+      max-width: 100%;
     }
 
     @media (max-width: $breakpoint-sm) {
-      padding: $spacing-xl;
       margin: 0 $spacing-md;
     }
   }
 
+  // Title bar inside the hero window
   &__welcome {
-    font-size: $font-4xl;
+    font-size: $font-base;
     font-weight: $font-bold;
-    line-height: 1.1;
-    margin: 0 0 $spacing-lg 0;
-    text-align: center;
+    font-family: $font-primary;
+    margin: 0;
+    padding: 3px 6px;
+    background: linear-gradient(90deg, $win-title-active 0%, $win-title-active-end 100%);
+    color: $white;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-align: left;
 
-    @media (max-width: $breakpoint-md) {
-      font-size: $font-3xl;
-    }
-
-    @media (max-width: $breakpoint-sm) {
-      font-size: $font-2xl;
+    // Fake title bar icon
+    &::before {
+      content: '🛒';
+      font-size: 12px;
     }
   }
 
+  // Window close/min/max buttons container injected by title bar
   &__title {
-    font-family: 'Arial Black', Arial, sans-serif;
-    font-size: $font-6xl;
-    font-weight: 900;
-    line-height: 0.9;
-    margin: 0 0 $spacing-sm 0;
+    font-family: $font-display;
+    font-size: $font-4xl;
+    font-weight: $font-bold;
+    line-height: 1.1;
+    margin: 0;
     text-align: center;
-    color: #2e7d32;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-shadow:
-      2px 2px 0px #4caf50,
-      4px 4px 0px #8bc34a;
+    color: $win-title-active;
+    letter-spacing: 0;
+    text-transform: none;
+    text-shadow: 1px 1px 0 rgba(255,255,255,0.7);
+    padding: $spacing-lg $spacing-xl $spacing-sm;
 
     @media (max-width: $breakpoint-md) {
-      font-size: $font-5xl;
-    }
-
-    @media (max-width: $breakpoint-sm) {
-      font-size: $font-4xl;
+      font-size: $font-3xl;
+      padding: $spacing-md $spacing-lg $spacing-xs;
     }
   }
 
   &__subtitle {
-    font-family: $font-display;
+    font-family: $font-primary;
     font-size: $font-base;
-    font-weight: $font-light;
+    font-weight: $font-regular;
     color: $text-secondary;
     line-height: 1.4;
-    margin: 0 0 $spacing-lg 0;
+    margin: 0;
     text-align: center;
-    font-style: italic;
-    letter-spacing: 0.3px;
+    font-style: normal;
+    letter-spacing: 0;
+    padding: 0 $spacing-xl $spacing-md;
 
     @media (max-width: $breakpoint-md) {
       font-size: $font-sm;
-    }
-
-    @media (max-width: $breakpoint-sm) {
-      font-size: $font-xs;
+      padding: 0 $spacing-lg $spacing-sm;
     }
   }
 
   &__actions {
     display: flex;
-    gap: $spacing-lg;
+    gap: $spacing-sm;
     flex-wrap: wrap;
     justify-content: center;
+    padding: $spacing-md $spacing-xl;
+    background: $win-bg;
+    border-top: 1px solid $win-border-dark;
+
+    // Separator line to mimic dialog button area
+    border-top: 2px solid;
+    border-color: $win-border-darker $win-border-light $win-border-light $win-border-darker;
 
     @media (max-width: $breakpoint-sm) {
       flex-direction: column;
       align-items: center;
+      padding: $spacing-sm $spacing-md;
     }
   }
 }
 
-@keyframes float {
-
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-
-  50% {
-    transform: translateY(-20px);
-  }
-}
-
-.features {
-  padding: $spacing-4xl 0;
-  background: $white;
-
-  &__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: $spacing-3xl;
-
-    @media (max-width: $breakpoint-sm) {
-      grid-template-columns: 1fr;
-      gap: $spacing-2xl;
-    }
-  }
-
-  &__item {
-    text-align: center;
-    padding: $spacing-2xl;
-    border-radius: $radius-xl;
-    background: $bg-accent;
-    transition: all $transition-normal;
-
-    &:hover {
-      transform: translateY(-5px);
-      box-shadow: $shadow-lg;
-    }
-  }
-
-  &__icon {
-    font-size: $font-6xl;
-    margin-bottom: $spacing-lg;
-    display: block;
-  }
-
-  &__title {
-    font-size: $font-2xl;
-    margin-bottom: $spacing-md;
-    color: $text-primary;
-  }
-
-  &__description {
-    color: $text-secondary;
-    line-height: 1.6;
-    margin: 0;
-  }
-}
-
+// ===  Departments Carousel – Win2K Panel ===
 .home-departments {
-  padding: $spacing-4xl 0;
-  background: $white;
-  overflow-x: hidden; // prevent horizontal scrollbar from outward controls
+  padding: $spacing-2xl 0;
+  background: $win-bg;
+  overflow-x: hidden;
 
   .container {
-    overflow-x: hidden; // ensure no horizontal scrollbar from inner transforms/margins
-    padding-left: calc(#{$spacing-xl} + 44px); // extra room so left card isn't visually cut
-    padding-right: calc(#{$spacing-xl} + 44px); // extra room so right card isn't visually cut
+    overflow-x: hidden;
+    padding-left: calc(#{$spacing-xl} + 44px);
+    padding-right: calc(#{$spacing-xl} + 44px);
 
     @media (max-width: $breakpoint-md) {
-      padding-left: calc(#{$spacing-lg} + 44px); // slightly more padding for better balance
+      padding-left: calc(#{$spacing-lg} + 44px);
       padding-right: calc(#{$spacing-lg} + 44px);
     }
   }
 
   &__carousel {
     position: relative;
+    background: $win-bg;
+    border: 2px solid;
+    border-color: $win-border-light $win-border-darker $win-border-darker $win-border-light;
+    padding: $spacing-sm;
   }
 
   &__controls {
     pointer-events: none;
     position: absolute;
     top: 50%;
-    left: $spacing-md; // align to inner content edge
-    right: $spacing-md; // align to inner content edge
+    left: $spacing-md;
+    right: $spacing-md;
     transform: translateY(-50%);
     display: flex;
     justify-content: space-between;
@@ -246,45 +185,47 @@
     z-index: $z-dropdown;
 
     @media (max-width: $breakpoint-md) {
-      left: $spacing-sm; // closer to edges on mobile
+      left: $spacing-sm;
       right: $spacing-sm;
       padding: 0 $spacing-sm;
     }
-
-    // no negative offsets needed when using button transforms
   }
 
   &__control {
     pointer-events: all;
-    border: none;
-    background: $primary-green;
-    color: $white;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
+    background: $win-bg;
+    color: $text-primary;
+    width: 26px;
+    height: 23px;
+    border: 2px solid;
+    border-color: $win-border-light $win-border-darker $win-border-darker $win-border-light;
+    border-radius: 0;
     cursor: pointer;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: background $transition-fast;
+    transition: none;
+    box-shadow: none;
 
     &:hover {
-      background: $secondary-green;
+      background: darken(#d4d0c8, 8%);
+    }
+
+    &:active {
+      border-color: $win-border-darker $win-border-light $win-border-light $win-border-darker;
     }
   }
 
   &__icon {
-    width: 22px;
-    height: 22px;
+    width: 16px;
+    height: 16px;
   }
 
-  // Buttons sit outside the card edges (not touching)
   &__control--prev {
     transform: translateX(-200%);
 
     @media (max-width: $breakpoint-md) {
-      transform: translateX(-150%); // closer to card on mobile
+      transform: translateX(-150%);
     }
   }
 
@@ -292,56 +233,55 @@
     transform: translateX(200%);
 
     @media (max-width: $breakpoint-md) {
-      transform: translateX(150%); // closer to card on mobile
+      transform: translateX(150%);
     }
   }
 
   &__track {
-    overflow-x: hidden; // show exactly 3 cards on desktop, 1 on mobile
-    overflow-y: visible; // allow shadows/bottoms without vertical scrollbar
+    overflow-x: hidden;
+    overflow-y: visible;
     position: relative;
+    background: $win-bg;
+    border: 2px solid;
+    border-color: $win-border-darker $win-border-light $win-border-light $win-border-darker;
   }
 
   &__group {
     display: flex;
     align-items: stretch;
-    transition: transform 0.5s ease;
-    column-gap: 0; // use slide padding for gutters
+    transition: transform 0.15s ease; // Snappy Win2K transitions
   }
 
   &__slide {
-    // Responsive card layout: 3 on desktop, 2 on tablet, 1 on mobile
-    flex: 0 0 33.3333%; // Default: 3 cards on desktop
-    padding: 0 $spacing-sm $spacing-lg; // inner gutters + bottom space
+    flex: 0 0 33.3333%;
+    padding: 4px;
     box-sizing: border-box;
 
     @media (max-width: $breakpoint-lg) and (min-width: $breakpoint-md) {
-      flex: 0 0 50%; // Show 2 cards on tablet (iPad Mini)
-      padding: 0 $spacing-md $spacing-lg; // More padding for tablet
+      flex: 0 0 50%;
     }
 
     @media (max-width: $breakpoint-md) {
-      flex: 0 0 100%; // Show only 1 card on mobile
-      padding: 0 $spacing-md $spacing-lg; // Slightly more padding for better proportions
+      flex: 0 0 100%;
     }
   }
 }
 
-/* Ensure uniform card sizing in Home carousel only */
+/* Win2K card overrides for Home carousel */
 .home-departments {
   .department-card {
     height: 100%;
     display: flex;
     flex-direction: column;
+    border: 2px solid;
+    border-color: $win-border-light $win-border-darker $win-border-darker $win-border-light;
   }
 
   .department-card__header.department-card__header--media {
-    height: 240px;
-    /* slightly larger height as requested */
+    height: 200px;
 
     @media (max-width: $breakpoint-md) {
-      height: 180px;
-      /* slightly bigger than before but still compact */
+      height: 160px;
     }
   }
 
@@ -349,44 +289,48 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    // Slight pixelated feel
+    image-rendering: auto;
   }
 
   .department-card__content {
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding-bottom: $spacing-md; // ensure inner spacing at bottom
-
-    @media (max-width: $breakpoint-md) {
-      padding: $spacing-md $spacing-md $spacing-md; // slightly more padding for better readability
-    }
+    background: $white;
+    padding: $spacing-sm;
   }
 
   .department-card__description {
-    margin-bottom: $spacing-md;
+    margin-bottom: $spacing-sm;
     overflow: hidden;
     text-overflow: ellipsis;
     display: block;
-    font-size: $font-sm; // slightly smaller to fit
+    font-size: $font-sm;
     line-height: 1.4;
+    color: $text-secondary;
 
     @media (max-width: $breakpoint-md) {
-      font-size: $font-base; // slightly larger text for better readability
-      line-height: 1.5;
-      margin-bottom: $spacing-md; // normal margin for better spacing
+      font-size: $font-sm;
     }
   }
 
   .department-card__features {
     margin-top: auto;
-    /* push features to bottom */
     display: flex;
     flex-wrap: wrap;
-    gap: $spacing-sm;
-    /* show all chips without clipping; content above is clamped to keep height reasonable */
+    gap: 3px;
+    border-top: 1px solid $win-border-dark;
+    padding-top: 4px;
+  }
 
-    @media (max-width: $breakpoint-md) {
-      gap: $spacing-sm; // normal gap between features for better spacing
-    }
+  .department-card__feature {
+    background: $win-bg;
+    color: $text-primary;
+    padding: 1px 5px;
+    border: 1px solid $win-border-dark;
+    font-size: $font-xs;
+    font-family: $font-primary;
+    border-radius: 0;
   }
 }

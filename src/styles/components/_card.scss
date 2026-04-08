@@ -1,29 +1,39 @@
 @use '../variables.scss' as *;
 
+// Windows 2000 style department card
 .department-card {
-  background: $white;
-  border-radius: $radius-xl;
+  background: $win-bg;
+  border: 2px solid;
+  border-color: $win-border-light $win-border-darker $win-border-darker $win-border-light;
+  border-radius: 0;
   overflow: hidden;
-  box-shadow: $shadow-md;
-  transition: all $transition-normal;
   height: 100%;
   display: flex;
   flex-direction: column;
+  transition: none;
+  box-shadow: none;
 
+  // No hover transform in Win2K
   &:hover {
-    box-shadow: $shadow-xl;
+    box-shadow: none;
   }
 
   &__header {
-    padding: $spacing-2xl;
+    padding: $spacing-md;
     text-align: center;
     position: relative;
     overflow: hidden;
+    background: $win-bg;
+
+    // Title bar-style header
+    background: linear-gradient(90deg, $win-title-active 0%, $win-title-active-end 100%);
+    padding: 3px 6px;
 
     &--media {
       padding: 0;
-      height: 200px;
-      background: $bg-secondary;
+      height: 180px;
+      background: $win-bg;
+      border-bottom: 2px solid $win-border-darker;
     }
   }
 
@@ -31,60 +41,79 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    image-rendering: auto;
+    display: block;
   }
 
   &__title {
-    font-size: $font-2xl;
+    font-size: $font-base;
     font-weight: $font-bold;
     margin: 0;
+    color: $white;
+    font-family: $font-primary;
+    text-shadow: none;
     position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
-    padding: $spacing-md $spacing-lg;
-    color: $white;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-    background: linear-gradient(180deg,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 0.55) 80%);
+    padding: 4px 6px;
+    background: linear-gradient(90deg, $win-title-active 0%, $win-title-active-end 100%);
     z-index: 1;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    // Fake small icon before title
+    &::before {
+      content: '📁';
+      font-size: 12px;
+    }
 
     @media (max-width: $breakpoint-sm) {
-      font-size: $font-xl;
+      font-size: $font-sm;
     }
   }
 
   &__content {
-    padding: $spacing-2xl;
+    padding: $spacing-sm $spacing-md;
     flex: 1;
     display: flex;
     flex-direction: column;
+    background: $white;
+    // Inset border effect for content area
+    border-top: 2px solid;
+    border-color: $win-border-darker $win-border-light $win-border-light $win-border-darker;
   }
 
   &__description {
     color: $text-secondary;
-    line-height: 1.6;
-    margin-bottom: $spacing-lg;
-    font-size: $font-base;
+    line-height: 1.4;
+    margin-bottom: $spacing-sm;
+    font-size: $font-sm;
+    font-family: $font-primary;
   }
 
   &__features {
     display: flex;
     flex-wrap: wrap;
-    gap: $spacing-md;
+    gap: 4px;
     margin-top: auto;
-    justify-content: center;
-    padding-top: $spacing-sm;
+    justify-content: flex-start;
+    padding-top: $spacing-xs;
+    border-top: 1px solid $win-border-dark;
   }
 
   &__feature {
-    background: $bg-accent;
+    background: $win-bg;
     color: $text-primary;
-    padding: $spacing-xs $spacing-sm;
-    border-radius: $radius-full;
+    padding: 1px 6px;
+    border-radius: 0;
     font-size: $font-xs;
-    font-weight: $font-medium;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-weight: $font-regular;
+    font-family: $font-primary;
+    text-transform: none;
+    letter-spacing: 0;
+    border: 1px solid $win-border-dark;
   }
 }

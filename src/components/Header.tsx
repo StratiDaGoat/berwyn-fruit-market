@@ -31,6 +31,24 @@ export const Header: React.FC<HeaderProps> = ({ isBannerVisible = false }) => {
 
   return (
     <header className={`header ${isBannerVisible ? 'with-banner' : ''}`}>
+      {/* Windows 2000 Title Bar */}
+      <div className="header__titlebar">
+        <div className="header__titlebar-left">
+          <span className="header__titlebar-icon">🛒</span>
+          <span className="header__titlebar-text">Berwyn Fruit Market - Microsoft Internet Explorer</span>
+        </div>
+        <div className="header__titlebar-controls">
+          <button className="header__titlebar-btn" aria-label="Minimize" tabIndex={-1}>─</button>
+          <button className="header__titlebar-btn" aria-label="Maximize" tabIndex={-1}>□</button>
+          <button className="header__titlebar-btn header__titlebar-btn--close" aria-label="Close" tabIndex={-1}>✕</button>
+        </div>
+      </div>
+      {/* Win2K Marquee ticker */}
+      <div className="header__marquee">
+        <marquee scrollamount="3" behavior="scroll">
+          🍎 Fresh produce daily! &nbsp;&nbsp; 🥩 Quality meats &amp; butcher shop &nbsp;&nbsp; 🌽 Weekly specials every Wednesday &nbsp;&nbsp; 📍 3811 S. Harlem Ave, Berwyn, IL &nbsp;&nbsp; ☎ (708) 795-6670 &nbsp;&nbsp; 🍌 Banana sale this week! &nbsp;&nbsp;
+        </marquee>
+      </div>
       <div className="container">
         <div className="header__content">
           {/* Logo */}

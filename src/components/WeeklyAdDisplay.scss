@@ -70,8 +70,9 @@
     justify-content: center;
     padding: $spacing-xl;
     text-align: center;
-    background: rgba(0, 0, 0, 0.02);
-    border-radius: $radius-sm;
+    background: $win-bg;
+    border: 2px solid;
+    border-color: $win-border-darker $win-border-light $win-border-light $win-border-darker;
     min-height: 200px;
     width: 100%;
     box-sizing: border-box;
