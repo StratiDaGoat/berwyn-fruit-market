@@ -1,11 +1,11 @@
 /**
- * April 22 weekly ad goes live Tue Apr 21, 2026 at 22:00 America/Chicago.
- * Before that: April 16 ad. At/after: April 22 ad.
+ * April 29 weekly ad goes live Tue Apr 28, 2026 at 22:00 America/Chicago.
+ * Before that: April 22 ad. At/after: April 29 ad.
  */
 
 const CHICAGO = 'America/Chicago';
 
-const GO_LIVE = { y: 2026, m: 4, d: 21 } as const;
+const GO_LIVE = { y: 2026, m: 4, d: 28 } as const;
 
 function chicagoParts(ms: number) {
   return new Intl.DateTimeFormat('en-US', {
@@ -53,7 +53,7 @@ function utcMsAtChicagoWallClock(
   return t;
 }
 
-const APRIL_22_AD_GO_LIVE_MS = utcMsAtChicagoWallClock(
+const APRIL_29_AD_GO_LIVE_MS = utcMsAtChicagoWallClock(
   GO_LIVE.y,
   GO_LIVE.m,
   GO_LIVE.d,
@@ -61,25 +61,25 @@ const APRIL_22_AD_GO_LIVE_MS = utcMsAtChicagoWallClock(
   0
 );
 
-export type WeeklyAdWeekKey = 416 | 422;
+export type WeeklyAdWeekKey = 422 | 429;
 
 export function getCurrentWeeklyAdWeek(): WeeklyAdWeekKey {
-  return Date.now() >= APRIL_22_AD_GO_LIVE_MS ? 422 : 416;
+  return Date.now() >= APRIL_29_AD_GO_LIVE_MS ? 429 : 422;
 }
 
 export const WEEKLY_AD_ASSETS = {
-  416: {
-    pdf: '/weekly-ad-april16.pdf',
-    images: [
-      '/weekly-ad-april16-first-page.webp',
-      '/weekly-ad-april16-second-page.webp',
-    ],
-  },
   422: {
     pdf: '/weekly-ad-april22.pdf',
     images: [
       '/weekly-ad-april22-first-page.webp',
       '/weekly-ad-april22-second-page.webp',
+    ],
+  },
+  429: {
+    pdf: '/weekly-ad-april29.pdf',
+    images: [
+      '/weekly-ad-april29-first-page.webp',
+      '/weekly-ad-april29-second-page.webp',
     ],
   },
 } as const;
