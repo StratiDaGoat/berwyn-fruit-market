@@ -8,6 +8,7 @@ import { Footer } from './components/Footer';
 import FlashSalePopup from './components/FlashSalePopup';
 import BananaFlashSalePopup from './components/BananaFlashSalePopup';
 import { isBananaFlashSaleInWindow } from './utils/bananaFlashSaleTimes';
+import ChipsAhoyBanner from './components/ChipsAhoyBanner';
 
 // Lazy load pages
 const Home = React.lazy(() =>
@@ -29,7 +30,8 @@ const Contact = React.lazy(() =>
 // Feature flag: Set to true to show flash sale banner, false to hide it
 const IS_FLASH_SALE_ACTIVE = false;
 
-const IS_BANANA_FLASH_ACTIVE = true;
+const IS_BANANA_FLASH_ACTIVE = false;
+const IS_CHIPS_AHOY_ACTIVE = true;
 
 /**
  * Main App component with routing configuration
@@ -48,12 +50,18 @@ function App() {
     () => IS_BANANA_FLASH_ACTIVE && isBananaFlashSaleInWindow()
   );
 
+  const [isChipsAhoyVisible, setIsChipsAhoyVisible] = useState(IS_CHIPS_AHOY_ACTIVE);
+
   const handleCloseBanner = () => {
     setIsBannerVisible(false);
   };
 
   const handleCloseBananaBanner = () => {
     setIsBananaBannerVisible(false);
+  };
+
+  const handleCloseChipsAhoy = () => {
+    setIsChipsAhoyVisible(false);
   };
 
   return (
@@ -67,11 +75,17 @@ function App() {
           onClose={handleCloseBananaBanner}
         />
       )}
+      {IS_CHIPS_AHOY_ACTIVE && (
+        <ChipsAhoyBanner
+          isOpen={isChipsAhoyVisible}
+          onClose={handleCloseChipsAhoy}
+        />
+      )}
       <Header
-        isBannerVisible={isBannerVisible || isBananaBannerVisible}
+        isBannerVisible={isBannerVisible || isBananaBannerVisible || isChipsAhoyVisible}
       />
       <main
-        className={`main-content ${isBannerVisible || isBananaBannerVisible ? 'with-banner' : ''}`}
+        className={`main-content ${isBannerVisible || isBananaBannerVisible || isChipsAhoyVisible ? 'with-banner' : ''}`}
       >
         <Suspense fallback={<div className="loading-spinner">Loading...</div>}>
           <Routes>

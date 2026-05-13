@@ -1,12 +1,12 @@
 /**
- * May 6 weekly ad goes live Tue May 5, 2026 at 22:00 America/Chicago.
- * Before April 29 go-live: April 22 ad. Until May 6 go-live: April 29 ad. At/after: May 6 ad.
+ * May 13 weekly ad goes live Tue May 12, 2026 at 22:00 America/Chicago.
  */
 
 const CHICAGO = 'America/Chicago';
 
 const APRIL_29_GO_LIVE = { y: 2026, m: 4, d: 28 } as const;
 const MAY_6_GO_LIVE = { y: 2026, m: 5, d: 5 } as const;
+const MAY_13_GO_LIVE = { y: 2026, m: 5, d: 12 } as const;
 
 function chicagoParts(ms: number) {
   return new Intl.DateTimeFormat('en-US', {
@@ -70,9 +70,18 @@ const MAY_6_AD_GO_LIVE_MS = utcMsAtChicagoWallClock(
   0
 );
 
-export type WeeklyAdWeekKey = 422 | 429 | 506;
+const MAY_13_AD_GO_LIVE_MS = utcMsAtChicagoWallClock(
+  MAY_13_GO_LIVE.y,
+  MAY_13_GO_LIVE.m,
+  MAY_13_GO_LIVE.d,
+  22,
+  0
+);
+
+export type WeeklyAdWeekKey = 422 | 429 | 506 | 513;
 
 export function getCurrentWeeklyAdWeek(): WeeklyAdWeekKey {
+  if (Date.now() >= MAY_13_AD_GO_LIVE_MS) return 513;
   if (Date.now() >= MAY_6_AD_GO_LIVE_MS) return 506;
   if (Date.now() >= APRIL_29_AD_GO_LIVE_MS) return 429;
   return 422;
@@ -98,6 +107,13 @@ export const WEEKLY_AD_ASSETS = {
     images: [
       '/weekly-ad-5:6-first-page.webp',
       '/weekly-ad-5:6-second-page.webp',
+    ],
+  },
+  513: {
+    pdf: '/weekly-ad-5:13.pdf',
+    images: [
+      '/weekly-ad-5:13-first-page.webp',
+      '/weekly-ad-5:13-second-page.webp',
     ],
   },
 } as const;
