@@ -3,9 +3,12 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="icon" type="image/webp" href="/logo.webp" sizes="150x50" />
-  <link rel="apple-touch-icon" href="/logo.webp" />
+  <link rel="icon" href="/favicon-48.png" type="image/png" sizes="48x48" />
+  <link rel="icon" href="/favicon-96.png" type="image/png" sizes="96x96" />
+  <link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192" />
+  <link rel="shortcut icon" href="/favicon-48.png" type="image/png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+  <link rel="manifest" href="/site.webmanifest" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- SEO Meta Tags -->
@@ -22,18 +25,37 @@
     content="Your local community market for the freshest fruits and vegetables. Visit us for premium quality produce and friendly service." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://berwynfruitmarket.com" />
-  <meta property="og:image" content="/og-image.jpg" />
+  <meta property="og:image" content="https://www.berwynfruitmarket.com/favicon-512.png" />
 
   <!-- Twitter Card Meta Tags -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Berwyn Fruit Market - Fresh Local Produce" />
   <meta name="twitter:description" content="Your local community market for the freshest fruits and vegetables." />
-  <meta name="twitter:image" content="/twitter-image.jpg" />
+  <meta name="twitter:image" content="https://www.berwynfruitmarket.com/favicon-512.png" />
 
   <!-- Additional Meta Tags -->
   <meta name="robots" content="index, follow" />
-  <meta name="theme-color" content="#4CAF50" />
+  <meta name="theme-color" content="#ffffff" />
   <link rel="canonical" href="https://berwynfruitmarket.com" />
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "GroceryStore",
+      "name": "Berwyn Fruit Market",
+      "url": "https://www.berwynfruitmarket.com",
+      "logo": "https://www.berwynfruitmarket.com/favicon-512.png",
+      "image": "https://www.berwynfruitmarket.com/favicon-512.png",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "3811 S. Harlem Ave",
+        "addressLocality": "Berwyn",
+        "addressRegion": "IL",
+        "postalCode": "60402",
+        "addressCountry": "US"
+      }
+    }
+  </script>
 
   <!-- Preconnect to external domains for performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
