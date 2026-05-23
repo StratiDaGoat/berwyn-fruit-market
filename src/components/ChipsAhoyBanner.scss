@@ -169,31 +169,6 @@
   }
 }
 
-// Banner sits above header in DOM — extra offset when text wraps to two lines
-.chips-ahoy-banner + .header.with-banner {
-  top: 60px;
-}
-
-@media (max-width: 768px) {
-  .chips-ahoy-banner + .header.with-banner {
-    top: 68px;
-  }
-
-  .app:has(.chips-ahoy-banner) .main-content.with-banner {
-    padding-top: 148px;
-  }
-}
-
-@media (max-width: 480px) {
-  .chips-ahoy-banner + .header.with-banner {
-    top: 64px;
-  }
-
-  .app:has(.chips-ahoy-banner) .main-content.with-banner {
-    padding-top: 144px;
-  }
-}
-
 .chips-ahoy-popup {
   position: fixed;
   top: 50%;

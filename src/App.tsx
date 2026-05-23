@@ -1,93 +1,99 @@
-import React, { Suspense, useState } from 'react';
+import { Suspense, useLayoutEffect, useState, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
-
-import FlashSalePopup from './components/FlashSalePopup';
-import BananaFlashSalePopup from './components/BananaFlashSalePopup';
-import { isBananaFlashSaleInWindow } from './utils/bananaFlashSaleTimes';
+import { Home } from './pages/Home';
 import ChipsAhoyBanner from './components/ChipsAhoyBanner';
+import {
+  IS_BANANA_FLASH_ACTIVE,
+  IS_CHIPS_AHOY_ACTIVE,
+  IS_FLASH_SALE_ACTIVE,
+} from './config/siteFlags';
+import { syncPromoBannerLayout } from './utils/promoBannerLayout';
+import { isBananaFlashSaleInWindow } from './utils/bananaFlashSaleTimes';
 
-// Lazy load pages
-const Home = React.lazy(() =>
-  import('./pages/Home').then(module => ({ default: module.Home }))
+const FlashSalePopup = lazy(() => import('./components/FlashSalePopup'));
+const BananaFlashSalePopup = lazy(
+  () => import('./components/BananaFlashSalePopup')
 );
-const About = React.lazy(() =>
+
+const About = lazy(() =>
   import('./pages/About').then(module => ({ default: module.About }))
 );
-const Products = React.lazy(() =>
+const Products = lazy(() =>
   import('./pages/Products').then(module => ({ default: module.Products }))
 );
-const WeeklyAds = React.lazy(() =>
+const WeeklyAds = lazy(() =>
   import('./pages/WeeklyAds').then(module => ({ default: module.WeeklyAds }))
 );
-const Contact = React.lazy(() =>
+const Contact = lazy(() =>
   import('./pages/Contact').then(module => ({ default: module.Contact }))
 );
 
-// Feature flag: Set to true to show flash sale banner, false to hide it
-const IS_FLASH_SALE_ACTIVE = false;
+const Analytics = lazy(() =>
+  import('@vercel/analytics/react').then(module => ({
+    default: module.Analytics,
+  }))
+);
+const SpeedInsights = lazy(() =>
+  import('@vercel/speed-insights/react').then(module => ({
+    default: module.SpeedInsights,
+  }))
+);
 
-const IS_BANANA_FLASH_ACTIVE = false;
-const IS_CHIPS_AHOY_ACTIVE = true;
-
-/**
- * Main App component with routing configuration
- * Sets up the main layout with header, footer, and page routes
- */
 function App() {
-  // Calculate initial visibility synchronously to prevent layout shift
   const [isBannerVisible, setIsBannerVisible] = useState(() => {
     if (!IS_FLASH_SALE_ACTIVE) return false;
     const targetDate = new Date('2026-02-08T21:00:00-06:00');
-    const now = new Date();
-    return targetDate.getTime() > now.getTime();
+    return targetDate.getTime() > Date.now();
   });
 
   const [isBananaBannerVisible, setIsBananaBannerVisible] = useState(
     () => IS_BANANA_FLASH_ACTIVE && isBananaFlashSaleInWindow()
   );
 
-  const [isChipsAhoyVisible, setIsChipsAhoyVisible] = useState(IS_CHIPS_AHOY_ACTIVE);
+  const [isChipsAhoyVisible, setIsChipsAhoyVisible] = useState(
+    IS_CHIPS_AHOY_ACTIVE
+  );
 
-  const handleCloseBanner = () => {
-    setIsBannerVisible(false);
-  };
+  const promoBannerOpen =
+    (IS_FLASH_SALE_ACTIVE && isBannerVisible) ||
+    (IS_BANANA_FLASH_ACTIVE && isBananaBannerVisible) ||
+    (IS_CHIPS_AHOY_ACTIVE && isChipsAhoyVisible);
 
-  const handleCloseBananaBanner = () => {
-    setIsBananaBannerVisible(false);
-  };
-
-  const handleCloseChipsAhoy = () => {
-    setIsChipsAhoyVisible(false);
-  };
+  useLayoutEffect(() => {
+    syncPromoBannerLayout(promoBannerOpen);
+  }, [promoBannerOpen]);
 
   return (
     <div className="app">
-      {IS_FLASH_SALE_ACTIVE && (
-        <FlashSalePopup isOpen={isBannerVisible} onClose={handleCloseBanner} />
+      {IS_FLASH_SALE_ACTIVE && isBannerVisible && (
+        <Suspense fallback={null}>
+          <FlashSalePopup
+            isOpen={isBannerVisible}
+            onClose={() => setIsBannerVisible(false)}
+          />
+        </Suspense>
       )}
-      {IS_BANANA_FLASH_ACTIVE && (
-        <BananaFlashSalePopup
-          isOpen={isBananaBannerVisible}
-          onClose={handleCloseBananaBanner}
-        />
+      {IS_BANANA_FLASH_ACTIVE && isBananaBannerVisible && (
+        <Suspense fallback={null}>
+          <BananaFlashSalePopup
+            isOpen={isBananaBannerVisible}
+            onClose={() => setIsBananaBannerVisible(false)}
+          />
+        </Suspense>
       )}
-      {IS_CHIPS_AHOY_ACTIVE && (
+      {IS_CHIPS_AHOY_ACTIVE && isChipsAhoyVisible && (
         <ChipsAhoyBanner
           isOpen={isChipsAhoyVisible}
-          onClose={handleCloseChipsAhoy}
+          onClose={() => setIsChipsAhoyVisible(false)}
         />
       )}
-      <Header
-        isBannerVisible={isBannerVisible || isBananaBannerVisible || isChipsAhoyVisible}
-      />
-      <main
-        className={`main-content ${isBannerVisible || isBananaBannerVisible || isChipsAhoyVisible ? 'with-banner' : ''}`}
-      >
-        <Suspense fallback={<div className="loading-spinner">Loading...</div>}>
+      <Header />
+      <main className="main-content">
+        <Suspense
+          fallback={<div className="route-loading-placeholder" aria-hidden />}
+        >
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
@@ -98,8 +104,10 @@ function App() {
         </Suspense>
       </main>
       <Footer />
-      <Analytics />
-      <SpeedInsights />
+      <Suspense fallback={null}>
+        <Analytics />
+        <SpeedInsights />
+      </Suspense>
     </div>
   );
 }

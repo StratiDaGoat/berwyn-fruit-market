@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="has-promo-banner">
 
 <head>
   <meta charset="UTF-8" />
@@ -61,13 +61,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-  <!-- Google Fonts with optimized loading -->
+  <!-- Fonts: fewer weights = less swap/layout shift -->
   <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap"
     rel="stylesheet" />
 
-  <!-- Preload only LCP image (hero slideshow) for optimal performance -->
-  <link rel="preload" as="image" href="/home-slide-1.webp" fetchpriority="high" />
+  <!-- LCP hero image -->
+  <link rel="preload" as="image" href="/home-slide-1.webp" fetchpriority="high" type="image/webp" />
 </head>
 
 <body>

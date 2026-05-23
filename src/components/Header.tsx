@@ -7,11 +7,7 @@ import './Header.scss';
  * Header component with navigation and mobile menu
  * Features responsive design with animated mobile menu
  */
-interface HeaderProps {
-  isBannerVisible?: boolean;
-}
-
-export const Header: React.FC<HeaderProps> = ({ isBannerVisible = false }) => {
+export const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
 
@@ -30,7 +26,7 @@ export const Header: React.FC<HeaderProps> = ({ isBannerVisible = false }) => {
   };
 
   return (
-    <header className={`header ${isBannerVisible ? 'with-banner' : ''}`}>
+    <header className="header">
       <div className="container">
         <div className="header__content">
           {/* Logo */}

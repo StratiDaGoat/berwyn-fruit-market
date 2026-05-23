@@ -20,6 +20,14 @@
     right: 0;
     bottom: 0;
     z-index: 1;
+    min-height: 100vh;
+
+    .home-slideshow,
+    [class*='home-slide'] {
+      min-height: 100vh;
+      aspect-ratio: auto;
+      height: 100%;
+    }
 
     // Remove slideshow controls
     .home-slide__control {

@@ -94,21 +94,6 @@
   z-index: 1030; // Higher than header z-index (1020)
 }
 
-// Header adjustment when banner is visible
-.header.with-banner {
-  top: 60px; // Push header down by banner height
-  transition: top 0.4s ease-in-out;
-  margin-top: 0; // Ensure no margin
-  border-top: none; // Remove any top border
-  border-bottom: none; // Remove bottom border to prevent gap
-}
-
-// Main content adjustment when banner is visible
-.main-content.with-banner {
-  padding-top: 140px; // Account for banner (60px) + header (80px)
-  transition: padding-top 0.4s ease-in-out;
-}
-
 .banner-container {
   position: relative;
   max-width: 1200px;

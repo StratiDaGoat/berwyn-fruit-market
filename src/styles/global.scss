@@ -10,6 +10,18 @@
 html {
   font-size: 16px;
   scroll-behavior: smooth;
+  --header-height: 80px;
+  --promo-banner-height: 0px;
+
+  &.has-promo-banner {
+    --promo-banner-height: 60px;
+  }
+
+  @media (max-width: 768px) {
+    &.has-promo-banner {
+      --promo-banner-height: 68px;
+    }
+  }
 }
 
 body {
@@ -31,7 +43,12 @@ body {
 
 .main-content {
   flex: 1;
-  padding-top: 80px; // Account for fixed header
+  padding-top: calc(var(--header-height) + var(--promo-banner-height));
+}
+
+.route-loading-placeholder {
+  min-height: calc(100vh - var(--header-height) - var(--promo-banner-height));
+  background-color: $bg-primary;
 }
 
 // Typography
