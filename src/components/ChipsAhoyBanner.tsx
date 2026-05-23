@@ -22,11 +22,19 @@ const ChipsAhoyBanner: React.FC<ChipsAhoyBannerProps> = ({
           <div className="banner-slider">
             <div className="banner-content">
               <span className="banner-text chips-ahoy-text">
-                <span className="text-desktop">
-                  SPECIAL! Chips Ahoy! Party Size — Only $3.99 · While Supplies Last
-                </span>
-                <span className="text-mobile">
-                  Chips Ahoy! Party Size $3.99 · While Supplies Last
+                <span className="chips-ahoy-headline">
+                  <span className="text-desktop">
+                    SPECIAL! Chips Ahoy! Party Size — Only $3.99 · While
+                    Supplies Last
+                  </span>
+                  <span className="text-mobile">
+                    <span className="chips-ahoy-mobile-line chips-ahoy-mobile-line--title">
+                      Chips Ahoy! Party Size
+                    </span>
+                    <span className="chips-ahoy-mobile-line chips-ahoy-mobile-line--price">
+                      $3.99 · While Supplies Last
+                    </span>
+                  </span>
                 </span>
               </span>
               <button
