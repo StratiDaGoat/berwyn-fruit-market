@@ -83,14 +83,7 @@ export const WeeklyAds: React.FC = () => {
   const pdfUrl = WEEKLY_AD_ASSETS[adWeek].pdf;
 
   const handlePrint = () => {
-    const printWindow = window.open(pdfUrl, '_blank');
-    if (printWindow) {
-      printWindow.onload = () => {
-        setTimeout(() => {
-          printWindow.print();
-        }, 1000);
-      };
-    }
+    window.print();
   };
 
   const handleDownload = () => {
@@ -98,9 +91,11 @@ export const WeeklyAds: React.FC = () => {
       const link = document.createElement('a');
       link.href = pdfUrl;
       link.download =
-        adWeek === 527
-          ? 'weekly-specials-may-27.pdf'
-          : adWeek === 520
+        adWeek === 603
+          ? 'weekly-specials-june-3.pdf'
+          : adWeek === 527
+            ? 'weekly-specials-may-27.pdf'
+            : adWeek === 520
             ? 'weekly-specials-may-20.pdf'
             : adWeek === 513
             ? 'weekly-specials-may-13.pdf'

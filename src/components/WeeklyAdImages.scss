@@ -151,17 +151,72 @@
   }
 }
 
-// Print styles
+// Print styles — stack pages full-width so nothing is clipped on the right
 @media print {
+  @page {
+    margin: 0.25in;
+    size: letter portrait;
+  }
+
+  .header,
+  .footer,
+  .flash-sale-banner,
+  .chips-ahoy-banner,
+  .departments-hero,
+  .weekly-specials__actions {
+    display: none !important;
+  }
+
+  .main-content {
+    padding-top: 0 !important;
+  }
+
+  html.has-promo-banner {
+    --promo-banner-height: 0px;
+  }
+
+  .weekly-specials-content,
+  .weekly-specials__card,
+  .weekly-specials__pdf-container,
+  .weekly-specials-content .container {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+    box-shadow: none !important;
+    background: $white !important;
+    overflow: visible !important;
+  }
+
   .weekly-ad-images {
+    overflow: visible !important;
+
     &__container {
-      flex-direction: column;
-      gap: $spacing-lg;
+      flex-direction: column !important;
+      gap: 0 !important;
+      max-width: none !important;
+      width: 100% !important;
     }
 
     &__item {
-      width: 100%;
+      width: 100% !important;
+      max-width: 100% !important;
+      flex: none !important;
+      aspect-ratio: auto !important;
+      overflow: visible !important;
       page-break-inside: avoid;
+      page-break-after: always;
+
+      &:last-child {
+        page-break-after: auto;
+      }
+    }
+
+    &__image {
+      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important;
+      object-fit: contain !important;
     }
   }
 }
