@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
 const DEFAULT_SLIDES = Array.from({ length: 11 }, (_, i) => {
@@ -24,79 +24,76 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
 
   const [index, setIndex] = useState(0);
   const [prevIndex, setPrevIndex] = useState(0);
-  const [pausedUntil, setPausedUntil] = useState<number>(0);
-  const [isSliding, setIsSliding] = useState<boolean>(false);
   const [direction, setDirection] = useState<'forward' | 'backward'>('forward');
-  const [isReady, setIsReady] = useState(imageUrls.length <= 1);
-  const [isFirstImageReady, setIsFirstImageReady] = useState(
-    imageUrls.length <= 1
-  );
+  const [isReady, setIsReady] = useState(false);
+  const [isFirstImageReady, setIsFirstImageReady] = useState(false);
   const [isInitialRender, setIsInitialRender] = useState(true);
+
   const decodedSetRef = useRef<Set<string>>(new Set());
   const inflightRef = useRef<Record<string, Promise<void>>>({});
 
-  const preloadAndDecode = React.useCallback((url: string): Promise<void> => {
+  const preloadAndDecode = useCallback((url: string): Promise<void> => {
     if (decodedSetRef.current.has(url)) return Promise.resolve();
     if (url in inflightRef.current) return inflightRef.current[url];
+
     const promise = new Promise<void>(resolve => {
       const img = new Image();
       img.src = url;
       img.loading = 'eager';
 
-      const decodePromise: Promise<void> | undefined =
-        typeof img.decode === 'function' ? img.decode() : undefined;
       const finalize = () => {
         decodedSetRef.current.add(url);
         delete inflightRef.current[url];
         resolve();
       };
-      if (decodePromise) {
-        decodePromise.then(finalize).catch(finalize);
+
+      if (typeof img.decode === 'function') {
+        img.decode().then(finalize).catch(finalize);
       } else {
         img.onload = finalize;
         img.onerror = finalize;
       }
     });
+
     inflightRef.current[url] = promise;
     return promise;
   }, []);
 
   useEffect(() => {
-    if (imageUrls.length <= 1) return;
-    const timer = setInterval(() => {
-      if (!isSliding && isReady && Date.now() >= pausedUntil) {
-        setIsInitialRender(false);
-        setDirection('forward');
-        setIndex(i => {
-          setPrevIndex(i);
-          return (i + 1) % imageUrls.length;
-        });
-      }
-    }, intervalMs);
-    return () => clearInterval(timer);
-  }, [imageUrls.length, intervalMs, pausedUntil, isSliding, isReady]);
+    if (imageUrls.length <= 1 || !isReady) return;
 
-  // Show first slide ASAP; decode remaining slides in the background
+    const timer = setInterval(() => {
+      setIsInitialRender(false);
+      setDirection('forward');
+      setIndex(i => {
+        const next = (i + 1) % imageUrls.length;
+        void preloadAndDecode(imageUrls[next]);
+        setPrevIndex(i);
+        return next;
+      });
+    }, intervalMs);
+
+    return () => clearInterval(timer);
+  }, [imageUrls, intervalMs, isReady, preloadAndDecode]);
+
   useEffect(() => {
     if (imageUrls.length <= 1) {
-      setIsReady(true);
       setIsFirstImageReady(true);
+      setIsReady(true);
       return;
     }
 
     let cancelled = false;
-    const firstUrl = imageUrls[0];
 
-    void preloadAndDecode(firstUrl).then(() => {
+    void preloadAndDecode(imageUrls[0]).then(() => {
       if (cancelled) return;
       setIsFirstImageReady(true);
       setIsReady(true);
-      setTimeout(() => setIsInitialRender(false), 100);
     });
 
-    void Promise.all(
-      imageUrls.slice(1).map(url => preloadAndDecode(url))
-    ).catch(() => undefined);
+    imageUrls.slice(1).forEach(url => {
+      void preloadAndDecode(url);
+    });
 
     return () => {
       cancelled = true;
@@ -105,43 +102,28 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
 
   useEffect(() => {
     if (imageUrls.length <= 1) return;
-    const preloadTargets = [
-      (index + 1) % imageUrls.length,
-      (index + 2) % imageUrls.length,
-    ];
-    preloadTargets.forEach(t => {
-      void preloadAndDecode(imageUrls[t]);
-    });
+
+    const next = (index + 1) % imageUrls.length;
+    const afterNext = (index + 2) % imageUrls.length;
+    void preloadAndDecode(imageUrls[next]);
+    void preloadAndDecode(imageUrls[afterNext]);
   }, [index, imageUrls, preloadAndDecode]);
 
-  const pauseAuto = () => setPausedUntil(Date.now() + 3000);
-
-  const slideToIndex = async (target: number) => {
-    if (isSliding) return;
-    setIsInitialRender(false);
-    const normalizedTarget =
-      ((target % imageUrls.length) + imageUrls.length) % imageUrls.length;
-    const targetUrl = imageUrls[normalizedTarget];
-    await preloadAndDecode(targetUrl);
-    setIsSliding(true);
-    pauseAuto();
-    setIndex(i => {
-      setPrevIndex(i);
-      return normalizedTarget;
-    });
-    setTimeout(() => setIsSliding(false), 820);
+  const slideStyle = {
+    position: 'absolute' as const,
+    inset: 0,
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover' as const,
+    objectPosition: 'center center',
+    transform: 'translateZ(0)',
+    WebkitTransform: 'translateZ(0)',
+    backfaceVisibility: 'hidden' as const,
+    WebkitBackfaceVisibility: 'hidden' as const,
   };
 
-  const goPrev = () => {
-    if (isSliding) return;
-    setDirection('backward');
-    void slideToIndex(index - 1);
-  };
-  const goNext = () => {
-    if (isSliding) return;
-    setDirection('forward');
-    void slideToIndex(index + 1);
-  };
+  const showStaticFirstSlide =
+    isFirstImageReady && (!isReady || (isInitialRender && index === 0));
 
   return (
     <div
@@ -167,7 +149,7 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
         />
       )}
 
-      {isFirstImageReady && (
+      {showStaticFirstSlide && (
         <img
           key={`static-${imageUrls[0]}`}
           src={imageUrls[0]}
@@ -177,12 +159,7 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
           fetchPriority="high"
           decoding="async"
           style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            objectPosition: 'center center',
+            ...slideStyle,
             zIndex: isInitialRender && index === 0 ? 2 : 1,
           }}
           draggable={false}
@@ -199,70 +176,34 @@ export const HomeSlideshow: React.FC<HomeSlideshowProps> = ({
           initial={{ x: 0, opacity: 1 }}
           animate={{ x: direction === 'forward' ? '-100%' : '100%' }}
           transition={{ duration: 0.8, ease: 'easeInOut' }}
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            objectPosition: 'center center',
-            willChange: 'transform',
-          }}
+          style={{ ...slideStyle, willChange: 'transform' }}
           draggable={false}
         />
       )}
 
-      {isReady && !(isInitialRender && index === 0) && (
+      {isReady && (
         <motion.img
           key={`enter-${imageUrls[index]}-${direction}`}
           src={imageUrls[index]}
           alt="home slide"
           width={4032}
           height={3024}
-          initial={{
-            x: direction === 'forward' ? '100%' : '-100%',
-            opacity: 1,
-          }}
+          initial={
+            isInitialRender && index === 0
+              ? { x: 0, opacity: 1 }
+              : { x: direction === 'forward' ? '100%' : '-100%', opacity: 1 }
+          }
           animate={{ x: 0 }}
-          transition={{ duration: 0.8, ease: 'easeInOut' }}
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            objectPosition: 'center center',
-            willChange: 'transform',
-          }}
+          transition={
+            isInitialRender && index === 0
+              ? { duration: 0 }
+              : { duration: 0.8, ease: 'easeInOut' }
+          }
+          style={{ ...slideStyle, willChange: 'transform' }}
           draggable={false}
+          loading={index === 0 ? 'eager' : 'lazy'}
+          fetchPriority={index === 0 ? 'high' : 'auto'}
         />
-      )}
-
-      {isReady && imageUrls.length > 1 && (
-        <>
-          <button
-            type="button"
-            aria-label="Previous image"
-            onClick={goPrev}
-            className="home-slide__control home-slide__control--prev"
-            disabled={isSliding}
-          >
-            <svg className="home-slide__icon" viewBox="0 0 24 24" aria-hidden>
-              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
-            </svg>
-          </button>
-          <button
-            type="button"
-            aria-label="Next image"
-            onClick={goNext}
-            className="home-slide__control home-slide__control--next"
-            disabled={isSliding}
-          >
-            <svg className="home-slide__icon" viewBox="0 0 24 24" aria-hidden>
-              <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" />
-            </svg>
-          </button>
-        </>
       )}
     </div>
   );
