@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { Home } from './pages/Home';
-import DualPromoBanner from './components/DualPromoBanner';
+import ChipsAhoyBanner from './components/ChipsAhoyBanner';
 import {
   IS_BANANA_FLASH_ACTIVE,
   IS_CHIPS_AHOY_ACTIVE,
@@ -84,7 +84,7 @@ function App() {
         </Suspense>
       )}
       {IS_CHIPS_AHOY_ACTIVE && isChipsAhoyVisible && (
-        <DualPromoBanner
+        <ChipsAhoyBanner
           isOpen={isChipsAhoyVisible}
           onClose={() => setIsChipsAhoyVisible(false)}
         />
