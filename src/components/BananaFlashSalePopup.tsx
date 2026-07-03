@@ -66,9 +66,9 @@ const BananaFlashSalePopup: React.FC<BananaFlashSalePopupProps> = ({
               <span className="banner-text banana-banner-text">
                 <span className="banana-banner-headline">
                   <span className="text-desktop">
-                    1 FREE BUNCH OF BANANAS — WHILE SUPPLIES LAST
+                    CUSTOMER APPRECIATION — 1 BUNCH FREE · WHILE SUPPLIES LAST
                   </span>
-                  <span className="text-mobile">FREE BANANA BUNCH · WHILE SUPPLIES LAST</span>
+                  <span className="text-mobile">CUSTOMER APPRECIATION · 1 BUNCH FREE</span>
                 </span>
                 <span className="banner-timer banana-banner-timer">
                   <span className="banner-countdown-label">{label}</span>
@@ -116,11 +116,11 @@ const BananaFlashSalePopup: React.FC<BananaFlashSalePopupProps> = ({
           </div>
           <div className="banana-popup-image-wrap">
             <img
-              src="/new-banana-ad.webp"
-              alt="Free bunch of bananas — while supplies last"
-              loading="lazy"
-              width="1200"
-              height="1600"
+              src="/banana-july4-free.webp"
+              alt="Customer Appreciation — 1 Bunch Free, while supplies last"
+              loading="eager"
+              width="1080"
+              height="1080"
               style={{ maxWidth: '100%', height: 'auto' }}
             />
           </div>

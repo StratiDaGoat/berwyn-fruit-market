@@ -14,12 +14,12 @@ html {
   --promo-banner-height: 0px;
 
   &.has-promo-banner {
-    --promo-banner-height: 60px;
+    --promo-banner-height: 52px;
   }
 
   @media (max-width: 768px) {
     &.has-promo-banner {
-      --promo-banner-height: 68px;
+      --promo-banner-height: 58px;
     }
   }
 }
