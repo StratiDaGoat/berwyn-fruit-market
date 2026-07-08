@@ -1,3 +1,10 @@
 {
+  "redirects": [
+    { "source": "/circular", "destination": "/weekly-ad", "permanent": true },
+    { "source": "/who-we-are", "destination": "/about", "permanent": true },
+    { "source": "/our-company", "destination": "/about", "permanent": true },
+    { "source": "/solutions", "destination": "/", "permanent": true },
+    { "source": "/departments", "destination": "/", "permanent": true }
+  ],
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
