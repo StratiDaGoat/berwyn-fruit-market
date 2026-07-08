@@ -91,7 +91,9 @@ export const WeeklyAds: React.FC = () => {
       const link = document.createElement('a');
       link.href = pdfUrl;
       link.download =
-        adWeek === 701
+        adWeek === 708
+          ? 'weekly-specials-july-8.pdf'
+          : adWeek === 701
           ? 'weekly-specials-july-1.pdf'
           : adWeek === 624
           ? 'weekly-specials-june-24.pdf'
