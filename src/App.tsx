@@ -3,10 +3,8 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { Home } from './pages/Home';
-import ChipsAhoyBanner from './components/ChipsAhoyBanner';
 import {
   IS_BANANA_FLASH_ACTIVE,
-  IS_CHIPS_AHOY_ACTIVE,
   IS_FLASH_SALE_ACTIVE,
 } from './config/siteFlags';
 import { syncPromoBannerLayout } from './utils/promoBannerLayout';
@@ -52,14 +50,9 @@ function App() {
     () => IS_BANANA_FLASH_ACTIVE && isBananaFlashSaleInWindow()
   );
 
-  const [isChipsAhoyVisible, setIsChipsAhoyVisible] = useState(
-    IS_CHIPS_AHOY_ACTIVE
-  );
-
   const promoBannerOpen =
     (IS_FLASH_SALE_ACTIVE && isBannerVisible) ||
-    (IS_BANANA_FLASH_ACTIVE && isBananaBannerVisible) ||
-    (IS_CHIPS_AHOY_ACTIVE && isChipsAhoyVisible);
+    (IS_BANANA_FLASH_ACTIVE && isBananaBannerVisible);
 
   useLayoutEffect(() => {
     syncPromoBannerLayout(promoBannerOpen);
@@ -82,12 +75,6 @@ function App() {
             onClose={() => setIsBananaBannerVisible(false)}
           />
         </Suspense>
-      )}
-      {IS_CHIPS_AHOY_ACTIVE && isChipsAhoyVisible && (
-        <ChipsAhoyBanner
-          isOpen={isChipsAhoyVisible}
-          onClose={() => setIsChipsAhoyVisible(false)}
-        />
       )}
       <Header />
       <main className="main-content">

@@ -84,7 +84,7 @@ export const Home: React.FC = () => {
       {/* Hero Section */}
       <section className="hero">
         <div className="hero__background">
-          <HomeSlideshow className="home-slideshow" />
+          <HomeSlideshow className="home-slideshow" showControls={!showOverlay} />
         </div>
         <div className="container">
           <motion.div

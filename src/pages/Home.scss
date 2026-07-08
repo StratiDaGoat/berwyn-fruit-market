@@ -23,7 +23,7 @@
     min-height: 100vh;
 
     .home-slideshow,
-    [class*='home-slide'] {
+    [class*='home-slide']:not(button) {
       min-height: 100vh;
       aspect-ratio: auto;
       height: 100%;
@@ -159,6 +159,58 @@
       align-items: center;
     }
   }
+}
+
+// Slideshow arrow controls
+.home-slideshow__control {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  border: none;
+  background: $primary-green;
+  color: $white;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease, background $transition-fast;
+
+  &--visible {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  &:hover {
+    background: $secondary-green;
+  }
+
+  &--prev {
+    left: $spacing-xl;
+
+    @media (max-width: $breakpoint-md) {
+      left: $spacing-md;
+    }
+  }
+
+  &--next {
+    right: $spacing-xl;
+
+    @media (max-width: $breakpoint-md) {
+      right: $spacing-md;
+    }
+  }
+}
+
+.home-slideshow__icon {
+  width: 22px;
+  height: 22px;
 }
 
 @keyframes float {
