@@ -8,35 +8,11 @@ interface BananaFlashSalePopupProps {
   onClose: () => void;
 }
 
-/** ≥24h left: e.g. 2D:14H:43M. Under 24h: e.g. 23:42:32 */
-function formatBananaCountdown(msRemaining: number): string {
-  if (msRemaining <= 0) return '00:00:00';
-  const totalSec = Math.floor(msRemaining / 1000);
-  const daySec = 24 * 3600;
-  if (totalSec >= daySec) {
-    const days = Math.floor(totalSec / 86400);
-    const hours = Math.floor((totalSec % 86400) / 3600);
-    const minutes = Math.floor((totalSec % 3600) / 60);
-    return `${days}D:${String(hours).padStart(2, '0')}H:${String(minutes).padStart(2, '0')}M`;
-  }
-  const hours = Math.floor(totalSec / 3600);
-  const minutes = Math.floor((totalSec % 3600) / 60);
-  const seconds = totalSec % 60;
-  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-}
-
 const BananaFlashSalePopup: React.FC<BananaFlashSalePopupProps> = ({
   isOpen,
   onClose,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [displayNow, setDisplayNow] = useState(() => Date.now());
-
-  const now = displayNow;
-  const ended = now >= BANANA_EVENT_END_MS;
-  const remaining = Math.max(0, BANANA_EVENT_END_MS - now);
-  const timeStr = formatBananaCountdown(remaining);
-  const label = 'Ends in';
 
   const syncExpired = useCallback(() => {
     if (Date.now() >= BANANA_EVENT_END_MS) {
@@ -48,14 +24,11 @@ const BananaFlashSalePopup: React.FC<BananaFlashSalePopupProps> = ({
   useEffect(() => {
     if (!isOpen) return;
     syncExpired();
-    const id = setInterval(() => {
-      setDisplayNow(Date.now());
-      syncExpired();
-    }, 1000);
+    const id = setInterval(syncExpired, 60_000);
     return () => clearInterval(id);
   }, [isOpen, syncExpired]);
 
-  if (!isOpen || ended) return null;
+  if (!isOpen || Date.now() >= BANANA_EVENT_END_MS) return null;
 
   return (
     <>
@@ -66,13 +39,9 @@ const BananaFlashSalePopup: React.FC<BananaFlashSalePopupProps> = ({
               <span className="banner-text banana-banner-text">
                 <span className="banana-banner-headline">
                   <span className="text-desktop">
-                    CUSTOMER APPRECIATION — 1 BUNCH FREE · WHILE SUPPLIES LAST
+                    1 BUNCH FREE · JULY 25TH · WHILE SUPPLIES LAST
                   </span>
-                  <span className="text-mobile">CUSTOMER APPRECIATION · 1 BUNCH FREE</span>
-                </span>
-                <span className="banner-timer banana-banner-timer">
-                  <span className="banner-countdown-label">{label}</span>
-                  <span className="banner-countdown-time">{timeStr}</span>
+                  <span className="text-mobile">1 BUNCH FREE · JULY 25TH</span>
                 </span>
               </span>
               <button
@@ -99,11 +68,8 @@ const BananaFlashSalePopup: React.FC<BananaFlashSalePopupProps> = ({
         <div className="banana-flash-sale-popup" role="dialog" aria-modal="true">
           <div className="banana-popup-header">
             <div style={{ width: 32 }} aria-hidden />
-            <div className="banana-popup-timer">
-              <div>{label}</div>
-              <div style={{ fontFamily: 'ui-monospace, monospace' }}>
-                {timeStr}
-              </div>
+            <div className="banana-popup-title">
+              1 BUNCH FREE · JULY 25TH · WHILE SUPPLIES LAST
             </div>
             <button
               type="button"
@@ -116,11 +82,11 @@ const BananaFlashSalePopup: React.FC<BananaFlashSalePopupProps> = ({
           </div>
           <div className="banana-popup-image-wrap">
             <img
-              src="/banana-july4-free.webp"
-              alt="Customer Appreciation — 1 Bunch Free, while supplies last"
+              src="/banana-july25-free.webp"
+              alt="1 Bunch Free — July 25th, while supplies last"
               loading="eager"
               width="1080"
-              height="1080"
+              height="1350"
               style={{ maxWidth: '100%', height: 'auto' }}
             />
           </div>

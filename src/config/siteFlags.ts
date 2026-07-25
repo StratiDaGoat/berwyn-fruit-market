@@ -2,4 +2,4 @@
 export const IS_CHIPS_AHOY_ACTIVE = false;
 
 export const IS_FLASH_SALE_ACTIVE = false;
-export const IS_BANANA_FLASH_ACTIVE = false;
+export const IS_BANANA_FLASH_ACTIVE = true;
