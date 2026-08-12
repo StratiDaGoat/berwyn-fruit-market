@@ -9,6 +9,7 @@
  * July 22 weekly ad goes live Tue July 21, 2026 at 22:00 America/Chicago.
  * July 29 weekly ad goes live Tue July 28, 2026 at 22:00 America/Chicago.
  * Aug 5 weekly ad goes live Tue Aug 4, 2026 at 22:00 America/Chicago.
+ * Aug 12 weekly ad goes live Tue Aug 11, 2026 at 22:00 America/Chicago.
  */
 
 const CHICAGO = 'America/Chicago';
@@ -28,6 +29,7 @@ const JULY_15_GO_LIVE = { y: 2026, m: 7, d: 14 } as const;
 const JULY_22_GO_LIVE = { y: 2026, m: 7, d: 21 } as const;
 const JULY_29_GO_LIVE = { y: 2026, m: 7, d: 28 } as const;
 const AUG_5_GO_LIVE = { y: 2026, m: 8, d: 4 } as const;
+const AUG_12_GO_LIVE = { y: 2026, m: 8, d: 11 } as const;
 
 function chicagoParts(ms: number) {
   return new Intl.DateTimeFormat('en-US', {
@@ -195,9 +197,18 @@ const AUG_5_AD_GO_LIVE_MS = utcMsAtChicagoWallClock(
   0
 );
 
-export type WeeklyAdWeekKey = 422 | 429 | 506 | 513 | 520 | 527 | 603 | 610 | 617 | 624 | 701 | 708 | 715 | 722 | 729 | 805;
+const AUG_12_AD_GO_LIVE_MS = utcMsAtChicagoWallClock(
+  AUG_12_GO_LIVE.y,
+  AUG_12_GO_LIVE.m,
+  AUG_12_GO_LIVE.d,
+  22,
+  0
+);
+
+export type WeeklyAdWeekKey = 422 | 429 | 506 | 513 | 520 | 527 | 603 | 610 | 617 | 624 | 701 | 708 | 715 | 722 | 729 | 805 | 812;
 
 export function getCurrentWeeklyAdWeek(): WeeklyAdWeekKey {
+  if (Date.now() >= AUG_12_AD_GO_LIVE_MS) return 812;
   if (Date.now() >= AUG_5_AD_GO_LIVE_MS) return 805;
   if (Date.now() >= JULY_29_AD_GO_LIVE_MS) return 729;
   if (Date.now() >= JULY_22_AD_GO_LIVE_MS) return 722;
@@ -327,6 +338,13 @@ export const WEEKLY_AD_ASSETS = {
     images: [
       '/weekly-ad-aug5-first-page.webp',
       '/weekly-ad-aug5-second-page.webp',
+    ],
+  },
+  812: {
+    pdf: '/weekly-ad-aug12.pdf',
+    images: [
+      '/weekly-ad-aug12-first-page.webp',
+      '/weekly-ad-aug12-second-page.webp',
     ],
   },
 } as const;
