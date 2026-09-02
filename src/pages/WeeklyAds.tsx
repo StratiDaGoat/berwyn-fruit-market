@@ -86,55 +86,66 @@ export const WeeklyAds: React.FC = () => {
     window.print();
   };
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
+    const filename =
+      adWeek === 902
+        ? 'weekly-specials-sept-2.pdf'
+        : adWeek === 826
+        ? 'weekly-specials-aug-26.pdf'
+        : adWeek === 819
+        ? 'weekly-specials-aug-19.pdf'
+        : adWeek === 812
+        ? 'weekly-specials-aug-12.pdf'
+        : adWeek === 805
+        ? 'weekly-specials-aug-5.pdf'
+        : adWeek === 729
+        ? 'weekly-specials-july-29.pdf'
+        : adWeek === 722
+        ? 'weekly-specials-july-22.pdf'
+        : adWeek === 715
+        ? 'weekly-specials-july-15.pdf'
+        : adWeek === 708
+        ? 'weekly-specials-july-8.pdf'
+        : adWeek === 701
+        ? 'weekly-specials-july-1.pdf'
+        : adWeek === 624
+        ? 'weekly-specials-june-24.pdf'
+        : adWeek === 617
+        ? 'weekly-specials-june-17.pdf'
+        : adWeek === 610
+        ? 'weekly-specials-june-10.pdf'
+        : adWeek === 603
+        ? 'weekly-specials-june-3.pdf'
+        : adWeek === 527
+          ? 'weekly-specials-may-27.pdf'
+          : adWeek === 520
+          ? 'weekly-specials-may-20.pdf'
+          : adWeek === 513
+          ? 'weekly-specials-may-13.pdf'
+          : adWeek === 506
+            ? 'weekly-specials-may-6.pdf'
+            : adWeek === 429
+              ? 'weekly-specials-april-29.pdf'
+              : 'weekly-specials-april-22.pdf';
+
     try {
+      // Fetch the bytes here rather than letting the anchor navigate, so a
+      // failed transfer is catchable and the fallback below actually runs.
+      const response = await fetch(pdfUrl);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const blob = await response.blob();
+      const objectUrl = URL.createObjectURL(blob);
+
       const link = document.createElement('a');
-      link.href = pdfUrl;
-      link.download =
-        adWeek === 826
-          ? 'weekly-specials-aug-26.pdf'
-          : adWeek === 819
-          ? 'weekly-specials-aug-19.pdf'
-          : adWeek === 812
-          ? 'weekly-specials-aug-12.pdf'
-          : adWeek === 805
-          ? 'weekly-specials-aug-5.pdf'
-          : adWeek === 729
-          ? 'weekly-specials-july-29.pdf'
-          : adWeek === 722
-          ? 'weekly-specials-july-22.pdf'
-          : adWeek === 715
-          ? 'weekly-specials-july-15.pdf'
-          : adWeek === 708
-          ? 'weekly-specials-july-8.pdf'
-          : adWeek === 701
-          ? 'weekly-specials-july-1.pdf'
-          : adWeek === 624
-          ? 'weekly-specials-june-24.pdf'
-          : adWeek === 617
-          ? 'weekly-specials-june-17.pdf'
-          : adWeek === 610
-          ? 'weekly-specials-june-10.pdf'
-          : adWeek === 603
-          ? 'weekly-specials-june-3.pdf'
-          : adWeek === 527
-            ? 'weekly-specials-may-27.pdf'
-            : adWeek === 520
-            ? 'weekly-specials-may-20.pdf'
-            : adWeek === 513
-            ? 'weekly-specials-may-13.pdf'
-            : adWeek === 506
-              ? 'weekly-specials-may-6.pdf'
-              : adWeek === 429
-                ? 'weekly-specials-april-29.pdf'
-                : 'weekly-specials-april-22.pdf';
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
+      link.href = objectUrl;
+      link.download = filename;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+
+      setTimeout(() => URL.revokeObjectURL(objectUrl), 60_000);
     } catch {
-      window.open(pdfUrl, '_blank');
+      window.open(pdfUrl, '_blank', 'noopener,noreferrer');
     }
   };
 
