@@ -18,6 +18,7 @@
  * Sept 23 weekly ad goes live Wed Sept 23, 2026 at 00:00 America/Chicago.
  * Sept 30 weekly ad goes live Tue Sept 29, 2026 at 22:00 America/Chicago.
  * Oct 7 weekly ad goes live Tue Oct 6, 2026 at 22:00 America/Chicago.
+ * Oct 14 weekly ad goes live Tue Oct 13, 2026 at 22:00 America/Chicago.
  */
 
 const CHICAGO = 'America/Chicago';
@@ -46,6 +47,7 @@ const SEPT_16_GO_LIVE = { y: 2026, m: 9, d: 15 } as const;
 const SEPT_23_GO_LIVE = { y: 2026, m: 9, d: 23 } as const;
 const SEPT_30_GO_LIVE = { y: 2026, m: 9, d: 29 } as const;
 const OCT_7_GO_LIVE = { y: 2026, m: 10, d: 6 } as const;
+const OCT_14_GO_LIVE = { y: 2026, m: 10, d: 13 } as const;
 
 function chicagoParts(ms: number) {
   return new Intl.DateTimeFormat('en-US', {
@@ -286,9 +288,18 @@ const OCT_7_AD_GO_LIVE_MS = utcMsAtChicagoWallClock(
   0
 );
 
-export type WeeklyAdWeekKey = 422 | 429 | 506 | 513 | 520 | 527 | 603 | 610 | 617 | 624 | 701 | 708 | 715 | 722 | 729 | 805 | 812 | 819 | 826 | 902 | 910 | 916 | 923 | 930 | 1007;
+const OCT_14_AD_GO_LIVE_MS = utcMsAtChicagoWallClock(
+  OCT_14_GO_LIVE.y,
+  OCT_14_GO_LIVE.m,
+  OCT_14_GO_LIVE.d,
+  22,
+  0
+);
+
+export type WeeklyAdWeekKey = 422 | 429 | 506 | 513 | 520 | 527 | 603 | 610 | 617 | 624 | 701 | 708 | 715 | 722 | 729 | 805 | 812 | 819 | 826 | 902 | 910 | 916 | 923 | 930 | 1007 | 1014;
 
 export function getCurrentWeeklyAdWeek(): WeeklyAdWeekKey {
+  if (Date.now() >= OCT_14_AD_GO_LIVE_MS) return 1014;
   if (Date.now() >= OCT_7_AD_GO_LIVE_MS) return 1007;
   if (Date.now() >= SEPT_30_AD_GO_LIVE_MS) return 930;
   if (Date.now() >= SEPT_23_AD_GO_LIVE_MS) return 923;
@@ -490,6 +501,13 @@ export const WEEKLY_AD_ASSETS = {
     images: [
       '/weekly-ad-oct7-first-page.webp',
       '/weekly-ad-oct7-second-page.webp',
+    ],
+  },
+  1014: {
+    pdf: '/weekly-ad-oct14.pdf',
+    images: [
+      '/weekly-ad-oct14-first-page.webp',
+      '/weekly-ad-oct14-second-page.webp',
     ],
   },
 } as const;
