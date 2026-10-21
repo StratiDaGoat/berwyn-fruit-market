@@ -88,7 +88,9 @@ export const WeeklyAds: React.FC = () => {
 
   const handleDownload = async () => {
     const filename =
-      adWeek === 1014
+      adWeek === 1021
+        ? 'weekly-specials-oct-21.pdf'
+        : adWeek === 1014
         ? 'weekly-specials-oct-14.pdf'
         : adWeek === 1007
         ? 'weekly-specials-oct-7.pdf'
